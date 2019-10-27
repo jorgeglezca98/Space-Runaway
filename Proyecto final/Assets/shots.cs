@@ -9,6 +9,8 @@ public class shots : MonoBehaviour {
 	public int shotSpeed = 2000;
 	public float shotMaxDistance = 100f;
 	private Transform shotPoint;
+	private GameObject lastShot;
+	private float lastShotSize;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +26,7 @@ public class shots : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if(Input.GetKey(KeyCode.Space)) {
+		if(Input.GetKey(KeyCode.Space) && (lastShot == null || Vector3.Distance(shotPoint.position, lastShot.transform.position - new Vector3(0,0,lastShotSize/2)) > lastShotSize)) {
 			RaycastHit hit;
 			GameObject HUD = GameObject.FindWithTag("playerHUD");
 
@@ -40,6 +42,9 @@ public class shots : MonoBehaviour {
 			Rigidbody shotRb = shot.AddComponent<Rigidbody>();
 			shotRb.useGravity = false;
             shotRb.AddRelativeForce(new Vector3(0,0,shotSpeed));
+
+            lastShot = shot;
+            lastShotSize = lastShot.GetComponent<Renderer>().bounds.size.z;
 		}
 	}
 }
