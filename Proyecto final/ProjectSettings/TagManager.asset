@@ -6,6 +6,9 @@ TagManager:
   tags:
   - playerHUD
   - shotPoint
+  - Fire
+  - FxTemporaire
+  - bullet
   layers:
   - Default
   - TransparentFX

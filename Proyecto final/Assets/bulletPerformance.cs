@@ -21,10 +21,16 @@ public class bulletPerformance : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision)
     {
-		destroyBullet();
+    	// TODO: it should explodes anyway, but it is being called too early
+		if(collision.gameObject.tag != "bullet")
+			destroyBullet();
     }
 
 	void destroyBullet(){
-		Destroy(gameObject);
+		var exp = GetComponent<ParticleSystem>();
+        exp.Play();
+        GetComponent<Renderer>().enabled = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+		Destroy(gameObject, exp.duration);
 	}
 }
