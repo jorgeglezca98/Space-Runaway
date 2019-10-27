@@ -1,31 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class shots : MonoBehaviour {
 
-	private Mesh mesh;
 	public GameObject shotPrefab;
 	public int shotSpeed = 2000;
-
-	//tamaño de bala: (0.001, 0.001, 0.01)
-	//posición de salida: posición de blaster + tamaño blaster(4.1) + tamaño bala (0.6)
+	public float shotMaxDistance = 100f;
+	private Transform shotPoint;
 
 	// Use this for initialization
 	void Start () {
-		mesh = GetComponent<MeshFilter>().mesh;
+		shotPoint = null;
+		foreach(Transform child in transform)
+		{
+		    if(child.tag == "shotPoint"){
+		    	shotPoint = child;
+		    	break;
+		    }
+		}
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		if(Input.GetKey(KeyCode.Space)) {
-			Debug.Log(new Vector3(transform.position.x, transform.position.y, transform.position.z + mesh.bounds.size.z + 0.6f));
-			GameObject shot = Instantiate(shotPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+			RaycastHit hit;
+			GameObject HUD = GameObject.FindWithTag("playerHUD");
+
+			if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance))
+            {
+                transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
+            } else {
+            	transform.localRotation = Quaternion.Euler(0,0,0);
+            }
+
+			GameObject shot = Instantiate(shotPrefab, shotPoint.position, transform.rotation);
 			
 			Rigidbody shotRb = shot.AddComponent<Rigidbody>();
-			shotRb.rotation = transform.rotation;
 			shotRb.useGravity = false;
-			shotRb.AddRelativeForce(new Vector3(0,0,shotSpeed));
+            shotRb.AddRelativeForce(new Vector3(0,0,shotSpeed));
 		}
 	}
 }
