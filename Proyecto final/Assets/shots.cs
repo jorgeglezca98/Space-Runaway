@@ -30,7 +30,7 @@ public class shots : MonoBehaviour {
 			RaycastHit hit;
 			GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-			if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance))
+			if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, HUD.transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance))
             {
                 transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
             } else {
@@ -38,7 +38,7 @@ public class shots : MonoBehaviour {
             }
 
 			GameObject shot = Instantiate(shotPrefab, shotPoint.position, transform.rotation);
-			
+
 			Rigidbody shotRb = shot.AddComponent<Rigidbody>();
 			shotRb.useGravity = false;
             shotRb.AddRelativeForce(new Vector3(0,0,shotSpeed));
