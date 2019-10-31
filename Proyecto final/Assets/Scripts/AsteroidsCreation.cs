@@ -4,24 +4,34 @@ using UnityEngine;
 
 public class AsteroidsCreation : MonoBehaviour {
 
-	private GameObject A_S_00;
-	private GameObject A_M_00;
-	private GameObject A_L_00;
-	private GameObject A_XL_00;
-	private GameObject A_XXL_00;
-	private GameObject A_S_20;
-	private GameObject A_M_20;
-	private GameObject A_L_20;
-	private GameObject A_XL_20;
-	private GameObject A_XXL_20;
-	private GameObject A_M_80;
-	private GameObject A_L_80;
+	// This ratio works great!! (Ratio = 5)
+	private int areaSize = 1000;
+	private int asteroidGap = 200;
+	private GameObject currentMeteor;
 
+
+	private List<string> asteroidNames = new List<string>{ "Asteroid_S_00", "Asteroid_M_00", "Asteroid_L_00",
+																									"Asteroid_XL_00", "Asteroid_XXL_00", "Asteroid_S_20",
+																									"Asteroid_M_20", "Asteroid_L_20", "Asteroid_XL_20",
+																									"Asteroid_XXL_20", "Asteroid_M_80", "Asteroid_L_80"};
 	void Awake()
 	{
-		A_S_00 = Instantiate(Resources.Load("Asteroid_L_20", typeof(GameObject))) as GameObject;
-		Instantiate(A_S_00, new Vector3(14,0,14), Quaternion.identity);
-		Debug.Log(A_S_00.GetComponent<Collider>().bounds.size);
+		int minRange = -1 * (areaSize / asteroidGap);
+		int maxRange = areaSize / asteroidGap;
+
+		for(int i = minRange ; i < maxRange; i++){
+			for(int j = minRange ; j < maxRange; j++){
+				for(int k = minRange ; k < maxRange; k++){
+					int asteroidName = Random.Range(0,12);
+					int yAxis = i * asteroidGap;
+					int xAxis = j * asteroidGap;
+					int zAxis = k * asteroidGap;
+					currentMeteor = Instantiate(Resources.Load(asteroidNames[asteroidName], typeof(GameObject)), new Vector3(xAxis,yAxis,zAxis), Quaternion.Euler(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360))) as GameObject;
+					currentMeteor.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10,11),Random.Range(-10,11),Random.Range(-10,11)), ForceMode.Impulse);
+				}
+			}
+		}
+
 	}
 	// Use this for initialization
 	void Start () {
