@@ -30,7 +30,7 @@ public class shots : MonoBehaviour {
 			RaycastHit hit;
 			GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-			if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, HUD.transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance))
+			if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, HUD.transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance, ~(1 << 8)))
             {
                 transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
             } else {

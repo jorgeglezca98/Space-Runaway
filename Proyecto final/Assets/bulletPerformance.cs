@@ -19,11 +19,11 @@ public class bulletPerformance : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision collision)
+	void OnTriggerEnter(Collider other)
     {
-    	// TODO: it should explodes anyway, but it is being called too early
-		if(collision.gameObject.tag != "bullet")
+		if(other.gameObject.tag != "bullet") {
 			destroyBullet();
+		}
     }
 
 	void destroyBullet(){
