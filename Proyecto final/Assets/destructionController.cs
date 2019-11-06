@@ -9,7 +9,8 @@ public class destructionController : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision) {
 
-		life -= collision.relativeVelocity.magnitude + collision.rigidbody.mass;
+		//life -= collision.relativeVelocity.magnitude + collision.rigidbody.mass;
+		life = 0;
 
 		if(life <= 0) {
 	    	Vector3 center = GetComponent<Renderer>().bounds.center;
@@ -23,6 +24,8 @@ public class destructionController : MonoBehaviour {
 	            Destroy(child.gameObject, destructionDelay);
 	        }
 
+	        var ps = GetComponent<ParticleSystem>();
+	        ps.Play();
 	        Destroy(gameObject, destructionDelay);
 	    }
     }
