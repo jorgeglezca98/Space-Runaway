@@ -451,5 +451,9 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-
 # End of https://www.gitignore.io/api/git,unity,macos,csharp
+
+# Ignore Specific Folders
+Assets/FreeMountain
+Assets/AsteroidPack
+Library/
