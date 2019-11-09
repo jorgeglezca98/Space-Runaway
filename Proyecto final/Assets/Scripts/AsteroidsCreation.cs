@@ -5,81 +5,105 @@ using UnityEngine;
 public class AsteroidsCreation : MonoBehaviour {
 
     public GameObject spaceship;
-    private GameObject[] asteroids;
+    private List<GameObject> asteroids;
     private enum Axis { yAxis, xAxis, zAxis };
-
-    public int threshold;
+   
+    // Separation between each asteroid.
     public int asteroidSeparation;
+    // Initially we use this value to maintain the asteriods away enough from the spaceship
+    // avoiding them to initialize in the same position as the spaceship.
     public int secureZone;
+    // This value specifies the number of asteroids that we want from the origin to each 
+    // direction ( +x, -x, +y .. ) or in other words, it specifies half the length of 
+    // each edge that conforms the cube of asteroids around the spaceship.
     public int areaSideSize;
-    
+    // We use a threshold to indicate when the asteroids are far away enought and should be
+    // moved to the opposite extreme relative to their current position.
+    private int threshold;
 
 
 
+    // Here is where the name of all the possible asteroid gameobjects are stored.
     private List<string> asteroidNames = new List<string>{ "Asteroid_S_00", "Asteroid_M_00", "Asteroid_L_00",
-																									"Asteroid_XL_00", "Asteroid_XXL_00", "Asteroid_S_20",
-																									"Asteroid_M_20", "Asteroid_L_20", "Asteroid_XL_20",
-																									"Asteroid_XXL_20", "Asteroid_M_80", "Asteroid_L_80"};
+															"Asteroid_XL_00", "Asteroid_XXL_00", "Asteroid_S_20",
+															"Asteroid_M_20", "Asteroid_L_20", "Asteroid_XL_20",
+															"Asteroid_XXL_20", "Asteroid_M_80", "Asteroid_L_80"};
     void Awake(){
-        asteroids = new GameObject[(areaSideSize*2)*(areaSideSize * 2)*(areaSideSize * 2)];
+        asteroids = new List<GameObject>();
+        threshold = (areaSideSize - 1) * asteroidSeparation + secureZone;
         initializeAsteroids();
-        Debug.Log("Hello!\n");
     }
     void Start () {
-	}
+        spaceship.transform.position = new Vector3(0, 0, 0);
+    }
 
-	void initializeAsteroids(){
-        
+    // In this function all asteroids are initialized in their initial positions.
+    void initializeAsteroids(){
+
+        spaceship.transform.position = new Vector3(0, 0, 0);
         Vector3 spaceshipPosition = spaceship.transform.position;
         int asteroidIndex = 0;
 
-        for (int x = -areaSideSize; x < 0; x++){
-            for (int y = -areaSideSize; y < areaSideSize; y++){
-                for (int z = -areaSideSize; z < 0; z++){
+        // When the loop goes from -areaSideSize+2 is because we want the asteroids field to be
+        // a little shorter in one of each axis side, avoiding them to be mapped in a position
+        // where an asteroid already exists.
+        for (int x = -areaSideSize + 2; x < 0; x++){
+            for (int y = -areaSideSize  + 2; y < areaSideSize; y++){
+                for (int z = -areaSideSize + 2 ; z < 0; z++){
+                    // We substract the secureZone to avoid the asteroids being instantiated in the
+                    // position where the spaceship is.
                     float xPosition = spaceshipPosition.x + (x * asteroidSeparation) - secureZone;
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) - secureZone;
-                    asteroids[asteroidIndex] = (GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject;
-            //        asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
+                    asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
+                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
                 }
             }
         }
 
         for (int x = 0; x < areaSideSize; x++){
-            for (int y = -areaSideSize; y < areaSideSize; y++){
+            for (int y = -areaSideSize + 2; y < areaSideSize; y++){
                 for (int z = 0; z < areaSideSize; z++){
                     float xPosition = spaceshipPosition.x + (x * asteroidSeparation) + secureZone;
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) + secureZone;
-                    asteroids[asteroidIndex] = (GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject;
-             //       asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
+                    asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
+                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
                 }
             }
         }
 
-        for (int x = -areaSideSize; x < 0; x++){
-            for (int y = -areaSideSize; y < areaSideSize; y++){
+        for (int x = -areaSideSize + 2; x < 0; x++){
+            for (int y = -areaSideSize + 2; y < areaSideSize; y++){
                 for (int z = 0; z < areaSideSize; z++) {
                     float xPosition = spaceshipPosition.x + (x * asteroidSeparation) - secureZone;
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) + secureZone;
-                    asteroids[asteroidIndex] = (GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject;
-               //     asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
+                    asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
+                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
                 }
             }
         }
 
         for (int x = 0; x < areaSideSize; x++){
-            for (int y = -areaSideSize; y < areaSideSize; y++){
-                for (int z = -areaSideSize; z < 0; z++){
+            for (int y = -areaSideSize + 2 ; y < areaSideSize; y++){
+                for (int z = -areaSideSize + 2; z < 0; z++){
                     float xPosition = spaceshipPosition.x + (x * asteroidSeparation) + secureZone;
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) - secureZone;
-                    asteroids[asteroidIndex] = (GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject;
-         //           asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
+                    asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
+                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+                    asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
                 }
             }
@@ -95,95 +119,65 @@ public class AsteroidsCreation : MonoBehaviour {
             Vector3 asteroidPosition = asteroid.transform.position;
             Vector3 spaceshipPosition = spaceship.transform.position;
 
-            int xAxisDirection = getSign(Axis.xAxis);
-            int yAxisDirection = getSign(Axis.yAxis);
-            int zAxisDirection = getSign(Axis.zAxis);
-
             float xAsteroidPosition = asteroidPosition.x;
             float yAsteroidPosition = asteroidPosition.y;
             float zAsteroidPosition = asteroidPosition.z;
 
-            if (!asteroidIsInFront(Axis.xAxis, asteroidPosition.x))
-            {
                 if (Mathf.Abs(asteroidPosition.x - spaceshipPosition.x) > threshold)
                 {
-                    xAsteroidPosition = spaceshipPosition.x + (xAxisDirection * threshold);
+                    int xAsteroidOppositeDirection = asteroidOppositeDirection(Axis.xAxis, asteroid);
+                    xAsteroidPosition = spaceshipPosition.x + (xAsteroidOppositeDirection * threshold);
                 }
-            }
 
-            if (!asteroidIsInFront(Axis.yAxis, asteroidPosition.y))
-            {
                 if (Mathf.Abs(asteroidPosition.y - spaceshipPosition.y) > threshold)
                 {
-                    yAsteroidPosition = spaceshipPosition.y + (yAxisDirection * threshold);
-                }
+                      int yAsteroidOppositeDirection = asteroidOppositeDirection(Axis.yAxis, asteroid);
+                      yAsteroidPosition = spaceshipPosition.y + (yAsteroidOppositeDirection * threshold);
             }
 
-            if (!asteroidIsInFront(Axis.zAxis, asteroidPosition.z))
-            {
                 if (Mathf.Abs(asteroidPosition.z - spaceshipPosition.z) > threshold)
                 {
-                    zAsteroidPosition = spaceshipPosition.z + (zAxisDirection * threshold);
-                }
+                     int zAsteroidOppositeDirection = asteroidOppositeDirection(Axis.zAxis, asteroid);
+                     zAsteroidPosition = spaceshipPosition.z + (zAsteroidOppositeDirection * threshold);
             }
+
 
             Vector3 newAsteroidPosition = new Vector3(xAsteroidPosition, yAsteroidPosition, zAsteroidPosition);
             asteroid.transform.position = newAsteroidPosition;
-        //    asteroid.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
 
         }
 
     }
 
-    bool asteroidIsInFront(Axis axis, float asteroidCoordinate)
+    int asteroidOppositeDirection(Axis axis, GameObject asteroid)
     {
-        Vector3 spaceshipPosition = spaceship.transform.position;
-        int currentAxisDirection = 0;
 
+        float substraction = 0.0f;
         switch (axis)
         {
             case Axis.xAxis:
-                currentAxisDirection = getSign(Axis.xAxis);
+                substraction = spaceship.transform.position.x - asteroid.transform.position.x;
                 break;
 
             case Axis.yAxis:
-                currentAxisDirection = getSign(Axis.yAxis);
+                substraction = spaceship.transform.position.y - asteroid.transform.position.y;
                 break;
 
             case Axis.zAxis:
-                currentAxisDirection = getSign(Axis.zAxis);
+                substraction = spaceship.transform.position.z - asteroid.transform.position.z;
                 break;
 
         }
 
-        int substraction = (int)(spaceshipPosition.x - asteroidCoordinate);
+        if (substraction < 0){
+            return -1;
+        }else return 1;
 
-        if (currentAxisDirection > 0)
-        {
-            if (substraction > 0)
-            {
-                return true;
-            }
-            else return false;
-        }
-        else if (currentAxisDirection < 0)
-        {
-            if (substraction > 0)
-            {
-                return false;
-            }
-            else return true;
-        }
-        else
-        {
-            Debug.Log("Not facing");
-            return true;
-        }
-
-        Debug.LogError("Error, no axis selected\n");
+        
     }
 
-    int getSign(Axis axis)
+    // Not being currently used but could be needed in the future.
+    int getSpaceshipDirection(Axis axis)
     {
         switch (axis)
         {
@@ -233,20 +227,7 @@ public class AsteroidsCreation : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        refreshAsteroids();
-        //Debug.Log("X axis: ");
-        //asteroidIsInFront(Axis.xAxis, 1);
-
-        //Debug.Log("Y axis: ");
-        //asteroidIsInFront(Axis.yAxis, 1);
-
-        //Debug.Log("Z axis: ");
-        //asteroidIsInFront(Axis.zAxis, 1);
-
-        // Debug.Log(spaceship.transform.rotation.x);
-
-
-        // Debug.Log(spaceship.transform.up);
+       refreshAsteroids();
     }
 
 
