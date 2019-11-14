@@ -19,7 +19,7 @@ public class spaceshipMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		rg.AddRelativeTorque((Vector3.back * Input.GetAxis("Horizontal") + Vector3.left * Input.GetAxis("Vertical")) * Time.deltaTime * velocidadRotacion);
+		rg.AddRelativeTorque((Vector3.back * Input.GetAxis("Horizontal") + Vector3.right * Input.GetAxis("Vertical")) * Time.deltaTime * velocidadRotacion);
 		rg.AddRelativeForce(new Vector3(0, 0, (Input.GetKey(KeyCode.K) ? 1 : 0) - (Input.GetKey(KeyCode.L) ? 1 : 0)) * Time.deltaTime * velocidad);
 	}
 }
