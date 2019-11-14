@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 199210154433848970}
   - component: {fileID: 33542012432229976}
   - component: {fileID: 23956347716958006}
+  - component: {fileID: 114100223868389988}
   m_Layer: 8
   m_Name: laserBullet
   m_TagString: bullet
@@ -87,6 +88,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1245862010480476}
   m_Mesh: {fileID: 0}
+--- !u!114 &114100223868389988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1245862010480476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16dbc60dc4d204edc8ac9fa556d250e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistace: 100
 --- !u!114 &114536970361024342
 MonoBehaviour:
   m_ObjectHideFlags: 1
