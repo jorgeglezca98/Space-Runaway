@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class spaceshipMovement : MonoBehaviour {
+public class SpaceshipMovement : MonoBehaviour {
 
 	private Rigidbody rg;
-	
+
 	public int velocidadRotacion = 400;
 	public int velocidad = 1500;
 
@@ -16,7 +16,7 @@ public class spaceshipMovement : MonoBehaviour {
 		rg.angularDrag = 0.5f;
 		rg.centerOfMass = Vector3.zero;
 	}
-	
+
 	// Update is called once per frame
 	void FixedUpdate () {
 		rg.AddRelativeTorque((Vector3.back * Input.GetAxis("Horizontal") + Vector3.right * Input.GetAxis("Vertical")) * Time.deltaTime * velocidadRotacion);

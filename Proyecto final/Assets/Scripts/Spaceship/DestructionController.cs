@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class destructionController : MonoBehaviour {
+public class DestructionController : MonoBehaviour {
 
 	public float life = 100f;
 	public int destructionDelay = 10;
@@ -10,7 +10,7 @@ public class destructionController : MonoBehaviour {
 	void OnCollisionEnter(Collision collision) {
 
 		//life -= collision.relativeVelocity.magnitude + collision.rigidbody.mass;
-		life = 0;
+		//life = 0;
 
 		if(life <= 0) {
 	    	Vector3 center = GetComponent<Renderer>().bounds.center;
