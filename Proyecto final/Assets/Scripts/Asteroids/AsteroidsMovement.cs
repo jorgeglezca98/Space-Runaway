@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class asteroidsMovement : MonoBehaviour {
+public class AsteroidsMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

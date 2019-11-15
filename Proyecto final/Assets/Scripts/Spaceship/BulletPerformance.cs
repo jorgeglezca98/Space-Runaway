@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bulletPerformance : MonoBehaviour {
+public class BulletPerformance : MonoBehaviour {
 
 	public int maxDistace = 100;
 	private Vector3 initialPosition;
@@ -11,7 +11,7 @@ public class bulletPerformance : MonoBehaviour {
 	void Start () {
 		initialPosition = transform.position;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if(Vector3.Distance(initialPosition, transform.position) >= maxDistace){
@@ -19,11 +19,10 @@ public class bulletPerformance : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider other)
-    {
-		if(other.gameObject.tag != "bullet") {
-			destroyBullet();
-		}
+	void OnTriggerEnter(Collider other){
+			if(other.gameObject.tag != "bullet") {
+				destroyBullet();
+			}
     }
 
 	void destroyBullet(){

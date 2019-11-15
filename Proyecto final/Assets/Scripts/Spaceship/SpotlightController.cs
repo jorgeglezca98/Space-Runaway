@@ -12,7 +12,7 @@ public class SpotlightController : MonoBehaviour {
     void Start () {
         attackMode = false;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -30,14 +30,12 @@ public class SpotlightController : MonoBehaviour {
         {
             if(GetComponent<Light>().spotAngle > 5) {
                 GetComponent<Light>().range += Time.deltaTime * rangeVariationVelocity;
-                // GetComponent<Light>().color += new Color(0.1f, 0f, 0f, 1f);
                 GetComponent<Light>().color += Color.red / 5.0f;
                 GetComponent<Light>().spotAngle -= Time.deltaTime * spotAngleVariationVelocity;
             }
         }else{
             if (GetComponent<Light>().spotAngle < 30){
                 GetComponent<Light>().range -= Time.deltaTime * rangeVariationVelocity;
-              //  GetComponent<Light>().color -= new Color(0.1f, 0f, 0f, 1f);
                 GetComponent<Light>().color -= Color.red / 5.0f;
                 GetComponent<Light>().spotAngle += Time.deltaTime * spotAngleVariationVelocity;
             }
