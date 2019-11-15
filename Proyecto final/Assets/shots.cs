@@ -26,7 +26,7 @@ public class shots : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if(Input.GetKey(KeyCode.Space) && (lastShot == null || Vector3.Distance(shotPoint.position, lastShot.transform.position - new Vector3(0,0,lastShotSize/2)) > lastShotSize)) {
+		if(Input.GetButton("Shoot") && (lastShot == null || Vector3.Distance(shotPoint.position, lastShot.transform.position - new Vector3(0,0,lastShotSize/2)) > lastShotSize)) {
 			RaycastHit hit;
 			GameObject HUD = GameObject.FindWithTag("playerHUD");
 

@@ -6,8 +6,8 @@ public class spaceshipMovement : MonoBehaviour {
 
 	private Rigidbody rg;
 	
-	public int velocidadRotacion = 200;
-	public int velocidad = 200;
+	public int velocidadRotacion = 400;
+	public int velocidad = 1500;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +20,6 @@ public class spaceshipMovement : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		rg.AddRelativeTorque((Vector3.back * Input.GetAxis("Horizontal") + Vector3.right * Input.GetAxis("Vertical")) * Time.deltaTime * velocidadRotacion);
-		rg.AddRelativeForce(new Vector3(0, 0, (Input.GetKey(KeyCode.K) ? 1 : 0) - (Input.GetKey(KeyCode.L) ? 1 : 0)) * Time.deltaTime * velocidad);
+		rg.AddRelativeForce(new Vector3(0, 0, (Input.GetButton("Run") ? 1 : 0) - (Input.GetButton("Stop") ? 1 : 0)) * Time.deltaTime * velocidad);
 	}
 }
