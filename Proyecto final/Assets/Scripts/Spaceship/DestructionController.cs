@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class DestructionController : MonoBehaviour {
 
-	public float life = 100f;
-	public int destructionDelay = 10;
+	public int destructionDelay = 1;
 
 	void OnCollisionEnter(Collision collision) {
 
-		//life -= collision.relativeVelocity.magnitude + collision.rigidbody.mass;
-		//life = 0;
-
-		if(life <= 0) {
+		if(PlayerStats.getHealth() <= 0) {
 	    	Vector3 center = GetComponent<Renderer>().bounds.center;
 	    	float radius = GetComponent<Renderer>().bounds.size.z;
 
