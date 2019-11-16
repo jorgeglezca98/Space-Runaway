@@ -11,7 +11,7 @@ public class HealthBar : MonoBehaviour {
 	private float updateSpeedSeconds = 0.5f;
 
 	void Awake(){
-		GetComponentInParent<Health>().OnHealthPctChanged += HandleHealthChanged;
+		GameEventsController.eventController.OnHealthPctChanged += HandleHealthChanged;
 	}
 
 	// This function is called when the health is modified

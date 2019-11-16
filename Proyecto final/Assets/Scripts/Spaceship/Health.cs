@@ -7,7 +7,6 @@ public class Health : MonoBehaviour {
 
 	// This delegate ensures that every function related with
 	// health changing is called.
-	public event Action<float> OnHealthPctChanged = delegate {};
 	private float maxHealth = 100f;
 
 	private void OnEnable(){
@@ -19,8 +18,6 @@ public class Health : MonoBehaviour {
 	public void modifyHealth(float amount){
 		float currentHealth = PlayerStats.getHealth() + amount;
 		PlayerStats.setHealth(currentHealth);
-		float healthPct = (float)currentHealth / (float)maxHealth;
-		OnHealthPctChanged(healthPct);
 	}
 
 	// Use this for initialization
