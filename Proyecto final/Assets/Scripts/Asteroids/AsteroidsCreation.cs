@@ -7,14 +7,14 @@ public class AsteroidsCreation : MonoBehaviour {
     public GameObject spaceship;
     private List<GameObject> asteroids;
     private enum Axis { yAxis, xAxis, zAxis };
-   
+
     // Separation between each asteroid.
     public int asteroidSeparation;
     // Initially we use this value to maintain the asteriods away enough from the spaceship
     // avoiding them to initialize in the same position as the spaceship.
     public int secureZone;
-    // This value specifies the number of asteroids that we want from the origin to each 
-    // direction ( +x, -x, +y .. ) or in other words, it specifies half the length of 
+    // This value specifies the number of asteroids that we want from the origin to each
+    // direction ( +x, -x, +y .. ) or in other words, it specifies half the length of
     // each edge that conforms the cube of asteroids around the spaceship.
     public int areaSideSize;
     // We use a threshold to indicate when the asteroids are far away enought and should be
@@ -173,7 +173,7 @@ public class AsteroidsCreation : MonoBehaviour {
             return -1;
         }else return 1;
 
-        
+
     }
 
     // Not being currently used but could be needed in the future.
@@ -196,12 +196,12 @@ public class AsteroidsCreation : MonoBehaviour {
             case Axis.yAxis:
                 if (spaceship.transform.eulerAngles.x > 270 && spaceship.transform.eulerAngles.x < 360)
                 {
-                    
+
                     return 1;
                 }
                 else
                 {
-                    
+
                     return -1;
                 }
                 break;

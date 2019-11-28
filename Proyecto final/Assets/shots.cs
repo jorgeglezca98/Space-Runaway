@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class shots : MonoBehaviour {
+public class Shots : MonoBehaviour {
 
 	public GameObject shotPrefab;
 	public int shotSpeed = 2000;
@@ -23,7 +23,7 @@ public class shots : MonoBehaviour {
 		    }
 		}
 	}
-	
+
 	// Update is called once per frame
 	void FixedUpdate () {
 		if(Input.GetButton("Shoot") && (lastShot == null || Vector3.Distance(shotPoint.position, lastShot.transform.position - new Vector3(0,0,lastShotSize/2)) > lastShotSize)) {
@@ -45,6 +45,16 @@ public class shots : MonoBehaviour {
 
             lastShot = shot;
             lastShotSize = lastShot.GetComponent<Renderer>().bounds.size.z;
+						PlayerStats.setAttackMode(true);
 		}
 	}
+
+
+		//
+		// IEnumerator manageAttackMode(){
+		// 	yield return new WaitForSeconds(PlayerStats.getAttackModeTime());
+		// 	PlayerStats.setAttackMode(false);
+		// }
+
+
 }
