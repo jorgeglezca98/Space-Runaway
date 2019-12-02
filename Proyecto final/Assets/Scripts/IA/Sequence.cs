@@ -1,17 +1,22 @@
-class Sequence : Composite {
+using UnityEngine;
 
-    public virtual Status Update() {
+namespace BehaviorTree {
+
+  class Sequence : Composite {
+
+    public override Status Update() {
       //Keep going until a child behavior says it’s running.
       try {
         foreach (Behavior child in Children) {
           Status s = child.Tick();
           //If child fails or keeps running, do the same.
-          if (s != BH_SUCCESS) return s;
+          if (s != Status.BH_SUCCESS) return s;
 
         }
-        return BH_SUCCESS;//Unexpected loop exit.
+        return Status.BH_SUCCESS;//Unexpected loop exit.
       } catch {
-        return BH_INVALID;
+        return Status.BH_INVALID;
       }
     }
+  }
 }

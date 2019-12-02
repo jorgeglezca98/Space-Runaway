@@ -1,16 +1,21 @@
-class Composite : Behavior {
+using System.Collections.Generic;
 
-	protected Vector<Behavior> Children = new List<Behavior>();
+namespace BehaviorTree {
+    
+    abstract class Composite : Behavior {
 
-	public void AddChild(Behavior b) {
-		Children.Add(b);
-	}
+    	protected List<Behavior> Children = new List<Behavior>();
 
-    public void RemoveChild(Behavior b) {
-    	Children.Remove(b);
-    }
+    	public void AddChild(Behavior b) {
+    		Children.Add(b);
+    	}
 
-    public void ClearChildren() {
-    	Children.Clear();
+        public void RemoveChild(Behavior b) {
+        	Children.Remove(b);
+        }
+
+        public void ClearChildren() {
+        	Children.Clear();
+        }
     }
 }

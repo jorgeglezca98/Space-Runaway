@@ -1,26 +1,32 @@
-class Selector : Composite {
-    
-    protected IEnumerator<Behabior> CurrentChild;
+using System.Collections.Generic;
+using UnityEngine;
 
-    protected virtual void OnInitialize() {
-      CurrentChild = Children.GetEnumerator();
-    }
+namespace BehaviorTree {
+  
+  class Selector : Composite {
+      
+      protected IEnumerator<Behavior> CurrentChild;
 
-    protected virtual Status Update() {
-      //Keep going until a child behavior says it’s running.
-      while (true) {
-        Status s = CurrentChild.Current.tick();
-        //If child succeeds or keeps running, do the same.
-        if (s != BH_FAILURE) return s;
-        //Continue search for fallback until the last child.
-        bool end = !CurrentChild.MoveNext();
-        if (end)
-          return BH_FAILURE;
+      public override void OnInitialize() {
+        CurrentChild = Children.GetEnumerator();
       }
-      return BH_INVALID;//”Unexpected loop exit.”
-    }
-}
 
+      public override Status Update() {
+        //Keep going until a child behavior says it’s running.
+        if (!CurrentChild.MoveNext()) return Status.BH_FAILURE;
+        while (true) {
+          Status s = CurrentChild.Current.Tick();
+          //If child succeeds or keeps running, do the same.
+          if (s != Status.BH_FAILURE) return s;
+          //Continue search for fallback until the last child.
+          bool end = !CurrentChild.MoveNext();
+          if (end)
+            return Status.BH_FAILURE;
+        }
+        return Status.BH_INVALID;//”Unexpected loop exit.”
+      }
+  }
+}
 //class Selector : Composite {
 //
 //    public virtual Status Update() {

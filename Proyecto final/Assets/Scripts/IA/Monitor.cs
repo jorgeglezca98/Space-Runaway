@@ -1,10 +1,14 @@
-class Monitor : Parallel {
 
-    public void AddCondition(Behavior condition) {
-       Children.Insert(0, condition);
-    }
+namespace BehaviorTree {
+	
+	class Monitor : Parallel {
 
-    public void AddAction(Behavior action) {
-       Children.Add(action);
-    }
+	    public void AddCondition(Behavior condition) {
+	       Children.Insert(0, condition);
+	    }
+
+	    public void AddAction(Behavior action) {
+	       Children.Add(action);
+	    }
+	}
 }

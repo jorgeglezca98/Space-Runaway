@@ -1,10 +1,11 @@
-using Behavior;
+namespace BehaviorTree {
+	
+	abstract class Decorator : Behavior {
 
-class Decorator : Behavior {
+		protected Behavior Child;
 
-	protected Behavior Child;
-
-	public Decorator(Behavior child) {
-		Child = child;
+		public Decorator(Behavior child) {
+			Child = child;
+		}
 	}
 }
