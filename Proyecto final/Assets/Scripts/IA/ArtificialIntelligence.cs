@@ -30,7 +30,7 @@ public class ArtificialIntelligence : MonoBehaviour {
 		sequenceAvanzar.AddChild(new IsTheTarjetFar(gameObject, DistanceFarFromTarget));
 		sequenceAvanzar.AddChild(new MoveAlong(gameObject, Velocity));
 		root.AddChild(sequenceRetroceder);
-		root.AddChild(sequenceAvanzar);
+		root.AddChild(sequenceAvanzar); 
 		root.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance));
 		Tree = new BehaviorTree.BehaviorTree(root);
 	}

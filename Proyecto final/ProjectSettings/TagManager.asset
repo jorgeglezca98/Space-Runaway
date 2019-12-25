@@ -9,6 +9,7 @@ TagManager:
   - Fire
   - FxTemporaire
   - bullet
+  - asteroid
   layers:
   - Default
   - TransparentFX

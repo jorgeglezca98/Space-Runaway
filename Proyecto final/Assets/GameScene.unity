@@ -346,7 +346,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_LocalRotation.x
@@ -354,7 +354,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_LocalRotation.z
@@ -362,7 +362,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_RootOrder
@@ -402,7 +402,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4383042245004334, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1039692511104696, guid: e54f7753d57c50c49898ec9886f4310c, type: 2}
       propertyPath: m_Layer
@@ -1052,7 +1052,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 297537616}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a50bc0ae04444936a8e32fea12df1ae, type: 3}
   m_Name: 
@@ -1270,7 +1270,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: -1319710162
+  randomSeed: -436513528
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -4520,6 +4520,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &297537628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 297537616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7654d8d589babd741b828b2d5e014d79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1889710217}
 --- !u!1 &340138894 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1376529962390934, guid: e54f7753d57c50c49898ec9886f4310c,
@@ -6695,7 +6707,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 1297350783
+  randomSeed: 1334162271
   InitialModule:
     serializedVersion: 3
     enabled: 1
