@@ -2,95 +2,162 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateAroundAsteroid : MonoBehaviour {
+public class RotateAroundAsteroid : MonoBehaviour
+{
 
-    public GameObject player;
-
-    private Vector3 boxcast;
-    float m_MaxDistance;
-    float m_Speed;
-    bool m_HitDetect;
-
-    Collider m_Collider;
-    RaycastHit m_Hit;
-
-    Vector3 boxcastDimension;
-    Vector3 directionToPlayer;
-
-    // Use this for initialization
-    void Start () {
-        m_MaxDistance = 20f;
-        boxcastDimension = new Vector3(14f,5f,15f);
-
-        //Debug.Log("Vector3 up: " + transform.up);
-
-
-        float angleToTargetInY = YawLeft();
-        Debug.Log("Pre Angle Y: " + angleToTargetInY);
-
-        float angleToTargetInX = PitchLeft();
-        Debug.Log("Pre Angle X: " + angleToTargetInX);
-
-        if (angleToTargetInY != 0f)
-            transform.eulerAngles = new Vector3(0, angleToTargetInY, 0);
-
-        angleToTargetInY = YawLeft();
-        Debug.Log("Post Angle Y: " + angleToTargetInY);
-
-        angleToTargetInX = PitchLeft();
-        Debug.Log("Post Angle X: " + angleToTargetInX);
-
-        
-
-
-        //if (angleToTargetInY != 0f)
-        //    transform.eulerAngles = new Vector3(0, angleToTargetInY, 0);
-
-        //if (angleToTargetInX != 0f)
-        //    transform.eulerAngles = new Vector3(angleToTargetInX, 0,0);
-        //angleToTargetInX = AngleToTargetInX();
-        //Debug.Log("Post angle: " + angleToTargetInX);
-
-
-        //float angleToTargetInY = AngleToTargetInY();
-        //Debug.Log("Necessary Angle to face the Target: " + angleToTargetInY);
-        //if (angleToTargetInY != 0f)
-        //    transform.eulerAngles = new Vector3(0, angleToTargetInY, 0);
-        //angleToTargetInY = AngleToTargetInY();
-        //Debug.Log("Necessary Angle to face the Target: " + angleToTargetInY);
+    enum Direction
+    {
+        Left,
+        Right
     }
 
-    float YawLeft()
+    public GameObject Player;
+    public Vector3 PreviousAsteroidPosition;
+    public Vector3 CurrentAsteroidPosition;
+    private Direction CurrentDirection;
+    float LookForCollisionDistance = 20f;
+
+    bool ThereIsCollision;
+
+    RaycastHit HittedObject;
+    RaycastHit HittedAsteroid;
+
+    float ShipSpeed = 20f;
+    float ShipsWingspan = 10f;
+    float HalfTheShipsLength = 7.5f;
+    float HalfTheShipsHeight = 2.5f;
+
+    Vector3 BoxcastDimension;
+
+    // Use this for initialization
+    void Start()
     {
-        Vector3 agentPosition = transform.position;
-        Vector3 agentDirection = transform.position + transform.forward;
-        Vector3 targetPosition = player.transform.position;
+        Random.seed = System.DateTime.Now.Millisecond;
+        BoxcastDimension = new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength);
+        PreviousAsteroidPosition = new Vector3(0f, 0f, 0f);
+    }
+
+    private void FixedUpdate()
+    {
+        Dodge();
+        MoveForward();
+    }
+
+    void MoveForward()
+    {
+        transform.Translate(0, 0, Time.deltaTime * ShipSpeed);
+    }
+
+    void Dodge()
+    {
+        if (ThereIsObstacle())
+        {
+            if (FacingNewAsteroid())
+            {
+                CurrentDirection = RandomDirection();
+            }
+
+            while (ThereIsObstacle())
+                Yaw(CurrentDirection);
+        }
+    }
+
+    Direction RandomDirection()
+    {
+        int randomNumber = Random.Range(-1, 1);
+        if (randomNumber >= 0)
+            return Direction.Right;
+        else return Direction.Left;
+    }
+
+    bool FacingNewAsteroid()
+    {
+        CurrentAsteroidPosition = HittedAsteroid.transform.position;
+        if (CurrentAsteroidPosition != PreviousAsteroidPosition)
+        {
+            PreviousAsteroidPosition = CurrentAsteroidPosition;
+            return true;
+        }
+        else return false;
+    }
+
+    void Yaw(Direction direction)
+    {
+        if(direction == Direction.Right)
+        {
+            transform.rotation *= Quaternion.Euler(0, 1f, 0);
+        }
+        else
+        {
+            transform.rotation *= Quaternion.Euler(0, -1f, 0);
+        }
+    }
+
+    Direction InverseDirection(Direction direction)
+    {
+        if (direction == Direction.Left)
+            return Direction.Right;
+        else return Direction.Left;
+    }
+
+    Direction DirectionTo(GameObject target)
+    {
+        Vector3 agentPosition = transform.TransformPoint(transform.position);
+        Vector3 agentDirection = transform.TransformPoint(transform.position) + transform.TransformDirection(transform.forward);
+        Vector3 targetPosition = transform.TransformPoint(target.transform.position);
 
         Vector3 agentToTarget = GenerateVectorFromPoints(agentPosition, targetPosition);
         Vector3 agentToForward = GenerateVectorFromPoints(agentPosition, agentDirection);
 
-        Vector3 crossProduct = CrossProduct(agentToTarget, agentToForward);
+        Vector3 crossProduct = Vector3.Cross(agentToTarget, agentToForward).normalized;
+
+        /* If the target is right in front of the A.I it doesn't arbitrarily it'll go left, it doesn't really matters.*/
+        if ( crossProduct.y <= 0 )
+        {
+            return Direction.Left;
+        }
+        else
+        {
+            return Direction.Right;
+        }
+    }
+
+    float YawLeftTo(GameObject target)
+    {
+        Vector3 agentPosition = transform.TransformPoint(transform.position);
+        Vector3 agentDirection = transform.TransformPoint(transform.position) + transform.TransformDirection(transform.forward);
+        Vector3 targetPosition = transform.TransformPoint(target.transform.position);
+
+        Vector3 agentToTarget = GenerateVectorFromPoints(agentPosition, targetPosition);
+        Vector3 agentToForward = GenerateVectorFromPoints(agentPosition, agentDirection);
+
+        Vector3 crossProduct = Vector3.Cross(agentToTarget, agentToForward).normalized;
+
         float angleBetweenVectors = AngleBetweenVectorsXZ(agentToTarget, agentToForward);
 
-        //Debug.Log("Angle Between Vectors: " + angleBetweenVectors);
-
-        if(angleBetweenVectors != 0f && crossProduct.y < 0)
+        if (angleBetweenVectors != 0f && crossProduct.y < 0)
         {
-            //Debug.Log("Angle1: " + (360 - angleBetweenVectors));
             return 360 - angleBetweenVectors;
         }
         else
         {
-            //Debug.Log("Angle2: " + (angleBetweenVectors));
             return angleBetweenVectors;
         }
     }
 
-    float PitchLeft()
+    float AngleBetweenVectorsXZ(Vector3 a, Vector3 b)
+    {
+        float numerator = (a.x * b.x) + (a.z * b.z);
+        float denominator = DistanceXZ(a) * DistanceXZ(b);
+        float cos = Clamp(numerator / denominator);
+        return Mathf.Acos(cos) * (180 / Mathf.PI);
+    }
+
+    float PitchLeftTo(GameObject target)
     {
         Vector3 agentPosition = transform.position;
         Vector3 agentDirection = transform.position + transform.forward;
-        Vector3 targetPosition = player.transform.position;
+        Vector3 targetPosition = target.transform.position;
 
         Vector3 agentToTarget = GenerateVectorFromPoints(agentPosition, targetPosition);
         Vector3 agentToForward = GenerateVectorFromPoints(agentPosition, agentDirection);
@@ -100,42 +167,30 @@ public class RotateAroundAsteroid : MonoBehaviour {
 
         if (angleBetweenVectors != 0f && crossProduct.x > 0)
         {
-            //Debug.Log("Angle1: " + (360 - angleBetweenVectors));
             return 360 - angleBetweenVectors;
         }
         else
         {
-            //Debug.Log("Angle2: " + (angleBetweenVectors));
             return angleBetweenVectors;
         }
 
     }
 
-
     float AngleBetweenVectorsZY(Vector3 a, Vector3 b)
     {
         float numerator = (a.z * b.z) + (a.y * b.y);
         float denominator = DistanceZY(a) * DistanceZY(b);
-
-        //Debug.Log("a: " + a);
-        //Debug.Log("b: " + b);
-        //Debug.Log("Numerator: " + numerator);
-        //Debug.Log("Denominator: " + denominator);
         float cos = numerator / denominator;
         return Mathf.Acos(cos) * (180 / Mathf.PI);
     }
 
-    float AngleBetweenVectorsXZ(Vector3 a, Vector3 b)
+    float Clamp(float value)
     {
-        float numerator = (a.x * b.x) + (a.z * b.z);
-        float denominator = DistanceXZ(a) * DistanceXZ(b);
-
-        //Debug.Log("a: " + a);
-        //Debug.Log("b: " + b);
-        //Debug.Log("Numerator: " + numerator);
-        //Debug.Log("Denominator: " + denominator);
-        float cos = numerator / denominator;
-        return Mathf.Acos(cos) * (180 / Mathf.PI);
+        if (value > 1.0f)
+            return 1.0f;
+        else if (value < -1.0f)
+            return -1.0f;
+        else return value;
     }
 
     float DistanceXZ(Vector3 v)
@@ -164,20 +219,23 @@ public class RotateAroundAsteroid : MonoBehaviour {
         return crossProduct;
     }
 
-    float Round(float number, float precision){
-        if (Mathf.Abs(number) < precision){
+    float Round(float number, float precision)
+    {
+        if (Mathf.Abs(number) < precision)
+        {
             return 0f;
-        }else return number;
+        }
+        else return number;
     }
 
-    float calculateSlope(Vector3 pointA, Vector3 pointB)
+    float CalculateSlope(Vector3 pointA, Vector3 pointB)
     {
         float numerator = pointB.x - pointA.x;
         float denominator = pointB.z - pointA.z;
         return numerator / denominator;
     }
 
-    float degreesToRadians(float degrees)
+    float DegreesToRadians(float degrees)
     {
         return Mathf.PI * (degrees / 180);
     }
@@ -187,83 +245,149 @@ public class RotateAroundAsteroid : MonoBehaviour {
         return radians * (180 / Mathf.PI);
     }
 
-    // Update is called once per frame
-    void Update()
+    bool ThereIsObstacle()
     {
 
-        int layerMask = 1 << 8;
-        layerMask = ~layerMask;
-
-        directionToPlayer = (player.transform.position - transform.position);
-        //rotationAngleAroundY();
-       // transform.Rotate(0.0f, (float)rotationAngleAroundY(), 0.0f, Space.Self);
-
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, directionToPlayer, out hit, Mathf.Infinity, layerMask))
+        ThereIsCollision = Physics.BoxCast(transform.position, BoxcastDimension, transform.forward, out HittedObject, transform.rotation, LookForCollisionDistance);
+        if (ThereIsCollision)
         {
+            if (HittedObject.collider.tag == "asteroid")
+            {
+                HittedAsteroid = HittedObject;
+                return true;
+            }
+            else return false;
 
-           // Debug.Log("Player position: " + player.transform.position);
-            Debug.DrawRay(transform.position, directionToPlayer * hit.distance, Color.yellow);
-            // if (hit.transform.tag == "asteroid")
-            //   Debug.Log("Bingo!");
-            // Debug.Log("Hit a : " + hit.transform.tag);
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-        //    Debug.Log("Hit a : " + hit.transform.tag);
+            return false;
         }
     }
 
-        //       //Test to see if there is a hit using a BoxCast
-        //       //Calculate using the center of the GameObject's Collider(could also just use the GameObject's position), half the GameObject's size, the direction, the GameObject's rotation, and the maximum distance as variables.
-        //       //Also fetch the hit data
-        //       //m_HitDetect = Physics.BoxCast(transform.position, boxcastDimension, transform.forward, out m_Hit, transform.rotation, m_MaxDistance);
-        //       //if (m_HitDetect)
-        //       //{
-        //       //    //Output the name of the Collider your Box hit
-        //       //    Debug.Log("Hit : " + m_Hit.collider.name);
-        //       //}
-        //   }
+    //Draw the BoxCast as a gizmo to show where it currently is testing. Click the Gizmos button to see this
+    void OnDrawGizmos()
+    {
+        //Check if there has been a hit yet
+        if (ThereIsCollision)
+        {
+            ExtDebug.DrawBoxCastOnHit(transform.position, BoxcastDimension, transform.rotation, transform.forward, HittedObject.distance);
+        }
+        //If there hasn't been a hit yet, draw the ray at the maximum distance
+        else
+        {
+            ExtDebug.DrawBoxCastBox(transform.position, BoxcastDimension, transform.rotation, transform.forward, HittedObject.distance);
+        }
+    }
+}
 
-        //   double rotationAngleAroundY()
-        //   {
-        //       float xOffset = transform.position.x - player.transform.position.x;
-        //       float zOffset = transform.position.z - player.transform.position.z;
-        //       Debug.Log("X offset: " + xOffset);
-        //       Debug.Log("Z offset: " + zOffset);
-        //       double angleInRadians = Mathf.Atan(xOffset / zOffset);
-        //       double angleInDegrees = angleInRadians * (180/Mathf.PI);
-        //       Debug.Log(angleInDegrees);
-        //       return angleInDegrees;
-
-        //   }
-
-        //Draw the BoxCast as a gizmo to show where it currently is testing. Click the Gizmos button to see this
-        //void OnDrawGizmos()
-        //{
-        //    //Check if there has been a hit yet
-        //    if (m_HitDetect)
-        //    {
-        //        Gizmos.color = Color.red;
-        //        //Draw a Ray forward from GameObject toward the hit
-        //        Gizmos.DrawRay(transform.position, transform.forward * m_Hit.distance);
-        //        //Draw a cube that extends to where the hit exists
-        //        Gizmos.DrawWireCube(transform.position + transform.forward * m_Hit.distance, boxcastDimension);
-        //    }
-        //    //If there hasn't been a hit yet, draw the ray at the maximum distance
-        //    else
-        //    {
-        //        Gizmos.color = Color.green;
-        //        //Draw a Ray forward from GameObject toward the maximum distance
-        //        Gizmos.DrawRay(transform.position, transform.forward * m_MaxDistance);
-        //        //Draw a cube at the maximum distance
-        //        Gizmos.DrawWireCube(transform.position + transform.forward * m_MaxDistance, boxcastDimension);
-        //    }
-        //}
-
-
-
+/*This class is purely used to draw the boxcast.*/
+public static class ExtDebug
+{
+    //Draws just the box at where it is currently hitting.
+    public static void DrawBoxCastOnHit(Vector3 origin, Vector3 halfExtents, Quaternion orientation, Vector3 direction, float hitInfoDistance)
+    {
+        origin = CastCenterOnCollision(origin, direction, hitInfoDistance);
+        DrawBox(origin, halfExtents, orientation);
     }
 
+    //Draws the full box from start of cast to its end distance. Can also pass in hitInfoDistance instead of full distance
+    public static void DrawBoxCastBox(Vector3 origin, Vector3 halfExtents, Quaternion orientation, Vector3 direction, float distance)
+    {
+        direction.Normalize();
+        Box bottomBox = new Box(origin, halfExtents, orientation);
+        Box topBox = new Box(origin + (direction * distance), halfExtents, orientation);
+
+        Gizmos.DrawLine(bottomBox.backBottomLeft, topBox.backBottomLeft);
+        Gizmos.DrawLine(bottomBox.backBottomRight, topBox.backBottomRight);
+        Gizmos.DrawLine(bottomBox.backTopLeft, topBox.backTopLeft);
+        Gizmos.DrawLine(bottomBox.backTopRight, topBox.backTopRight);
+        Gizmos.DrawLine(bottomBox.frontTopLeft, topBox.frontTopLeft);
+        Gizmos.DrawLine(bottomBox.frontTopRight, topBox.frontTopRight);
+        Gizmos.DrawLine(bottomBox.frontBottomLeft, topBox.frontBottomLeft);
+        Gizmos.DrawLine(bottomBox.frontBottomRight, topBox.frontBottomRight);
+
+        DrawBox(bottomBox);
+        DrawBox(topBox);
+    }
+
+    public static void DrawBox(Vector3 origin, Vector3 halfExtents, Quaternion orientation)
+    {
+        DrawBox(new Box(origin, halfExtents, orientation));
+    }
+    public static void DrawBox(Box box)
+    {
+        Gizmos.DrawLine(box.frontTopLeft, box.frontTopRight);
+        Gizmos.DrawLine(box.frontTopRight, box.frontBottomRight);
+        Gizmos.DrawLine(box.frontBottomRight, box.frontBottomLeft);
+        Gizmos.DrawLine(box.frontBottomLeft, box.frontTopLeft);
+
+        Gizmos.DrawLine(box.backTopLeft, box.backTopRight);
+        Gizmos.DrawLine(box.backTopRight, box.backBottomRight);
+        Gizmos.DrawLine(box.backBottomRight, box.backBottomLeft);
+        Gizmos.DrawLine(box.backBottomLeft, box.backTopLeft);
+
+        Gizmos.DrawLine(box.frontTopLeft, box.backTopLeft);
+        Gizmos.DrawLine(box.frontTopRight, box.backTopRight);
+        Gizmos.DrawLine(box.frontBottomRight, box.backBottomRight);
+        Gizmos.DrawLine(box.frontBottomLeft, box.backBottomLeft);
+    }
+
+    public struct Box
+    {
+        public Vector3 localFrontTopLeft { get; private set; }
+        public Vector3 localFrontTopRight { get; private set; }
+        public Vector3 localFrontBottomLeft { get; private set; }
+        public Vector3 localFrontBottomRight { get; private set; }
+        public Vector3 localBackTopLeft { get { return -localFrontBottomRight; } }
+        public Vector3 localBackTopRight { get { return -localFrontBottomLeft; } }
+        public Vector3 localBackBottomLeft { get { return -localFrontTopRight; } }
+        public Vector3 localBackBottomRight { get { return -localFrontTopLeft; } }
+
+        public Vector3 frontTopLeft { get { return localFrontTopLeft + origin; } }
+        public Vector3 frontTopRight { get { return localFrontTopRight + origin; } }
+        public Vector3 frontBottomLeft { get { return localFrontBottomLeft + origin; } }
+        public Vector3 frontBottomRight { get { return localFrontBottomRight + origin; } }
+        public Vector3 backTopLeft { get { return localBackTopLeft + origin; } }
+        public Vector3 backTopRight { get { return localBackTopRight + origin; } }
+        public Vector3 backBottomLeft { get { return localBackBottomLeft + origin; } }
+        public Vector3 backBottomRight { get { return localBackBottomRight + origin; } }
+
+        public Vector3 origin { get; private set; }
+
+        public Box(Vector3 origin, Vector3 halfExtents, Quaternion orientation) : this(origin, halfExtents)
+        {
+            Rotate(orientation);
+        }
+        public Box(Vector3 origin, Vector3 halfExtents)
+        {
+            this.localFrontTopLeft = new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z);
+            this.localFrontTopRight = new Vector3(halfExtents.x, halfExtents.y, -halfExtents.z);
+            this.localFrontBottomLeft = new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+            this.localFrontBottomRight = new Vector3(halfExtents.x, -halfExtents.y, -halfExtents.z);
+
+            this.origin = origin;
+        }
+
+
+        public void Rotate(Quaternion orientation)
+        {
+            localFrontTopLeft = RotatePointAroundPivot(localFrontTopLeft, Vector3.zero, orientation);
+            localFrontTopRight = RotatePointAroundPivot(localFrontTopRight, Vector3.zero, orientation);
+            localFrontBottomLeft = RotatePointAroundPivot(localFrontBottomLeft, Vector3.zero, orientation);
+            localFrontBottomRight = RotatePointAroundPivot(localFrontBottomRight, Vector3.zero, orientation);
+        }
+    }
+
+    //This should work for all cast types
+    static Vector3 CastCenterOnCollision(Vector3 origin, Vector3 direction, float hitInfoDistance)
+    {
+        return origin + (direction.normalized * hitInfoDistance);
+    }
+
+    static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rotation)
+    {
+        Vector3 direction = point - pivot;
+        return pivot + rotation * direction;
+    }
+}
