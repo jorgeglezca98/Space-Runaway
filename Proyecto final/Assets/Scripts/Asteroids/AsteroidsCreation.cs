@@ -8,6 +8,12 @@ public class AsteroidsCreation : MonoBehaviour {
     private List<GameObject> asteroids;
     private enum Axis { yAxis, xAxis, zAxis };
 
+    /* Recommended settings for the parameters:
+     * asteroidSeparation = 100
+     * secureZone = 20
+     * areaSideSize = 3
+     */
+
     // Separation between each asteroid.
     public int asteroidSeparation;
     // Initially we use this value to maintain the asteriods away enough from the spaceship
@@ -56,7 +62,7 @@ public class AsteroidsCreation : MonoBehaviour {
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) - secureZone;
                     asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
-                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    //asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
@@ -71,7 +77,7 @@ public class AsteroidsCreation : MonoBehaviour {
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) + secureZone;
                     asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
-                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    //asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
@@ -86,7 +92,7 @@ public class AsteroidsCreation : MonoBehaviour {
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) + secureZone;
                     asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
-                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                    //asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;
@@ -101,7 +107,7 @@ public class AsteroidsCreation : MonoBehaviour {
                     float yPosition = spaceshipPosition.y + (y * asteroidSeparation);
                     float zPosition = spaceshipPosition.z + (z * asteroidSeparation) - secureZone;
                     asteroids.Add((GameObject)Instantiate(Resources.Load(asteroidNames[Random.Range(0, 12)], typeof(GameObject)), new Vector3(xPosition, yPosition, zPosition), Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360))) as GameObject);
-                    asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
+                   // asteroids[asteroidIndex].GetComponent<Collider>().enabled = false;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
                     asteroids[asteroidIndex].GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-10, 11), Random.Range(-10, 11), Random.Range(-10, 11)), ForceMode.Impulse);
                     asteroidIndex += 1;

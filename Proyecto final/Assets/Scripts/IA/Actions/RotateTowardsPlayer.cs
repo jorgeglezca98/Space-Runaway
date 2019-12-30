@@ -4,9 +4,6 @@ namespace BehaviorTree{
 
     class RotateTowardsPlayer : LeafNode{
 
-        public GameObject Player;
-
-
         public RotateTowardsPlayer(GameObject agent) : base(agent)
         {
 
@@ -14,7 +11,7 @@ namespace BehaviorTree{
 
         public override Status Update()
         {
-            Agent.transform.LookAt(Player.transform);
+            Agent.transform.LookAt(ArtificialIntelligence.Target.transform);
             return Status.BH_SUCCESS;
         }
 
