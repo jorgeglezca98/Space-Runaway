@@ -7,7 +7,9 @@ public class shots : MonoBehaviour {
 
 	public GameObject shotPrefab;
 	public int shotSpeed = 2000;
-	public float shotMaxDistance = 100f;
+	public float ShotMaxDistance = 100f;
+	public float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
+	public float RangeSize = 10f;
 	private Transform shotPoint;
 	private GameObject lastShot;
 	private float lastShotSize;
@@ -49,28 +51,51 @@ public class shots : MonoBehaviour {
 				RaycastHit hit;
 				GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-				if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, HUD.transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance, ~(1 << 8)))
-	            {
-	                transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
-	            } else {
-	            	transform.localRotation = Quaternion.Euler(0,0,0);
-	            }
+				RaycastHit[] hitsInRange = Physics.BoxCastAll(HUD.transform.position, 
+					new Vector3(RangeSize, RangeSize, ShotMinDistance), 
+					transform.TransformDirection(Vector3.forward), 
+					Quaternion.identity, 
+					ShotMaxDistance, 
+					(1 << 10));
+
+				if(hitsInRange.Length > 0) {
+					int i = 0;
+					Vector3 origenRaycast = HUD.transform.position;
+					do {
+						Physics.Raycast(
+							origenRaycast, 
+							hitsInRange[i].transform.position - origenRaycast, 
+							out hit, 
+							Mathf.Infinity, 
+							~(1 << 8) & ~(1 << 9));
+						i++;
+					} while (hit.transform.tag != "enemy" && i < hitsInRange.Length);
+					
+					Debug.Log(hit.transform.tag);
+					if (hit.transform.tag == "enemy")
+			        {
+			        	transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
+		            } else {
+		            	transform.localRotation = Quaternion.Euler(0,0,0);
+		            }
+				} else {
+					transform.localRotation = Quaternion.Euler(0,0,0);
+				}
 
 				GameObject shot = Instantiate(shotPrefab, shotPoint.position, transform.rotation);
 
-				Rigidbody shotRb = shot.AddComponent<Rigidbody>();
-				shotRb.useGravity = false;
+				Rigidbody shotRb = shot.GetComponent<Rigidbody>();
 	            shotRb.AddRelativeForce(new Vector3(0,0,shotSpeed));
 
 	            lastShot = shot;
 	            lastShotSize = lastShot.GetComponent<Renderer>().bounds.size.z;
 
-			if(!PlayerStats.isAttacking()){
-				PlayerStats.setAttackMode(true);
-			}
+				if(!PlayerStats.isAttacking()){
+					PlayerStats.setAttackMode(true);
+				}
 
-			attackModeTimer = Time.time + maxAttackModeTimer;
-			PlayerStats.setOverheat(PlayerStats.getOverheat() + overheatIncrement);
+				attackModeTimer = Time.time + maxAttackModeTimer;
+				PlayerStats.setOverheat(PlayerStats.getOverheat() + overheatIncrement);
 			}
 		}
 	}

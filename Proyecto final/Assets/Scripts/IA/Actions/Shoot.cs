@@ -28,7 +28,7 @@ namespace BehaviorTree {
 			bool isInRange = Physics.BoxCast(Agent.transform.position, new Vector3(RangeSize, RangeSize, ShotMinDistance), 
 				Agent.transform.TransformDirection(Vector3.forward), Quaternion.identity, ShotMaxDistance, (1 << 9));
 			bool collidesWithSomething = Physics.Raycast(Agent.transform.position, 
-				ArtificialIntelligence.Target - Agent.transform.position, out hit, ShotMaxDistance, ~(1 << 8));
+				ArtificialIntelligence.Target.transform.position - Agent.transform.position, out hit, ShotMaxDistance, ~(1 << 8));
 			bool targetIsHit = GameObject.ReferenceEquals(ArtificialIntelligence.Target, hit.transform.gameObject);
 			
 			if (isInRange && collidesWithSomething && targetIsHit)
