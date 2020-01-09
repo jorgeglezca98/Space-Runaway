@@ -27,7 +27,7 @@ public class ArtificialIntelligence : MonoBehaviour {
 		if(players.Length > 0 && Target == null)
 			Target = players[0];
 
-		Sequence root = new Sequence();
+		Parallel root = new Parallel();
 
         Selector selectorMovebackOrForward = new Selector();
 
@@ -41,6 +41,10 @@ public class ArtificialIntelligence : MonoBehaviour {
 
         selectorMovebackOrForward.AddChild(sequenceRetroceder);
         selectorMovebackOrForward.AddChild(sequenceAvanzar);
+
+        Sequence sequenceDashIfDamageIsReceived = new Sequence();
+        sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject));
+        sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject));
 
         //root.AddChild(sequenceRetroceder);
         //root.AddChild(sequenceAvanzar);
@@ -64,8 +68,8 @@ public class ArtificialIntelligence : MonoBehaviour {
 
         sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
         sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-
-
+        sequenceShootOrAvoid.AddChild(sequenceDashIfDamageIsReceived);
+        
         root.AddChild(selectorMovebackOrForward);
         //root.AddChild(selectorAvoidAsteroidOrFaceTarget);
         root.AddChild(sequenceShootOrAvoid);
