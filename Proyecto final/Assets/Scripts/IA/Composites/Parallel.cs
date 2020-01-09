@@ -1,7 +1,9 @@
 
 
-namespace BehaviorTree {
-	class Parallel : Composite {
+namespace BehaviorTree
+{
+    class Parallel : Composite
+    {
         public enum Policy
         {
             RequireOne,
@@ -27,7 +29,7 @@ namespace BehaviorTree {
                             return Status.BH_SUCCESS;
                     }
 
-                    if(s == Status.BH_FAILURE)
+                    if (s == Status.BH_FAILURE)
                     {
                         failureCount++;
                         if (failurePolicy == Policy.RequireOne)
@@ -43,7 +45,7 @@ namespace BehaviorTree {
 
                 // if all policies are "requireAll" and some BH fails, then BH_RUNNING will be returned, 
                 // even if there are no behaviours running at the moment
-                return Status.BH_RUNNING; 
+                return Status.BH_RUNNING;
             }
             catch
             {
@@ -89,5 +91,5 @@ namespace BehaviorTree {
                    if (b.isRunning()) b.abort();
                 }
             }*/
-	}
+    }
 }
