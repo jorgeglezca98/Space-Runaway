@@ -5,9 +5,9 @@ using UnityEngine;
 
 class Dash : MonoBehaviour
 {
-    Vector3 rightDash = new Vector3(Time.deltaTime * 350, 0, 0);
-    Vector3 leftDash = new Vector3(-Time.deltaTime * 350, 0, 0);
-    Rigidbody rb;
+
+    public Rigidbody rb;
+    public float intensity = 350f;
 
     private void Start()
     {
@@ -18,11 +18,11 @@ class Dash : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Q))
         {
-            rb.AddRelativeForce(leftDash, ForceMode.Impulse);
+            rb.AddRelativeForce(new Vector3(-Time.deltaTime * intensity, 0, 0), ForceMode.Impulse);
         }
         else if (Input.GetKey(KeyCode.E))
         {
-            rb.AddRelativeForce(rightDash, ForceMode.Impulse);
+            rb.AddRelativeForce(new Vector3(Time.deltaTime * intensity, 0, 0), ForceMode.Impulse);
         }
     }
 }
