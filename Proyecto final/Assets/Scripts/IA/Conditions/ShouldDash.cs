@@ -6,26 +6,30 @@ namespace BehaviorTree
 {
     class ShouldDash : LeafNode
     {
-        float actualHealth = PlayerStats.getHealth();
+        LifeStats stats;
+        float actualHealth;
         float lastHealth;
 
         float diff = 20;
+        private GameObject gameObject;
+        private DestructionController destructionController;
 
-        public ShouldDash(GameObject agent) : base(agent)
+        public ShouldDash(GameObject agent, DestructionController destructionController) : base(agent)
         {
+            stats = destructionController.Stats;
+            actualHealth = stats.getHealth();
             lastHealth = actualHealth;
         }
 
         public override Status Update()
         {
-            actualHealth = PlayerStats.getHealth();
-            if (Mathf.Abs(lastHealth - actualHealth) >= 20)
+            actualHealth = stats.getHealth();
+            if (Mathf.Abs(lastHealth - actualHealth) >= diff)
             {
                 lastHealth = actualHealth;
                 return Status.BH_SUCCESS;
             }
             return Status.BH_FAILURE;
         }
-
     }
 }

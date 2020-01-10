@@ -43,7 +43,7 @@ public class ArtificialIntelligence : MonoBehaviour {
         selectorMovebackOrForward.AddChild(sequenceAvanzar);
 
         Sequence sequenceDashIfDamageIsReceived = new Sequence();
-        sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject));
+        sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
         sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject));
 
         //root.AddChild(sequenceRetroceder);

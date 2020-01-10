@@ -5,7 +5,7 @@ using UnityEngine;
 public class DestructionController : MonoBehaviour {
 
 	public int destructionDelay = 1;
-	private LifeStats Stats = new LifeStats();
+    public LifeStats Stats = new LifeStats();
 
 	void OnCollisionEnter(Collision collision) 
 	{
