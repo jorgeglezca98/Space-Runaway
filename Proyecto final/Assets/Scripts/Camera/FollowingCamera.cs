@@ -14,7 +14,10 @@ public class FollowingCamera : MonoBehaviour
 
 	// Update is called once per frame
 	void Update () {
-        transform.position = player.transform.position;
-		transform.rotation = player.transform.rotation;
+		if (player)
+		{
+		    transform.position = player.transform.position;
+			transform.rotation = player.transform.rotation;
+		}
 	}
 }

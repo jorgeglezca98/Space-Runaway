@@ -5,10 +5,26 @@ using UnityEngine;
 public class DestructionController : MonoBehaviour {
 
 	public int destructionDelay = 1;
+    public LifeStats Stats = new LifeStats();
 
-	void OnCollisionEnter(Collision collision) {
+	void OnCollisionEnter(Collision collision) 
+	{
+		DestroySpaceship(collision.gameObject.tag);
+    }
 
-		if(PlayerStats.getHealth() <= 0) {
+    private void OnTriggerEnter(Collider other)
+    {
+        DestroySpaceship(other.gameObject.tag);
+    }
+
+    private void DestroySpaceship(string tag){
+    	if(tag == "bullet") 
+			Stats.setHealth(Stats.getHealth() - 5f);
+		else
+			Stats.setHealth(0f);
+
+		if(Stats.getHealth() <= 0) 
+		{
 	    	Vector3 center = GetComponent<Renderer>().bounds.center;
 	    	float radius = GetComponent<Renderer>().bounds.size.z;
 
