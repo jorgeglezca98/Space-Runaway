@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class shots : MonoBehaviour {
+public class Shots : MonoBehaviour {
 
 	public GameObject shotPrefab;
 	public int shotSpeed = 2000;
-	public float shotMaxDistance = 100f;
+	public float ShotMaxDistance = 100f;
+	public float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
+	public float RangeSize = 10f;
 	private Transform shotPoint;
 	private GameObject lastShot;
 	private float lastShotSize;
+	private OverheatStats Stats = new OverheatStats();
 
 	// Time since the last time the player attacked.
 	private float attackModeTimer = 0.0f;
@@ -44,41 +47,64 @@ public class shots : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate () {
-		if(PlayerStats.getOverheat() < PlayerStats.getMaxOverheat()){
+		if(Stats.getOverheat() < Stats.getMaxOverheat()){
 			if(Input.GetButton("Shoot") && (lastShot == null || Vector3.Distance(shotPoint.position, lastShot.transform.position - new Vector3(0,0,lastShotSize/2)) > lastShotSize)) {
 				RaycastHit hit;
 				GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-				if (Physics.Raycast(HUD.GetComponent<Renderer>().bounds.center, HUD.transform.TransformDirection(Vector3.forward), out hit, shotMaxDistance, ~(1 << 8)))
-	            {
-	                transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
-	            } else {
-	            	transform.localRotation = Quaternion.Euler(0,0,0);
-	            }
+				RaycastHit[] hitsInRange = Physics.BoxCastAll(HUD.transform.position, 
+					new Vector3(RangeSize, RangeSize, ShotMinDistance), 
+					transform.TransformDirection(Vector3.forward), 
+					Quaternion.identity, 
+					ShotMaxDistance, 
+					(1 << 10));
+
+				if(hitsInRange.Length > 0) {
+					int i = 0;
+					Vector3 origenRaycast = HUD.transform.position;
+					do {
+						Physics.Raycast(
+							origenRaycast, 
+							hitsInRange[i].transform.position - origenRaycast, 
+							out hit, 
+							Mathf.Infinity, 
+							~(1 << 8) & ~(1 << 9));
+						i++;
+					} while (hit.transform.tag != "enemy" && i < hitsInRange.Length);
+					
+					Debug.Log(hit.transform.tag);
+					if (hit.transform.tag == "enemy")
+			        {
+			        	transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
+		            } else {
+		            	transform.localRotation = Quaternion.Euler(0,0,0);
+		            }
+				} else {
+					transform.localRotation = Quaternion.Euler(0,0,0);
+				}
 
 				GameObject shot = Instantiate(shotPrefab, shotPoint.position, transform.rotation);
 
-				Rigidbody shotRb = shot.AddComponent<Rigidbody>();
-				shotRb.useGravity = false;
+				Rigidbody shotRb = shot.GetComponent<Rigidbody>();
 	            shotRb.AddRelativeForce(new Vector3(0,0,shotSpeed));
 
 	            lastShot = shot;
 	            lastShotSize = lastShot.GetComponent<Renderer>().bounds.size.z;
 
-			if(!PlayerStats.isAttacking()){
-				PlayerStats.setAttackMode(true);
-			}
+				if(!Stats.isAttacking()){
+					Stats.setAttackMode(true);
+				}
 
-			attackModeTimer = Time.time + maxAttackModeTimer;
-			PlayerStats.setOverheat(PlayerStats.getOverheat() + overheatIncrement);
+				attackModeTimer = Time.time + maxAttackModeTimer;
+				Stats.setOverheat(Stats.getOverheat() + overheatIncrement);
 			}
 		}
 	}
 
 	void Update(){
 		manageAttackMode();
-		if(PlayerStats.getOverheat() < PlayerStats.getMaxOverheat()){
-			PlayerStats.setOverheat(PlayerStats.getOverheat() - overheatDecrement);
+		if(Stats.getOverheat() < Stats.getMaxOverheat()){
+			Stats.setOverheat(Stats.getOverheat() - overheatDecrement);
 		}
 	}
 
@@ -88,19 +114,17 @@ public class shots : MonoBehaviour {
 
 	IEnumerator coolDown_(){
 		yield return new WaitForSeconds(maxOverheatPenalization);
-		PlayerStats.setOverheat(0f);
+		Stats.setOverheat(0f);
 	}
 
 	// When the time in "maxAttackModeTimer" has passed
 	// the attack mode sets to false.
 	void manageAttackMode(){
-		if(PlayerStats.isAttacking()){
+		if(Stats.isAttacking()){
 			if(attackModeTimer <= Time.time){
-				PlayerStats.setAttackMode(false);
+				Stats.setAttackMode(false);
 			}
 		}
 	}
-
-
 
 }

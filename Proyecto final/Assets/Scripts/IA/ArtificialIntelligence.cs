@@ -8,26 +8,26 @@ public class ArtificialIntelligence : MonoBehaviour {
 
 	public static GameObject Target;
 	private BehaviorTree.BehaviorTree Tree;
-    private int Velocity = 20;
+    public int Velocity = 20;
 	public GameObject ShotPrefab;
-    private int ShotMaxDistance = 200;
-    private int ShotMinDistance = 10;
-    private int ShotSpeed = 2000;
-    private int DistanceFarFromTarget = 100;
-    private int DistanceCloseToTarget = 50;
-    private int AimingHelpRange = 100;
-    private float LookForCollisionDistance = 20f;
-    private float ShipSpeed = 20f;
-    private float ShipsWingspan = 10f;
-    private float HalfTheShipsLength = 7.5f;
-    private float HalfTheShipsHeight = 2.5f;
+    public int ShotMaxDistance = 200;
+    public int ShotMinDistance = 10;
+    public int ShotSpeed = 2000;
+    public int DistanceFarFromTarget = 100;
+    public int DistanceCloseToTarget = 50;
+    public int AimingHelpRange = 100;
+    public float LookForCollisionDistance = 20f;
+    public float ShipSpeed = 20f;
+    public float ShipsWingspan = 10f;
+    public float HalfTheShipsLength = 7.5f;
+    public float HalfTheShipsHeight = 2.5f;
 
     void Start () {
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		if(players.Length > 0 && Target == null)
 			Target = players[0];
 
-		Sequence root = new Sequence();
+		Parallel root = new Parallel();
 
         Selector selectorMovebackOrForward = new Selector();
 
@@ -41,6 +41,10 @@ public class ArtificialIntelligence : MonoBehaviour {
 
         selectorMovebackOrForward.AddChild(sequenceRetroceder);
         selectorMovebackOrForward.AddChild(sequenceAvanzar);
+
+        Sequence sequenceDashIfDamageIsReceived = new Sequence();
+        sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
+        sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject));
 
         //root.AddChild(sequenceRetroceder);
         //root.AddChild(sequenceAvanzar);
@@ -64,8 +68,8 @@ public class ArtificialIntelligence : MonoBehaviour {
 
         sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
         sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-
-
+        sequenceShootOrAvoid.AddChild(sequenceDashIfDamageIsReceived);
+        
         root.AddChild(selectorMovebackOrForward);
         //root.AddChild(selectorAvoidAsteroidOrFaceTarget);
         root.AddChild(sequenceShootOrAvoid);

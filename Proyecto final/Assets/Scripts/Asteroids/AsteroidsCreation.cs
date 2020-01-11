@@ -120,14 +120,16 @@ public class AsteroidsCreation : MonoBehaviour {
     void refreshAsteroids()
     {
 
-        foreach (GameObject asteroid in asteroids)
+        if(spaceship)
         {
-            Vector3 asteroidPosition = asteroid.transform.position;
-            Vector3 spaceshipPosition = spaceship.transform.position;
+            foreach (GameObject asteroid in asteroids)
+            {
+                Vector3 asteroidPosition = asteroid.transform.position;
+                Vector3 spaceshipPosition = spaceship.transform.position;
 
-            float xAsteroidPosition = asteroidPosition.x;
-            float yAsteroidPosition = asteroidPosition.y;
-            float zAsteroidPosition = asteroidPosition.z;
+                float xAsteroidPosition = asteroidPosition.x;
+                float yAsteroidPosition = asteroidPosition.y;
+                float zAsteroidPosition = asteroidPosition.z;
 
                 if (Mathf.Abs(asteroidPosition.x - spaceshipPosition.x) > threshold)
                 {
@@ -139,20 +141,19 @@ public class AsteroidsCreation : MonoBehaviour {
                 {
                       int yAsteroidOppositeDirection = asteroidOppositeDirection(Axis.yAxis, asteroid);
                       yAsteroidPosition = spaceshipPosition.y + (yAsteroidOppositeDirection * threshold);
-            }
+                }
 
                 if (Mathf.Abs(asteroidPosition.z - spaceshipPosition.z) > threshold)
                 {
                      int zAsteroidOppositeDirection = asteroidOppositeDirection(Axis.zAxis, asteroid);
                      zAsteroidPosition = spaceshipPosition.z + (zAsteroidOppositeDirection * threshold);
+                }
+
+                Vector3 newAsteroidPosition = new Vector3(xAsteroidPosition, yAsteroidPosition, zAsteroidPosition);
+                asteroid.transform.position = newAsteroidPosition;
+
             }
-
-
-            Vector3 newAsteroidPosition = new Vector3(xAsteroidPosition, yAsteroidPosition, zAsteroidPosition);
-            asteroid.transform.position = newAsteroidPosition;
-
         }
-
     }
 
     int asteroidOppositeDirection(Axis axis, GameObject asteroid)
