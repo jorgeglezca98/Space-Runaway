@@ -5,7 +5,12 @@ using UnityEngine;
 public class DestructionController : MonoBehaviour {
 
 	public int destructionDelay = 1;
-    public LifeStats Stats = new LifeStats();
+	public int Health = 200;
+    public LifeStats Stats;
+
+    void Start () {
+    	Stats = new LifeStats(Health);
+    }
 
 	void OnCollisionEnter(Collision collision) 
 	{
@@ -19,7 +24,7 @@ public class DestructionController : MonoBehaviour {
 
     private void DestroySpaceship(string tag){
     	if(tag == "bullet") 
-			Stats.setHealth(Stats.getHealth() - 0.5f);
+			Stats.setHealth(Stats.getHealth() - 1f);
 		else
 			Stats.setHealth(0f);
 

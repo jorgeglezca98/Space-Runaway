@@ -1160,6 +1160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destructionDelay: 1
+  Health: 200
 --- !u!199 &297537623
 ParticleSystemRenderer:
   serializedVersion: 4
@@ -1311,7 +1312,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 644589895
+  randomSeed: -1681405748
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -4606,16 +4607,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a50bc0ae04444936a8e32fea12df1ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Velocity: 20
+  Velocity: 40
   ShotPrefab: {fileID: 1536069079119206, guid: 7cca178c62a894cc9af0192e8bc97d99, type: 2}
   ShotMaxDistance: 200
   ShotMinDistance: 10
   ShotSpeed: 10000
-  DistanceFarFromTarget: 100
+  DistanceFarFromTarget: 50
   DistanceCloseToTarget: 50
   AimingHelpRange: 100
   LookForCollisionDistance: 20
-  ShipSpeed: 20
   ShipsWingspan: 10
   HalfTheShipsLength: 7.5
   HalfTheShipsHeight: 2.5
@@ -8159,11 +8159,16 @@ Prefab:
     - target: {fileID: 114541170419519408, guid: d051d980bdbc541a9a90a73131fee911,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1646201777253976, guid: d051d980bdbc541a9a90a73131fee911, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114408779357771766, guid: d051d980bdbc541a9a90a73131fee911,
+        type: 2}
+      propertyPath: Health
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114961525152538228, guid: d051d980bdbc541a9a90a73131fee911, type: 2}
@@ -12671,6 +12676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destructionDelay: 1
+  Health: 200
 --- !u!54 &1889710220
 Rigidbody:
   m_ObjectHideFlags: 0
