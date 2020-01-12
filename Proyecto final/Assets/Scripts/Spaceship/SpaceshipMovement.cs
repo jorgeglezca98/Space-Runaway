@@ -6,8 +6,8 @@ public class SpaceshipMovement : MonoBehaviour {
 
 	private Rigidbody rg;
 
-	public int velocidadRotacion = 400;
-	public int velocidad = 1500;
+	public int velocidadRotacion = 500;
+	public int velocidad = 1800;
 
 	// Use this for initialization
 	void Start () {

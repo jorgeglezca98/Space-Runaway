@@ -15,14 +15,14 @@ public class AsteroidsCreation : MonoBehaviour {
      */
 
     // Separation between each asteroid.
-    public int asteroidSeparation;
+    public int asteroidSeparation = 100;
     // Initially we use this value to maintain the asteriods away enough from the spaceship
     // avoiding them to initialize in the same position as the spaceship.
-    public int secureZone;
+    public int secureZone = 40;
     // This value specifies the number of asteroids that we want from the origin to each
     // direction ( +x, -x, +y .. ) or in other words, it specifies half the length of
     // each edge that conforms the cube of asteroids around the spaceship.
-    public int areaSideSize;
+    public int areaSideSize = 10;
     // We use a threshold to indicate when the asteroids are far away enought and should be
     // moved to the opposite extreme relative to their current position.
     private int threshold;

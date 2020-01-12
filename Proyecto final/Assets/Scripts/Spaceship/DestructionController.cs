@@ -19,7 +19,7 @@ public class DestructionController : MonoBehaviour {
 
     private void DestroySpaceship(string tag){
     	if(tag == "bullet") 
-			Stats.setHealth(Stats.getHealth() - 5f);
+			Stats.setHealth(Stats.getHealth() - 0.5f);
 		else
 			Stats.setHealth(0f);
 

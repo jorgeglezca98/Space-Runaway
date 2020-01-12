@@ -6,7 +6,7 @@ using UnityEngine;
 public class Shots : MonoBehaviour {
 
 	public GameObject shotPrefab;
-	public int shotSpeed = 2000;
+	public int shotSpeed = 10000;
 	public float ShotMaxDistance = 100f;
 	public float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
 	public float RangeSize = 10f;

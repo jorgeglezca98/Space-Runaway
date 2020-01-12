@@ -28,6 +28,8 @@ public class EnemyPointer : MonoBehaviour {
 			enemy = GameObject.FindWithTag("enemy");
 		}
 		if(enemy) {
+			ArrowRenderer.enabled = true;
+
 			transform.LookAt(enemy.transform);
 			transform.Rotate(90, 0, 0);
 
@@ -38,6 +40,8 @@ public class EnemyPointer : MonoBehaviour {
 			} else if((DateTime.Now - lastShot).TotalSeconds >= 1f) {
 				ArrowRenderer.material.color = Color.blue;
 			}
+		} else {
+			ArrowRenderer.enabled = false;
 		}
 	}
 }
