@@ -23,12 +23,14 @@ public class Shots : MonoBehaviour {
 	private float maxAttackModeTimer = 2f;
 
 	// The amount of overheat the weapon produces everytime it shots.
-	private float overheatIncrement = 0.25f;
+	private float overheatIncrement = 5f;
 	// The amount of overheat the weapon cools down everytime it shots.
 	private float overheatDecrement = 0.0625f;
 	// The amount of time in seconds the weapon get disabled when the
 	// maximum overheat is achieved.
 	private float maxOverheatPenalization = 5f;
+
+	private bool isCoolingDown = false;
 
 	// Use this for initialization
 	void Start () {
@@ -106,7 +108,10 @@ public class Shots : MonoBehaviour {
         AudioManager.PlaySoundEffect("Shot");
 
 			}
-		}else coolDown();
+		}else if(!isCoolingDown){
+			isCoolingDown = true;
+			coolDown();
+		}
 	}
 
 	void ChangeOverheat(float amount){
@@ -116,7 +121,7 @@ public class Shots : MonoBehaviour {
 
 	void Update(){
 		manageAttackMode();
-		if(Stats.getOverheat() < Stats.getMaxOverheat()){
+		if(Stats.getOverheat() < Stats.getMaxOverheat() && Stats.getOverheat() > 0){
 			ChangeOverheat(Stats.getOverheat() - overheatDecrement);
 			//Stats.setOverheat(Stats.getOverheat() - overheatDecrement);
 		}
@@ -129,6 +134,7 @@ public class Shots : MonoBehaviour {
 	IEnumerator coolDown_(){
 		yield return new WaitForSeconds(maxOverheatPenalization);
 		ChangeOverheat(0f);
+		isCoolingDown = false;
 		//Stats.setOverheat(0f);
 	}
 
