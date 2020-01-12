@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AsteroidsCreation : MonoBehaviour {
 
-    public GameObject spaceship;
+    private GameObject spaceship;
     private List<GameObject> asteroids;
     private enum Axis { yAxis, xAxis, zAxis };
 
@@ -15,14 +15,14 @@ public class AsteroidsCreation : MonoBehaviour {
      */
 
     // Separation between each asteroid.
-    public int asteroidSeparation;
+    private int asteroidSeparation = 100;
     // Initially we use this value to maintain the asteriods away enough from the spaceship
     // avoiding them to initialize in the same position as the spaceship.
-    public int secureZone;
+    private int secureZone = 50;
     // This value specifies the number of asteroids that we want from the origin to each
     // direction ( +x, -x, +y .. ) or in other words, it specifies half the length of
     // each edge that conforms the cube of asteroids around the spaceship.
-    public int areaSideSize;
+    private int areaSideSize = 5;
     // We use a threshold to indicate when the asteroids are far away enought and should be
     // moved to the opposite extreme relative to their current position.
     private int threshold;
@@ -39,15 +39,15 @@ public class AsteroidsCreation : MonoBehaviour {
         threshold = (areaSideSize - 1) * asteroidSeparation + secureZone;
         initializeAsteroids();
     }
+
     void Start () {
-        spaceship.transform.position = new Vector3(0, 0, 0);
+        spaceship = GameObject.Find("PlayerSpaceship");
     }
 
     // In this function all asteroids are initialized in their initial positions.
     void initializeAsteroids(){
 
-        spaceship.transform.position = new Vector3(0, 0, 0);
-        Vector3 spaceshipPosition = spaceship.transform.position;
+        Vector3 spaceshipPosition = new Vector3(0,0,0);
         int asteroidIndex = 0;
 
         // When the loop goes from -areaSideSize+2 is because we want the asteroids field to be

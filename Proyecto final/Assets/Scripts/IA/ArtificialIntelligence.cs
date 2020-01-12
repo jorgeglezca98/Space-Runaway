@@ -6,28 +6,29 @@ using BehaviorTree;
 
 public class ArtificialIntelligence : MonoBehaviour {
 
-	public static GameObject Target;
-	private BehaviorTree.BehaviorTree Tree;
-    public int Velocity = 20;
-	public GameObject ShotPrefab;
-    public int ShotMaxDistance = 200;
-    public int ShotMinDistance = 10;
-    public int ShotSpeed = 2000;
-    public int DistanceFarFromTarget = 100;
-    public int DistanceCloseToTarget = 50;
-    public int AimingHelpRange = 100;
-    public float LookForCollisionDistance = 20f;
-    public float ShipSpeed = 20f;
-    public float ShipsWingspan = 10f;
-    public float HalfTheShipsLength = 7.5f;
-    public float HalfTheShipsHeight = 2.5f;
+		public static GameObject Target;
+		private BehaviorTree.BehaviorTree Tree;
+    private int Velocity = 20;
+		private GameObject ShotPrefab;
+    private int ShotMaxDistance = 200;
+    private int ShotMinDistance = 10;
+    private int ShotSpeed = 2000;
+    private int DistanceFarFromTarget = 100;
+    private int DistanceCloseToTarget = 50;
+    private int AimingHelpRange = 100;
+    private float LookForCollisionDistance = 20f;
+    private float ShipSpeed = 20f;
+    private float ShipsWingspan = 10f;
+    private float HalfTheShipsLength = 7.5f;
+    private float HalfTheShipsHeight = 2.5f;
 
     void Start () {
-		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-		if(players.Length > 0 && Target == null)
-			Target = players[0];
-
-		Parallel root = new Parallel();
+		  //	GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+			// if(players.Length > 0 && Target == null)
+			// 	Target = players[0];
+				Target = GameObject.Find("PlayerSpaceship");
+				ShotPrefab = Resources.Load("shot_prefab") as GameObject;
+				Parallel root = new Parallel();
 
         Selector selectorMovebackOrForward = new Selector();
 
@@ -69,14 +70,10 @@ public class ArtificialIntelligence : MonoBehaviour {
         sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
         sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
         sequenceShootOrAvoid.AddChild(sequenceDashIfDamageIsReceived);
-        
+
         root.AddChild(selectorMovebackOrForward);
         //root.AddChild(selectorAvoidAsteroidOrFaceTarget);
         root.AddChild(sequenceShootOrAvoid);
-
-
-
-
 
         Tree = new BehaviorTree.BehaviorTree(root);
 
@@ -86,23 +83,23 @@ public class ArtificialIntelligence : MonoBehaviour {
 		Tree.Tick();
 	}
 
-    void OnDrawGizmos()
-    {
-
-        Vector3 direction = Target.transform.position - transform.position;
-
-        RaycastHit HittedObject;
-        bool ThereIsCollision = Physics.BoxCast(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), direction, out HittedObject, transform.rotation, Mathf.Infinity, ~(1 << 8));
-        //Check if there has been a hit yet
-        if (ThereIsCollision)
-        {
-            ExtDebug.DrawBoxCastOnHit(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, direction, HittedObject.distance);
-        }
-        //If there hasn't been a hit yet, draw the ray at the maximum distance
-        else
-        {
-            ExtDebug.DrawBoxCastBox(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, direction, HittedObject.distance);
-        }
+    // void OnDrawGizmos()
+    // {
+		//
+    //     Vector3 direction = Target.transform.position - transform.position;
+		//
+    //     RaycastHit HittedObject;
+    //     bool ThereIsCollision = Physics.BoxCast(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), direction, out HittedObject, transform.rotation, Mathf.Infinity, ~(1 << 8));
+    //     //Check if there has been a hit yet
+    //     if (ThereIsCollision)
+    //     {
+    //         ExtDebug.DrawBoxCastOnHit(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, direction, HittedObject.distance);
+    //     }
+    //     //If there hasn't been a hit yet, draw the ray at the maximum distance
+    //     else
+    //     {
+    //         ExtDebug.DrawBoxCastBox(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, direction, HittedObject.distance);
+    //     }
 
     //    bool ThereIsCollision2 = Physics.BoxCast(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.forward, out HittedObject, transform.rotation, LookForCollisionDistance, ~(1 << 8));
     //    //Check if there has been a hit yet
@@ -115,7 +112,7 @@ public class ArtificialIntelligence : MonoBehaviour {
     //    {
     //        ExtDebug.DrawBoxCastBox(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, transform.forward, HittedObject.distance);
     //    }
-    }
+  //  }
 
 }
 

@@ -4,41 +4,74 @@ using UnityEngine;
 
 public class DestructionController : MonoBehaviour {
 
-	public int destructionDelay = 1;
+    protected int destructionDelay = 1;
     public LifeStats Stats = new LifeStats();
+    private AudioManager AudioManager;
+		bool SpaceshipHasBeenDestroyed = false;
 
-	void OnCollisionEnter(Collision collision) 
-	{
-		DestroySpaceship(collision.gameObject.tag);
+    private void Start()
+    {
+        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
+
+		void Update(){
+			if (Stats.getHealth() <= 0 && !SpaceshipHasBeenDestroyed){
+				DestroySpaceship();
+				SpaceshipHasBeenDestroyed = true;
+			}
+		}
+
+    void OnCollisionEnter(Collision collision)
+	  {
+			if(collision.gameObject.tag == "bullet")
+				InflictBulletDamage();
+			else DestroySpaceship();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        DestroySpaceship(other.gameObject.tag);
+			if(other.gameObject.tag == "bullet")
+				InflictBulletDamage();
+			else DestroySpaceship();
     }
 
-    private void DestroySpaceship(string tag){
-    	if(tag == "bullet") 
-			Stats.setHealth(Stats.getHealth() - 5f);
-		else
-			Stats.setHealth(0f);
+		protected virtual void Initialize(){
 
-		if(Stats.getHealth() <= 0) 
-		{
-	    	Vector3 center = GetComponent<Renderer>().bounds.center;
-	    	float radius = GetComponent<Renderer>().bounds.size.z;
+		}
 
-	    	foreach (Transform child in transform) {
-	            child.transform.parent = null;
-	            Rigidbody childrg = child.gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
-	            childrg.useGravity = false;
-	            childrg.AddExplosionForce(1000, center, radius);
-	            Destroy(child.gameObject, destructionDelay);
-	        }
+		protected virtual void InflictBulletDamage(){
 
-	        var ps = GetComponent<ParticleSystem>();
-	        ps.Play();
-	        Destroy(gameObject, destructionDelay);
-	    }
-    }
+		}
+
+		protected virtual void DestroySpaceship(){
+
+		}
+
+		/*It receives a parameter because the Delegate requires it*/
+		public void PlayImpactSound(float damage){
+			AudioManager.PlaySoundEffect("Impact");
+		}
+
+		public void PlayExplosionSound(){
+			AudioManager.PlaySoundEffect("Explosion");
+		}
+
+		public void SplitSpaceship(){
+			Vector3 center = GetComponent<Renderer>().bounds.center;
+			float radius = GetComponent<Renderer>().bounds.size.z;
+
+			foreach (Transform child in transform) {
+						child.transform.parent = null;
+						Rigidbody childrg = child.gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
+						childrg.useGravity = false;
+						childrg.AddExplosionForce(1000, center, radius);
+						Destroy(child.gameObject, destructionDelay);
+				}
+				var ps = GetComponent<ParticleSystem>();
+				ps.Play();
+		}
+
+
+
+
 }

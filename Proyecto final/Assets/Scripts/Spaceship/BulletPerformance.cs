@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletPerformance : MonoBehaviour {
 
-	public int maxDistace = 100;
+	private int maxDistace = 100;
 	private Vector3 initialPosition;
 
 	// Use this for initialization

@@ -28,6 +28,11 @@ public class Sound{
         this.AudioSource.Play();
     }
 
+    public void Stop()
+    {
+        this.AudioSource.Stop();
+    }
+
     public void SetVolume(float volume)
     {
         this.Volume = volume;

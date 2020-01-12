@@ -21,7 +21,7 @@ public class SpotlightController : MonoBehaviour {
 	void Update () {
 
 
-    }
+  }
 
 
   void inAttackMode(){

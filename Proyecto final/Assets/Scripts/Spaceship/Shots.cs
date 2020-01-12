@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Shots : MonoBehaviour {
 
-	public GameObject shotPrefab;
-	public int shotSpeed = 2000;
-	public float ShotMaxDistance = 100f;
-	public float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
-	public float RangeSize = 10f;
+	private GameObject shotPrefab;
+    private AudioManager AudioManager;
+	private int shotSpeed = 2000;
+    private float ShotMaxDistance = 100f;
+    private float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
+    private float RangeSize = 10f;
 	private Transform shotPoint;
 	private GameObject lastShot;
 	private float lastShotSize;
@@ -32,7 +33,11 @@ public class Shots : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		GameEventsController.eventController.OnMaximumOverheat += coolDown;
+        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        shotPrefab = Resources.Load("shot_prefab") as GameObject;
+
+
+        GameEventsController.eventController.OnMaximumOverheat += coolDown;
 
 		shotPoint = null;
 		foreach(Transform child in transform)
@@ -52,11 +57,11 @@ public class Shots : MonoBehaviour {
 				RaycastHit hit;
 				GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-				RaycastHit[] hitsInRange = Physics.BoxCastAll(HUD.transform.position, 
-					new Vector3(RangeSize, RangeSize, ShotMinDistance), 
-					transform.TransformDirection(Vector3.forward), 
-					Quaternion.identity, 
-					ShotMaxDistance, 
+				RaycastHit[] hitsInRange = Physics.BoxCastAll(HUD.transform.position,
+					new Vector3(RangeSize, RangeSize, ShotMinDistance),
+					transform.TransformDirection(Vector3.forward),
+					Quaternion.identity,
+					ShotMaxDistance,
 					(1 << 10));
 
 				if(hitsInRange.Length > 0) {
@@ -64,15 +69,14 @@ public class Shots : MonoBehaviour {
 					Vector3 origenRaycast = HUD.transform.position;
 					do {
 						Physics.Raycast(
-							origenRaycast, 
-							hitsInRange[i].transform.position - origenRaycast, 
-							out hit, 
-							Mathf.Infinity, 
+							origenRaycast,
+							hitsInRange[i].transform.position - origenRaycast,
+							out hit,
+							Mathf.Infinity,
 							~(1 << 8) & ~(1 << 9));
 						i++;
 					} while (hit.transform.tag != "enemy" && i < hitsInRange.Length);
-					
-					Debug.Log(hit.transform.tag);
+
 					if (hit.transform.tag == "enemy")
 			        {
 			        	transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
@@ -93,18 +97,28 @@ public class Shots : MonoBehaviour {
 
 				if(!Stats.isAttacking()){
 					Stats.setAttackMode(true);
+					GameEventsController.eventController.attackModeEnter();
 				}
 
 				attackModeTimer = Time.time + maxAttackModeTimer;
-				Stats.setOverheat(Stats.getOverheat() + overheatIncrement);
+				//Stats.setOverheat(Stats.getOverheat() + overheatIncrement);
+				ChangeOverheat(Stats.getOverheat() + overheatIncrement);
+        AudioManager.PlaySoundEffect("Shot");
+
 			}
-		}
+		}else coolDown();
+	}
+
+	void ChangeOverheat(float amount){
+		Stats.setOverheat(amount);
+		GameEventsController.eventController.overheatPctChanged(Stats.getOverheat());
 	}
 
 	void Update(){
 		manageAttackMode();
 		if(Stats.getOverheat() < Stats.getMaxOverheat()){
-			Stats.setOverheat(Stats.getOverheat() - overheatDecrement);
+			ChangeOverheat(Stats.getOverheat() - overheatDecrement);
+			//Stats.setOverheat(Stats.getOverheat() - overheatDecrement);
 		}
 	}
 
@@ -114,7 +128,8 @@ public class Shots : MonoBehaviour {
 
 	IEnumerator coolDown_(){
 		yield return new WaitForSeconds(maxOverheatPenalization);
-		Stats.setOverheat(0f);
+		ChangeOverheat(0f);
+		//Stats.setOverheat(0f);
 	}
 
 	// When the time in "maxAttackModeTimer" has passed
@@ -122,6 +137,7 @@ public class Shots : MonoBehaviour {
 	void manageAttackMode(){
 		if(Stats.isAttacking()){
 			if(attackModeTimer <= Time.time){
+				GameEventsController.eventController.attackModeExit();
 				Stats.setAttackMode(false);
 			}
 		}

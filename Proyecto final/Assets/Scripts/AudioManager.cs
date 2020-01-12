@@ -92,6 +92,15 @@ public class AudioManager : MonoBehaviour {
         else Debug.LogWarning("Sound effect: " + soundEffectName + " not found.");
     }
 
+    public void StopSoundEffect(string soundEffectName)
+    {
+        Sound soundEffect = FindSoundEffect(soundEffectName);
+
+        if (soundEffect != null)
+            soundEffect.Stop();
+        else Debug.LogWarning("Sound effect: " + soundEffectName + " not found.");
+    }
+
     public Sound FindSoundEffect(string soundEffectName)
     {
 
