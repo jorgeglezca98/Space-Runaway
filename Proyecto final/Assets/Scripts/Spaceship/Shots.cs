@@ -52,7 +52,8 @@ public class Shots : MonoBehaviour {
 				RaycastHit hit;
 				GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-				RaycastHit[] hitsInRange = Physics.BoxCastAll(HUD.transform.position, 
+				RaycastHit[] hitsInRange = Physics.BoxCastAll(
+					HUD.transform.position, 
 					new Vector3(RangeSize, RangeSize, ShotMinDistance), 
 					transform.TransformDirection(Vector3.forward), 
 					Quaternion.identity, 
@@ -72,7 +73,6 @@ public class Shots : MonoBehaviour {
 						i++;
 					} while (hit.transform.tag != "enemy" && i < hitsInRange.Length);
 					
-					Debug.Log(hit.transform.tag);
 					if (hit.transform.tag == "enemy")
 			        {
 			        	transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
@@ -126,5 +126,16 @@ public class Shots : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnDrawGizmos()
+    {
+    	GameObject HUD = GameObject.FindWithTag("playerHUD");
+        ExtDebug.DrawBoxCastBox(
+        	HUD.transform.position, 
+			new Vector3(RangeSize, RangeSize, ShotMinDistance), 
+			Quaternion.identity, 
+			transform.TransformDirection(Vector3.forward), 
+			ShotMaxDistance);
+    }
 
 }

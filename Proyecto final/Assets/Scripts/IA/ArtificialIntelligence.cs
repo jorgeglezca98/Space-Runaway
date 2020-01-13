@@ -10,12 +10,12 @@ public class ArtificialIntelligence : MonoBehaviour {
 	private BehaviorTree.BehaviorTree Tree;
     public int Velocity = 40;
 	public GameObject ShotPrefab;
-    public int ShotMaxDistance = 200;
+    public int ShotMaxDistance = 100;
     public int ShotMinDistance = 10;
     public int ShotSpeed = 10000;
     public int DistanceFarFromTarget = 100;
     public int DistanceCloseToTarget = 50;
-    public int AimingHelpRange = 100;
+    public int AimingHelpRange = 10;
     public float LookForCollisionDistance = 30f;
     public float ShipsWingspan = 10f;
     public float HalfTheShipsLength = 7.5f;
