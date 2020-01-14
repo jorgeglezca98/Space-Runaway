@@ -17,6 +17,7 @@ public class PlayerDestructionController : DestructionController {
 		SplitSpaceship();
 		PlayExplosionSound();
 		Destroy(gameObject, destructionDelay);
+		GameEventsController.eventController.playerDestroyed();
 	}
 
 }

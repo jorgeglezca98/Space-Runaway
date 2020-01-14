@@ -11,6 +11,7 @@ TagManager:
   - bullet
   - asteroid
   - enemy
+  - mothership
   layers:
   - Default
   - TransparentFX

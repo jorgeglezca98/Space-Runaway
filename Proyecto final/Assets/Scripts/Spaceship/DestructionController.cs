@@ -25,14 +25,16 @@ public class DestructionController : MonoBehaviour {
 	  {
 			if(collision.gameObject.tag == "bullet")
 				InflictBulletDamage();
-			else DestroySpaceship();
+			else if (collision.gameObject.tag != "mothership")
+        DestroySpaceship();
     }
 
     private void OnTriggerEnter(Collider other)
     {
 			if(other.gameObject.tag == "bullet")
 				InflictBulletDamage();
-			else DestroySpaceship();
+			else if(other.gameObject.tag != "mothership")
+        DestroySpaceship();
     }
 
 		protected virtual void Initialize(){

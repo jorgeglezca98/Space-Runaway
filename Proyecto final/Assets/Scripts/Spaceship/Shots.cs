@@ -25,7 +25,7 @@ public class Shots : MonoBehaviour {
 	// The amount of overheat the weapon produces everytime it shots.
 	private float overheatIncrement = 5f;
 	// The amount of overheat the weapon cools down everytime it shots.
-	private float overheatDecrement = 0.0625f;
+	private float overheatDecrement = 2f;
 	// The amount of time in seconds the weapon get disabled when the
 	// maximum overheat is achieved.
 	private float maxOverheatPenalization = 5f;

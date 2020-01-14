@@ -14,11 +14,26 @@ public class GameEventsController : MonoBehaviour {
 	public event Action OnMaximumOverheat = delegate{};
 	public event Action OnAttackModeEnter = delegate{};
 	public event Action OnAttackModeExit = delegate{};
+	public event Action<string> OnPlayerDestruction = delegate{};
+	public event Action<string> OnPlayerWon = delegate{};
+
 
 
 	public void healthPctChanged(float health){
 		if(OnHealthPctChanged != null){
 			OnHealthPctChanged(health);
+		}
+	}
+
+	public void playerDestroyed(){
+		if(OnPlayerDestruction != null){
+			OnPlayerDestruction("YOU LOSE!");
+		}
+	}
+
+	public void playerWon(){
+		if(OnPlayerWon != null){
+			OnPlayerWon("YOU WON!");
 		}
 	}
 

@@ -5,9 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class GameMenu : MonoBehaviour {
 
-    public static bool GameIsPaused = false;
-    public GameObject PauseMenuUi;
-    public GameObject MainMenuUi;
+    public static bool GameIsPaused;
+    private GameObject PauseMenuUi;
+    private GameObject MainMenuUi;
+    private GameObject EndMenuUi;
+
+    void Start(){
+      GameIsPaused = false;
+      PauseMenuUi = gameObject.transform.Find("PauseMenu").gameObject;
+      MainMenuUi = gameObject.transform.Find("MainMenu").gameObject;
+      EndMenuUi = gameObject.transform.Find("EndMenu").gameObject;
+      GameEventsController.eventController.OnPlayerDestruction += FinalScreen;
+      GameEventsController.eventController.OnPlayerWon += FinalScreen;
+    }
 
     private void Update()
     {
@@ -40,6 +50,13 @@ public class GameMenu : MonoBehaviour {
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void FinalScreen(string text){
+       if(text == "YOU WON!")
+          Time.timeScale = 0f;
+       EndMenuUi.transform.Find("EndText").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = text;
+       EndMenuUi.SetActive(true);
     }
 
     public void QuitGame()
