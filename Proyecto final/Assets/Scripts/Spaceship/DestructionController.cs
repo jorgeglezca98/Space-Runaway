@@ -7,7 +7,7 @@ public class DestructionController : MonoBehaviour {
     protected int destructionDelay = 1;
     private int Health = 200;
     public LifeStats Stats;
-    private AudioManager AudioManager;
+    protected AudioManager AudioManager;
 		bool SpaceshipHasBeenDestroyed = false;
 
     private void Start()
@@ -26,7 +26,7 @@ public class DestructionController : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
 	  {
 			if(collision.gameObject.tag == "bullet")
-				InflictBulletDamage();
+				InflictBulletDamage(collision.gameObject.name);
 			else if (collision.gameObject.tag != "mothership")
         DestroySpaceship();
     }
@@ -34,7 +34,7 @@ public class DestructionController : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
 			if(other.gameObject.tag == "bullet")
-				InflictBulletDamage();
+				InflictBulletDamage(other.gameObject.name);
 			else if(other.gameObject.tag != "mothership")
         DestroySpaceship();
     }
@@ -43,7 +43,7 @@ public class DestructionController : MonoBehaviour {
 
 		}
 
-		protected virtual void InflictBulletDamage(){
+		protected virtual void InflictBulletDamage(string bulletType){
 
 		}
 
@@ -51,10 +51,9 @@ public class DestructionController : MonoBehaviour {
 
 		}
 
-		/*It receives a parameter because the Delegate requires it*/
-		public void PlayImpactSound(float damage){
-			AudioManager.PlaySoundEffect("Impact");
-		}
+    protected virtual void PlayImpactSound(float damage){
+
+    }
 
 		public void PlayExplosionSound(){
 			AudioManager.PlaySoundEffect("Explosion");

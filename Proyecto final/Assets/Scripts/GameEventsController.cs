@@ -16,6 +16,7 @@ public class GameEventsController : MonoBehaviour {
 	public event Action OnAttackModeExit = delegate{};
 	public event Action<string> OnPlayerDestruction = delegate{};
 	public event Action<string> OnPlayerWon = delegate{};
+	public event Action OnEnemyDestruction = delegate{};
 
 
 
@@ -28,6 +29,12 @@ public class GameEventsController : MonoBehaviour {
 	public void playerDestroyed(){
 		if(OnPlayerDestruction != null){
 			OnPlayerDestruction("YOU LOSE!");
+		}
+	}
+
+	public void enemyDestroyed(){
+		if(OnEnemyDestruction != null){
+			OnEnemyDestruction();
 		}
 	}
 

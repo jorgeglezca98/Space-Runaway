@@ -39,6 +39,7 @@ namespace BehaviorTree {
         			blaster.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
         			GameObject bullet = Object.Instantiate(ShotPrefab, shotPoint.position, blaster.rotation);
 		          bullet.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, ShotSpeed));
+							ArtificialIntelligence.AudioManager.PlaySoundEffect("EnemyShot");
         		}
 
             	return Status.BH_SUCCESS;

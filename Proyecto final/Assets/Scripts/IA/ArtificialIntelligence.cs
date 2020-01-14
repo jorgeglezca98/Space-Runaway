@@ -8,7 +8,7 @@ public class ArtificialIntelligence : MonoBehaviour {
 
 		public static GameObject Target;
 		private BehaviorTree.BehaviorTree Tree;
-    private int Velocity = 40;
+    private int Velocity = 20;
 		private GameObject ShotPrefab;
     private int ShotMaxDistance = 100;
     private int ShotMinDistance = 10;
@@ -21,13 +21,14 @@ public class ArtificialIntelligence : MonoBehaviour {
     private float ShipsWingspan = 10f;
     private float HalfTheShipsLength = 7.5f;
     private float HalfTheShipsHeight = 2.5f;
+		public static AudioManager AudioManager;
 
     void Start () {
-		  //	GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-			// if(players.Length > 0 && Target == null)
-			// 	Target = players[0];
+
 				Target = GameObject.Find("PlayerSpaceship");
-				ShotPrefab = Resources.Load("shot_prefab") as GameObject;
+				ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
+				AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+
 				Parallel root = new Parallel();
 
         Selector selectorMovebackOrForward = new Selector();
@@ -64,7 +65,7 @@ public class ArtificialIntelligence : MonoBehaviour {
 
         sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
         sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-        sequenceShootOrAvoid.AddChild(sequenceDashIfDamageIsReceived);
+        root.AddChild(sequenceDashIfDamageIsReceived);
 
         root.AddChild(sequenceShootOrAvoid);
         root.AddChild(selectorMovebackOrForward);

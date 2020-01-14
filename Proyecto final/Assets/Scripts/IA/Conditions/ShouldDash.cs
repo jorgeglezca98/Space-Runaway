@@ -26,6 +26,7 @@ namespace BehaviorTree
             actualHealth = stats.getHealth();
             if (lastHealth != actualHealth)
             {
+                Debug.Log("Im goin' to dash!");
                 lastHealth = actualHealth;
                 return Status.BH_SUCCESS;
             }

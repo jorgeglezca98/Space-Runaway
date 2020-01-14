@@ -6,27 +6,29 @@ using BehaviorTree;
 
 public class KamikazeArtificialIntelligence : MonoBehaviour {
 
-    public static GameObject Target;
+    private static GameObject Target;
     private BehaviorTree.BehaviorTree Tree;
-    public int Velocity = 20;
-    public GameObject ShotPrefab;
-    public int ShotMaxDistance = 200;
-    public int ShotMinDistance = 10;
-    public int ShotSpeed = 2000;
-    public int DistanceFarFromTarget = 100;
-    public int DistanceCloseToTarget = 50;
-    public int AimingHelpRange = 100;
-    public float LookForCollisionDistance = 20f;
-    public float ShipSpeed = 20f;
-    public float ShipsWingspan = 10f;
-    public float HalfTheShipsLength = 7.5f;
-    public float HalfTheShipsHeight = 2.5f;
+    private int Velocity = 20;
+    private GameObject ShotPrefab;
+    private int ShotMaxDistance = 200;
+    private int ShotMinDistance = 10;
+    private int ShotSpeed = 2000;
+    private int DistanceFarFromTarget = 100;
+    private int DistanceCloseToTarget = 50;
+    private int AimingHelpRange = 100;
+    private float LookForCollisionDistance = 20f;
+    private float ShipSpeed = 20f;
+    private float ShipsWingspan = 10f;
+    private float HalfTheShipsLength = 7.5f;
+    private float HalfTheShipsHeight = 2.5f;
 
     void Start () {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if(players.Length > 0 && Target == null)
-            Target = players[0];
+        // GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        // if(players.Length > 0 && Target == null)
+        //     Target = players[0];
 
+        Target = GameObject.Find("PlayerSpaceship");
+    		ShotPrefab = Resources.Load("shot_prefab") as GameObject;
         Parallel root = new Parallel();
 
         Sequence sequenceShootOrAvoid = new Sequence();
@@ -47,7 +49,7 @@ public class KamikazeArtificialIntelligence : MonoBehaviour {
 
         sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
         sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-        
+
         root.AddChild(new MoveAlong(gameObject, Velocity));
         root.AddChild(sequenceShootOrAvoid);
 

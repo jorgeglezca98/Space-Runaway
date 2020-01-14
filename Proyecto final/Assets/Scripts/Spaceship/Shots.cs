@@ -35,11 +35,11 @@ public class Shots : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-        shotPrefab = Resources.Load("shot_prefab") as GameObject;
+    AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    shotPrefab = Resources.Load("player_shot_prefab") as GameObject;
 
 
-        GameEventsController.eventController.OnMaximumOverheat += coolDown;
+    GameEventsController.eventController.OnMaximumOverheat += coolDown;
 
 		shotPoint = null;
 		foreach(Transform child in transform)
@@ -106,7 +106,7 @@ public class Shots : MonoBehaviour {
 				attackModeTimer = Time.time + maxAttackModeTimer;
 				//Stats.setOverheat(Stats.getOverheat() + overheatIncrement);
 				ChangeOverheat(Stats.getOverheat() + overheatIncrement);
-        AudioManager.PlaySoundEffect("Shot");
+        AudioManager.PlaySoundEffect("PlayerShot");
 
 			}
 		}else if(!isCoolingDown){

@@ -33,7 +33,6 @@ public class MotherShipIndicator : MonoBehaviour {
 		float y = - TopCornerY + (Height * MotherShipPosRelativeToCam.y);
 		float z = 0;
 		Vector3 FixedMotherShipPosRelativeToCam = new Vector3(x,y,z);
-		Debug.Log("Fixed pos: " + FixedMotherShipPosRelativeToCam);
 		// Debug.Log("Z: " + z);
 		if(moterShipFacing  > 0)
 			transform.Find("MotherShipIcon").GetComponent<RectTransform>().localPosition = FixedMotherShipPosRelativeToCam;
