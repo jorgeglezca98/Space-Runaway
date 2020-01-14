@@ -5,12 +5,14 @@ using UnityEngine;
 public class DestructionController : MonoBehaviour {
 
     protected int destructionDelay = 1;
-    public LifeStats Stats = new LifeStats();
+    private int Health = 200;
+    public LifeStats Stats;
     private AudioManager AudioManager;
 		bool SpaceshipHasBeenDestroyed = false;
 
     private void Start()
     {
+        Stats = new LifeStats(Health);
         AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 

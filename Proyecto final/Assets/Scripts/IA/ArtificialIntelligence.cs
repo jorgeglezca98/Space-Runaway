@@ -8,15 +8,15 @@ public class ArtificialIntelligence : MonoBehaviour {
 
 		public static GameObject Target;
 		private BehaviorTree.BehaviorTree Tree;
-    private int Velocity = 20;
+    private int Velocity = 40;
 		private GameObject ShotPrefab;
-    private int ShotMaxDistance = 200;
+    private int ShotMaxDistance = 100;
     private int ShotMinDistance = 10;
-    private int ShotSpeed = 2000;
+    private int ShotSpeed = 10000;
     private int DistanceFarFromTarget = 100;
     private int DistanceCloseToTarget = 50;
-    private int AimingHelpRange = 100;
-    private float LookForCollisionDistance = 20f;
+    private int AimingHelpRange = 10;
+    private float LookForCollisionDistance = 60f;
     private float ShipSpeed = 20f;
     private float ShipsWingspan = 10f;
     private float HalfTheShipsLength = 7.5f;
@@ -47,14 +47,9 @@ public class ArtificialIntelligence : MonoBehaviour {
         sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
         sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject));
 
-        //root.AddChild(sequenceRetroceder);
-        //root.AddChild(sequenceAvanzar);
-        //root.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance));
-
         Sequence sequenceShootOrAvoid = new Sequence();
         Sequence sequenceShootIfVisible = new Sequence();
         sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance));
-
 
         Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
 
@@ -71,48 +66,15 @@ public class ArtificialIntelligence : MonoBehaviour {
         sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
         sequenceShootOrAvoid.AddChild(sequenceDashIfDamageIsReceived);
 
-        root.AddChild(selectorMovebackOrForward);
-        //root.AddChild(selectorAvoidAsteroidOrFaceTarget);
         root.AddChild(sequenceShootOrAvoid);
+        root.AddChild(selectorMovebackOrForward);
 
         Tree = new BehaviorTree.BehaviorTree(root);
-
     }
 
     void FixedUpdate() {
 		Tree.Tick();
 	}
-
-    // void OnDrawGizmos()
-    // {
-		//
-    //     Vector3 direction = Target.transform.position - transform.position;
-		//
-    //     RaycastHit HittedObject;
-    //     bool ThereIsCollision = Physics.BoxCast(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), direction, out HittedObject, transform.rotation, Mathf.Infinity, ~(1 << 8));
-    //     //Check if there has been a hit yet
-    //     if (ThereIsCollision)
-    //     {
-    //         ExtDebug.DrawBoxCastOnHit(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, direction, HittedObject.distance);
-    //     }
-    //     //If there hasn't been a hit yet, draw the ray at the maximum distance
-    //     else
-    //     {
-    //         ExtDebug.DrawBoxCastBox(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, direction, HittedObject.distance);
-    //     }
-
-    //    bool ThereIsCollision2 = Physics.BoxCast(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.forward, out HittedObject, transform.rotation, LookForCollisionDistance, ~(1 << 8));
-    //    //Check if there has been a hit yet
-    //    if (ThereIsCollision2)
-    //    {
-    //        ExtDebug.DrawBoxCastOnHit(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, transform.forward, HittedObject.distance);
-    //    }
-    //    //If there hasn't been a hit yet, draw the ray at the maximum distance
-    //    else
-    //    {
-    //        ExtDebug.DrawBoxCastBox(transform.position, new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength), transform.rotation, transform.forward, HittedObject.distance);
-    //    }
-  //  }
 
 }
 

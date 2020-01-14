@@ -7,7 +7,7 @@ public class Shots : MonoBehaviour {
 
 	private GameObject shotPrefab;
     private AudioManager AudioManager;
-	private int shotSpeed = 2000;
+	private int shotSpeed = 10000;
     private float ShotMaxDistance = 100f;
     private float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
     private float RangeSize = 10f;
@@ -59,7 +59,8 @@ public class Shots : MonoBehaviour {
 				RaycastHit hit;
 				GameObject HUD = GameObject.FindWithTag("playerHUD");
 
-				RaycastHit[] hitsInRange = Physics.BoxCastAll(HUD.transform.position,
+				RaycastHit[] hitsInRange = Physics.BoxCastAll(
+					HUD.transform.position,
 					new Vector3(RangeSize, RangeSize, ShotMinDistance),
 					transform.TransformDirection(Vector3.forward),
 					Quaternion.identity,
@@ -148,5 +149,16 @@ public class Shots : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnDrawGizmos()
+    {
+    	GameObject HUD = GameObject.FindWithTag("playerHUD");
+        ExtDebug.DrawBoxCastBox(
+        	HUD.transform.position,
+			new Vector3(RangeSize, RangeSize, ShotMinDistance),
+			Quaternion.identity,
+			transform.TransformDirection(Vector3.forward),
+			ShotMaxDistance);
+    }
 
 }

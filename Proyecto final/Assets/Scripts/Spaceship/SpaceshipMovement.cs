@@ -7,8 +7,8 @@ public class SpaceshipMovement : MonoBehaviour {
 	private Rigidbody rg;
     private AudioManager AudioManager;
 
-	private int velocidadRotacion = 400;
-	private int velocidad = 1500;
+	private int velocidadRotacion = 500;
+	private int velocidad = 1800;
 
     private float NoticeableSoundThreshold = 1f;
     private bool MovementSoundEffectPlaying;
@@ -37,8 +37,8 @@ public class SpaceshipMovement : MonoBehaviour {
 		rg.AddRelativeForce(new Vector3(0, 0, (Input.GetButton("Run") ? 1 : 0) - (Input.GetButton("Stop") ? 1 : 0)) * Time.deltaTime * velocidad);
 
         if (Input.GetButton("Run") || Input.GetButton("Stop")){
-            if (!MovementSoundEffectPlaying)     
-                AudioManager.PlaySoundEffect("Movement");           
+            if (!MovementSoundEffectPlaying)
+                AudioManager.PlaySoundEffect("Movement");
         }else{
             if(MovementSoundEffectPlaying)
                 AudioManager.StopSoundEffect("Movement");

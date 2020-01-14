@@ -7,7 +7,7 @@ class Dash : MonoBehaviour
 {
 
     public Rigidbody rb;
-    public float intensity = 350f;
+    public float intensity = 600;
 
     private void Start()
     {
@@ -16,11 +16,11 @@ class Dash : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             rb.AddRelativeForce(new Vector3(-Time.deltaTime * intensity, 0, 0), ForceMode.Impulse);
         }
-        else if (Input.GetKey(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             rb.AddRelativeForce(new Vector3(Time.deltaTime * intensity, 0, 0), ForceMode.Impulse);
         }

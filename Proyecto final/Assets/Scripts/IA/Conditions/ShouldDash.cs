@@ -24,7 +24,7 @@ namespace BehaviorTree
         public override Status Update()
         {
             actualHealth = stats.getHealth();
-            if (Mathf.Abs(lastHealth - actualHealth) >= diff)
+            if (lastHealth != actualHealth)
             {
                 lastHealth = actualHealth;
                 return Status.BH_SUCCESS;

@@ -8,6 +8,11 @@ public class LifeStats{
 	private float playerHealth = 100f;
 	private float maxHealth = 100f;
 
+	public LifeStats(float maxHealth) {
+		this.maxHealth = maxHealth;
+		this.playerHealth = maxHealth;
+	}
+
 	public float getHealth(){
 		return playerHealth;
 	}
