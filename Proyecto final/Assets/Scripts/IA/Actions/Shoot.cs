@@ -25,6 +25,7 @@ namespace BehaviorTree {
 			RaycastHit hit;
 
             Transform[] blasters = new Transform[2] { Agent.transform.Find("Blaster-1"), Agent.transform.Find("Blaster-2") };
+
 			bool isInRange = Physics.BoxCast(Agent.transform.position, new Vector3(RangeSize, RangeSize, ShotMinDistance),
 				Agent.transform.TransformDirection(Vector3.forward), Quaternion.identity, ShotMaxDistance, (1 << 9));
 			bool collidesWithSomething = Physics.Raycast(Agent.transform.position,
@@ -35,6 +36,7 @@ namespace BehaviorTree {
             {
             	foreach(Transform blaster in blasters)
             	{
+							Debug.Log("Blaster name" + blaster.gameObject.name);
         			Transform shotPoint = blaster.Find("ShotPoint");
         			blaster.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
         			GameObject bullet = Object.Instantiate(ShotPrefab, shotPoint.position, blaster.rotation);

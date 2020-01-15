@@ -13,9 +13,17 @@ class AssaultArtificialIntelligence : ArtificialIntelligence {
 
     void Start () {
 
-        Target = GameObject.Find("PlayerSpaceship");
-        ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
+      if(AudioManager == null)
         AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+      if(Target == null)
+        Target = GameObject.Find("PlayerSpaceship");
+
+
+        ShipsWingspan = 10f;
+        HalfTheShipsLength = 7.5f;
+        HalfTheShipsHeight = 2.5f;
+
+        ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
 
         Parallel root = new Parallel();
 

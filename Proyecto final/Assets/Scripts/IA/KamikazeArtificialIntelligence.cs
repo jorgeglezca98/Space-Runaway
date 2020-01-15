@@ -11,8 +11,16 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
         // if(players.Length > 0 && Target == null)
         //     Target = players[0];
 
-        Target = GameObject.Find("PlayerSpaceship");
-    	  ShotPrefab = Resources.Load("shot_prefab") as GameObject;
+        if(AudioManager == null)
+          AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        if(Target == null)
+          Target = GameObject.Find("PlayerSpaceship");
+
+        ShipsWingspan = 18f;
+        HalfTheShipsLength = 14f;
+        HalfTheShipsHeight = 5f;
+
+    	  ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
         Parallel root = new Parallel();
 
         Sequence sequenceShootOrAvoid = new Sequence();
