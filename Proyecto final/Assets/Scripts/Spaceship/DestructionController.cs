@@ -5,15 +5,27 @@ using UnityEngine;
 public class DestructionController : MonoBehaviour {
 
     protected int destructionDelay = 1;
-    private int Health = 200;
+    // private int Health = 200;
     public LifeStats Stats;
     protected AudioManager AudioManager;
 		bool SpaceshipHasBeenDestroyed = false;
 
     private void Start()
     {
-        Stats = new LifeStats(Health);
+        // Stats = new LifeStats(Health);
+        SetHealth();
         AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
+
+
+    private void SetHealth(){
+      if(gameObject.name == "PlayerSpaceship"){
+         Stats = new LifeStats(200);
+      }else if(gameObject.name == "AssaultEnemy(Clone)"){
+         Stats = new LifeStats(200);
+      }else if(gameObject.name == "KamikazeEnemy(Clone)"){
+         Stats = new LifeStats(500);
+      }
     }
 
 		void Update(){

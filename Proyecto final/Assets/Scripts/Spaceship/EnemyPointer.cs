@@ -17,9 +17,9 @@ public class EnemyPointer : MonoBehaviour {
 		ArrowRenderer = gameObject.GetComponent<Renderer> ();
 		ArrowRenderer.material.color = Color.blue;
 
-		PlayerDestructionController = GameObject.FindWithTag("Player").GetComponent<DestructionController>();
+		PlayerDestructionController = GameObject.Find("PlayerSpaceship").GetComponent<PlayerDestructionController>();
 		lastHealth = PlayerDestructionController.Stats.getHealth();
-		
+
 		lastShot = DateTime.Now;
 	}
 

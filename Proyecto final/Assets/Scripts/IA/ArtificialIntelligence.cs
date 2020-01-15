@@ -8,7 +8,7 @@ public class ArtificialIntelligence : MonoBehaviour {
 
 		public static GameObject Target;
 		private BehaviorTree.BehaviorTree Tree;
-    private int Velocity = 20;
+    private int Velocity = 40;
 		private GameObject ShotPrefab;
     private int ShotMaxDistance = 100;
     private int ShotMinDistance = 10;

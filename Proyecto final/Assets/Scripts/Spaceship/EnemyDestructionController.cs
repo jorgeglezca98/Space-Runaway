@@ -9,6 +9,7 @@ public class EnemyDestructionController : DestructionController {
 	}
 
 	protected override void InflictBulletDamage(string bulletType){
+		Debug.Log("Im getting Damage");
 		if(bulletType == "player_shot_prefab(Clone)"){
 			Stats.setHealth(Stats.getHealth() - 1f);
 			PlayImpactSound(0f);
@@ -18,7 +19,6 @@ public class EnemyDestructionController : DestructionController {
 
 			/*It receives a parameter because the Delegate requires it*/
 	protected override void PlayImpactSound(float damage){
-			Debug.Log("ON ENEMY IMPACT PLAYING");
 			AudioManager.PlaySoundEffect("OnEnemyImpact");
 	}
 

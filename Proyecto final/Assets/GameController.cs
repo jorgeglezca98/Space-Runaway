@@ -18,6 +18,12 @@ public class GameController : MonoBehaviour {
 
 
 	void Awake () {
+
+        GameObject[] residualEnemies = GameObject.FindGameObjectsWithTag("enemy");
+        for(int i = 0; i < residualEnemies.Length; i++){
+            Destroy(residualEnemies[i]);
+        }
+
         PlayerSpaceship = GameObject.Find("PlayerSpaceship");
         PlayerSpaceship.transform.position = PlayerInitialPosition;
         AddScriptsToPlayer();
@@ -70,7 +76,7 @@ public class GameController : MonoBehaviour {
 
         // TODO: Put the other prefab!
         case EnemyType.Kamikaze:
-          enemy = Instantiate(Resources.Load("AssaultEnemy")) as GameObject;
+          enemy = Instantiate(Resources.Load("KamikazeEnemy")) as GameObject;
           enemy.AddComponent<EnemyDestructionController>();
           enemy.AddComponent<KamikazeArtificialIntelligence>();
           enemy.transform.position = GenerateFreePosition();
@@ -81,15 +87,15 @@ public class GameController : MonoBehaviour {
   }
 
   Vector3 GenerateFreePosition(){
-    GameObject[] asteroids = GameObject.FindGameObjectsWithTag("asteroid");
-    GameObject asteroid = asteroids[Random.Range(0, asteroids.Length - 1)];
-    Vector3 asteroidPosition = asteroid.transform.position;
-    float x = asteroidPosition.x + 60;
-    float y = asteroidPosition.y + 60;
-    float z = asteroidPosition.z + 60;
-    // float x = 0;
-    // float y = 0;
-    // float z = 300;
+    // GameObject[] asteroids = GameObject.FindGameObjectsWithTag("asteroid");
+    // GameObject asteroid = asteroids[Random.Range(0, asteroids.Length - 1)];
+    // Vector3 asteroidPosition = asteroid.transform.position;
+    // float x = asteroidPosition.x + 60;
+    // float y = asteroidPosition.y + 60;
+    // float z = asteroidPosition.z + 60;
+    float x = 0;
+    float y = 0;
+    float z = 200;
     return new Vector3(x,y,z);
   }
 
@@ -104,6 +110,7 @@ public class GameController : MonoBehaviour {
         PlayerSpaceship.transform.Find("Blaster-1").gameObject.AddComponent<Shots>();
         PlayerSpaceship.transform.Find("Blaster-2").gameObject.AddComponent<Shots>();
         GameObject.Find("FrontSpotlight").AddComponent<SpotlightController>();
+        GameObject.Find("Arrow").AddComponent<EnemyPointer>();
     }
 
 

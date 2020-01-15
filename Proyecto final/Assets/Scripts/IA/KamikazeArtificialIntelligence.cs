@@ -6,21 +6,22 @@ using BehaviorTree;
 
 public class KamikazeArtificialIntelligence : MonoBehaviour {
 
-    private static GameObject Target;
-    private BehaviorTree.BehaviorTree Tree;
-    private int Velocity = 20;
-    private GameObject ShotPrefab;
-    private int ShotMaxDistance = 200;
-    private int ShotMinDistance = 10;
-    private int ShotSpeed = 2000;
-    private int DistanceFarFromTarget = 100;
-    private int DistanceCloseToTarget = 50;
-    private int AimingHelpRange = 100;
-    private float LookForCollisionDistance = 20f;
-    private float ShipSpeed = 20f;
-    private float ShipsWingspan = 10f;
-    private float HalfTheShipsLength = 7.5f;
-    private float HalfTheShipsHeight = 2.5f;
+  public static GameObject Target;
+  private BehaviorTree.BehaviorTree Tree;
+  private int Velocity = 40;
+  private GameObject ShotPrefab;
+  private int ShotMaxDistance = 100;
+  private int ShotMinDistance = 10;
+  private int ShotSpeed = 10000;
+  private int DistanceFarFromTarget = 100;
+  private int DistanceCloseToTarget = 50;
+  private int AimingHelpRange = 10;
+  private float LookForCollisionDistance = 60f;
+  private float ShipSpeed = 20f;
+  private float ShipsWingspan = 10f;
+  private float HalfTheShipsLength = 7.5f;
+  private float HalfTheShipsHeight = 2.5f;
+  public static AudioManager AudioManager;
 
     void Start () {
         // GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
