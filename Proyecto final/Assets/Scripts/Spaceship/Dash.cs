@@ -18,12 +18,12 @@ class Dash : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetButtonDown("DashIzq"))
         {
             rb.AddRelativeForce(new Vector3(-Time.deltaTime * intensity, 0, 0), ForceMode.Impulse);
             AudioManager.PlaySoundEffect("Dash");
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetButtonDown("DashDch"))
         {
             rb.AddRelativeForce(new Vector3(Time.deltaTime * intensity, 0, 0), ForceMode.Impulse);
             AudioManager.PlaySoundEffect("Dash");

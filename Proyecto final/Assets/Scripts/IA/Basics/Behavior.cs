@@ -23,7 +23,7 @@ namespace BehaviorTree {
 				return false;
 			} else {
 				return this == obj;
-			}   
+			}
 	    }
 
 	    public override int GetHashCode() {

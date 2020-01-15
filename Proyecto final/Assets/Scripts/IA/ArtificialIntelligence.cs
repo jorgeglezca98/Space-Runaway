@@ -4,79 +4,29 @@ using System.Linq;
 using UnityEngine;
 using BehaviorTree;
 
-public class ArtificialIntelligence : MonoBehaviour {
+namespace BehaviorTree{
+	class ArtificialIntelligence : MonoBehaviour {
 
-		public static GameObject Target;
-		private BehaviorTree.BehaviorTree Tree;
-    private int Velocity = 40;
-		private GameObject ShotPrefab;
-    private int ShotMaxDistance = 100;
-    private int ShotMinDistance = 10;
-    private int ShotSpeed = 10000;
-    private int DistanceFarFromTarget = 100;
-    private int DistanceCloseToTarget = 50;
-    private int AimingHelpRange = 10;
-    private float LookForCollisionDistance = 60f;
-    private float ShipSpeed = 20f;
-    private float ShipsWingspan = 10f;
-    private float HalfTheShipsLength = 7.5f;
-    private float HalfTheShipsHeight = 2.5f;
-		public static AudioManager AudioManager;
+			public static GameObject Target;
+	    public static AudioManager AudioManager;
+	    protected BehaviorTree Tree;
 
-    void Start () {
+	    protected int Velocity = 20;
+			protected GameObject ShotPrefab;
+	    protected int ShotMaxDistance = 100;
+	    protected int ShotMinDistance = 10;
+	    protected int ShotSpeed = 10000;
+	    protected int AimingHelpRange = 10;
+	    protected float LookForCollisionDistance = 60f;
+	    protected float ShipsWingspan = 10f;
+	    protected float HalfTheShipsLength = 7.5f;
+	    protected float HalfTheShipsHeight = 2.5f;
 
-				Target = GameObject.Find("PlayerSpaceship");
-				ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
-				AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+	    void FixedUpdate() {
+			Tree.Tick();
+		}
 
-				Parallel root = new Parallel();
-
-        Selector selectorMovebackOrForward = new Selector();
-
-
-        Sequence sequenceRetroceder = new Sequence();
-        sequenceRetroceder.AddChild(new IsTheTarjetClose(gameObject, DistanceCloseToTarget));
-        sequenceRetroceder.AddChild(new MoveBack(gameObject, Velocity));
-        Sequence sequenceAvanzar = new Sequence();
-        sequenceAvanzar.AddChild(new IsTheTarjetFar(gameObject, DistanceFarFromTarget));
-        sequenceAvanzar.AddChild(new MoveAlong(gameObject, Velocity));
-
-        selectorMovebackOrForward.AddChild(sequenceRetroceder);
-        selectorMovebackOrForward.AddChild(sequenceAvanzar);
-
-        Sequence sequenceDashIfDamageIsReceived = new Sequence();
-        sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
-        sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject));
-
-        Sequence sequenceShootOrAvoid = new Sequence();
-        Sequence sequenceShootIfVisible = new Sequence();
-        sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance));
-
-        Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
-
-        Sequence sequenceAvoidAsteroids = new Sequence();
-        sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
-                                                                         HalfTheShipsLength, HalfTheShipsHeight));
-        sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
-                                                                         HalfTheShipsLength, HalfTheShipsHeight));
-
-        selectorAvoidAsteroidOrFaceTarget.AddChild(sequenceAvoidAsteroids);
-        selectorAvoidAsteroidOrFaceTarget.AddChild(new RotateTowardsPlayer(gameObject));
-
-        sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
-        sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-        root.AddChild(sequenceDashIfDamageIsReceived);
-
-        root.AddChild(sequenceShootOrAvoid);
-        root.AddChild(selectorMovebackOrForward);
-
-        Tree = new BehaviorTree.BehaviorTree(root);
-    }
-
-    void FixedUpdate() {
-		Tree.Tick();
 	}
-
 }
 
 

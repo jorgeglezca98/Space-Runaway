@@ -1,4 +1,4 @@
-﻿using BehaviorTree;
+using BehaviorTree;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,48 +7,54 @@ namespace BehaviorTree
 {
     class DashMovement : LeafNode
     {
-        Vector3 rightDash = new Vector3(Time.deltaTime * 350, 0, 0);
-        Vector3 leftDash = new Vector3(-Time.deltaTime * 350, 0, 0);
-
-        public int ShotMaxDistance = 10;
-        public int ShotMinDistance = 0;
-        public int RangeSize = 10;
+        private Vector3 RightDash;
+        private Vector3 LeftDash;
+        private int SecureDistance;
+        private float HalfTheShipsHeight;
+        private float HalfTheShipsLength;
+        private int Intensity;
 
         System.Random random = new System.Random();
 
-        public DashMovement(GameObject agent) : base(agent)
-        { }
+        public DashMovement(GameObject agent, int SecureDistance, int Intensity,
+            float HalfTheShipsHeight, float HalfTheShipsLength) : base(agent)
+        {
+            this.Intensity = Intensity;
+            this.SecureDistance = SecureDistance;
+            this.HalfTheShipsLength = HalfTheShipsLength;
+            this.HalfTheShipsHeight = HalfTheShipsHeight;
+            RightDash = new Vector3(Intensity, 0, 0);
+            LeftDash = new Vector3(Intensity, 0, 0);
+        }
 
         public override Status Update()
         {
-            RaycastHit hit;
-
-            bool objectLeft = Physics.BoxCast(Agent.transform.position, new Vector3(RangeSize, RangeSize, ShotMinDistance),
-                Agent.transform.TransformDirection(Vector3.left), out hit, Quaternion.identity, ShotMaxDistance, ~(1 << 8));
-            bool objectRight = Physics.BoxCast(Agent.transform.position, new Vector3(RangeSize, RangeSize, ShotMinDistance),
-                Agent.transform.TransformDirection(Vector3.right), out hit, Quaternion.identity, ShotMaxDistance, ~(1 << 8));
+            bool objectLeft = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
+                Agent.transform.TransformDirection(Vector3.left), Quaternion.identity, SecureDistance, ~(1 << 8) & ~(1 << 9));
+            bool objectRight = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
+                Agent.transform.TransformDirection(Vector3.right), Quaternion.identity, SecureDistance, ~(1 << 8) & ~(1 << 9));
 
             if (objectLeft && !objectRight)
             {
-                Agent.GetComponent<Rigidbody>().AddRelativeForce(rightDash, ForceMode.Impulse);
+                Agent.GetComponent<Rigidbody>().AddRelativeForce(RightDash, ForceMode.Impulse);
             }
             else if (!objectLeft && objectRight)
             {
-                Agent.GetComponent<Rigidbody>().AddRelativeForce(leftDash, ForceMode.Impulse);
+                Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
             }
             else if (!objectLeft && !objectRight)
             {
                 switch(random.Next(2))
                 {
                     case 0:
-                        Agent.GetComponent<Rigidbody>().AddRelativeForce(leftDash, ForceMode.Impulse);
+                        Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
                         break;
                     case 1:
-                        Agent.GetComponent<Rigidbody>().AddRelativeForce(rightDash, ForceMode.Impulse);
+                        Agent.GetComponent<Rigidbody>().AddRelativeForce(RightDash, ForceMode.Impulse);
                         break;
                 }
-            }
-           
+            }else return Status.BH_FAILURE;
+
             return Status.BH_SUCCESS;
         }
     }

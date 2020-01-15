@@ -4,24 +4,7 @@ using System.Linq;
 using UnityEngine;
 using BehaviorTree;
 
-public class KamikazeArtificialIntelligence : MonoBehaviour {
-
-  public static GameObject Target;
-  private BehaviorTree.BehaviorTree Tree;
-  private int Velocity = 40;
-  private GameObject ShotPrefab;
-  private int ShotMaxDistance = 100;
-  private int ShotMinDistance = 10;
-  private int ShotSpeed = 10000;
-  private int DistanceFarFromTarget = 100;
-  private int DistanceCloseToTarget = 50;
-  private int AimingHelpRange = 10;
-  private float LookForCollisionDistance = 60f;
-  private float ShipSpeed = 20f;
-  private float ShipsWingspan = 10f;
-  private float HalfTheShipsLength = 7.5f;
-  private float HalfTheShipsHeight = 2.5f;
-  public static AudioManager AudioManager;
+class KamikazeArtificialIntelligence : ArtificialIntelligence {
 
     void Start () {
         // GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
@@ -29,7 +12,7 @@ public class KamikazeArtificialIntelligence : MonoBehaviour {
         //     Target = players[0];
 
         Target = GameObject.Find("PlayerSpaceship");
-    		ShotPrefab = Resources.Load("shot_prefab") as GameObject;
+    	  ShotPrefab = Resources.Load("shot_prefab") as GameObject;
         Parallel root = new Parallel();
 
         Sequence sequenceShootOrAvoid = new Sequence();
@@ -56,9 +39,5 @@ public class KamikazeArtificialIntelligence : MonoBehaviour {
 
         Tree = new BehaviorTree.BehaviorTree(root);
 
-    }
-
-    void FixedUpdate() {
-        Tree.Tick();
     }
 }
