@@ -17,6 +17,7 @@ public class SliderVRController : MonoBehaviour {
 
 			void Start () {
 					IsActive = false;
+					ChangeAmount = 0.1f;
 					AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 					Reticle = GameObject.Find("Main Camera").transform;
 					Slider = GetComponent<Slider>();
@@ -32,20 +33,33 @@ public class SliderVRController : MonoBehaviour {
 				}
 			}
 
-			void Update () {
-					if (IsActive == true && Input.GetButton("Click")) {
-						Vector3 currentPosition = Reticle.position;
-						float directionOfChange = currentPosition.x- PreviousX;
-						ChangeSliderValue(ChangeAmount * directionOfChange);
-					} else PreviousX = Reticle.position.x;
-			}
+			// void Update () {
+			// 		if (IsActive == true && Input.GetButton("Click")) {
+			// 			Vector3 currentPosition = Reticle.position;
+			// 			float directionOfChange = currentPosition.x - PreviousX;
+			// 			ChangeSliderValue(ChangeAmount * directionOfChange);
+			// 		} else PreviousX = Reticle.position.x;
+			// }
 
 
-			void ChangeSliderValue(float amount){
-				Slider.value -= amount;
+			void ChangeSliderValue(){
 				if(gameObject.name == "MusicVolumeSlider")
 					AudioManager.ChangeMusicVolume(Slider.value);
 				else AudioManager.ChangeSoundEffectSVolume(Slider.value);
+			}
+
+			public void TurnVolumeUp(){
+				if(Slider.value < Slider.maxValue){
+					Slider.value += ChangeAmount;
+					ChangeSliderValue();
+				}
+			}
+
+			public void TurnVolumeDown(){
+				if(Slider.value > Slider.minValue){
+					Slider.value -= ChangeAmount;
+					ChangeSliderValue();
+				}
 			}
 
 			public void Activate(){

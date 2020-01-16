@@ -6,17 +6,26 @@ using UnityEngine.SceneManagement;
 public class GameMenu : MonoBehaviour {
 
     public static bool GameIsPaused;
+    private GameObject InitialMenuUi;
     private GameObject PauseMenuUi;
     private GameObject MainMenuUi;
     private GameObject EndMenuUi;
 
     void Start(){
       GameIsPaused = false;
+      InitialMenuUi = gameObject.transform.Find("InitialMenu").gameObject;
       PauseMenuUi = gameObject.transform.Find("PauseMenu").gameObject;
       MainMenuUi = gameObject.transform.Find("MainMenu").gameObject;
       EndMenuUi = gameObject.transform.Find("EndMenu").gameObject;
       GameEventsController.eventController.OnPlayerDestruction += FinalScreen;
       GameEventsController.eventController.OnPlayerWon += FinalScreen;
+      DisplayInitialMenu();
+    }
+
+    private void DisplayInitialMenu(){
+      InitialMenuUi.SetActive(true);
+      Time.timeScale = 0f;
+      GameIsPaused = true;
     }
 
     private void Update()
@@ -26,11 +35,17 @@ public class GameMenu : MonoBehaviour {
             {
                 Resume();
             }
-            else if (!MainMenuUi.activeSelf)
+            else if (!MainMenuUi.activeSelf && !InitialMenuUi.activeSelf && !EndMenuUi.activeSelf)
             {
                 Pause();
             }
         }
+    }
+
+    public void Play(){
+      InitialMenuUi.SetActive(false);
+      Time.timeScale = 1f;
+      GameIsPaused = false;
     }
 
     public void Resume()
