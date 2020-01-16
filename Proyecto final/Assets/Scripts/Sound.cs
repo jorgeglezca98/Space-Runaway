@@ -38,7 +38,11 @@ public class Sound{
         this.Volume = volume;
         this.AudioSource.volume = volume;
     }
-    
+
+    public float GetVolume(){
+      return this.AudioSource.volume;
+    }
+
     public bool IsPlaying()
     {
         return this.AudioSource.isPlaying;

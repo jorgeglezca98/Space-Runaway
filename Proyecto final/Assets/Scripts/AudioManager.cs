@@ -11,6 +11,9 @@ public class AudioManager : MonoBehaviour {
     public Sound[] Songs;
     private Sound CurrentSong;
 
+    private float MusicVolume;
+    private float SoundEffectsVolume;
+
     public static AudioManager instance;
 
     int CurrentSongIndex;
@@ -21,6 +24,8 @@ public class AudioManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
         if (instance == null)
         {
+            MusicVolume = 1f;
+            SoundEffectsVolume = 1f;
             instance = this;
         }
         else
@@ -50,8 +55,17 @@ public class AudioManager : MonoBehaviour {
         StartCoroutine(PlaySong());
     }
 
+    public float GetMusicVolume(){
+      return MusicVolume;
+    }
+
+    public float GetSoundEffectsVolume(){
+      return SoundEffectsVolume;
+    }
+
     public void ChangeSoundEffectSVolume(float volume)
     {
+      SoundEffectsVolume = volume;
         foreach (Sound sound in SoundEffects)
         {
             sound.SetVolume(volume);
@@ -60,6 +74,7 @@ public class AudioManager : MonoBehaviour {
 
     public void ChangeMusicVolume(float volume)
     {
+      MusicVolume = volume;
         foreach (Sound song in Songs)
         {
             song.SetVolume(volume);
@@ -116,4 +131,3 @@ public class AudioManager : MonoBehaviour {
 
 
 }
-
