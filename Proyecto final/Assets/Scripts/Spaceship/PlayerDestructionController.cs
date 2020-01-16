@@ -21,9 +21,9 @@ public class PlayerDestructionController : DestructionController {
 	}
 
 	protected override void DestroySpaceship(){
-		SplitSpaceship();
+		//SplitSpaceship();
 		PlayExplosionSound();
-		Destroy(gameObject, destructionDelay);
+		//Destroy(gameObject, destructionDelay);
 		GameEventsController.eventController.playerDestroyed();
 	}
 

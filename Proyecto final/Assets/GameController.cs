@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour {
 
     enum EnemyType{Assault,Kamikaze};
 
-    private EnemyType[] EnemiesList = {EnemyType.Kamikaze};
+    private EnemyType[] EnemiesList = {EnemyType.Assault, EnemyType.Assault, EnemyType.Kamikaze};
     private int CurrentEnemy =  0;
     public static bool EnemyIsUp = false;
 

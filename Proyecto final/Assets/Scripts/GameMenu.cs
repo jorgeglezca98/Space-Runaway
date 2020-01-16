@@ -21,7 +21,7 @@ public class GameMenu : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)){
+		if (Input.GetButtonDown("Start")){
             if (GameIsPaused && PauseMenuUi.activeSelf)
             {
                 Resume();
@@ -53,8 +53,7 @@ public class GameMenu : MonoBehaviour {
     }
 
     public void FinalScreen(string text){
-       if(text == "YOU WON!")
-          Time.timeScale = 0f;
+       Time.timeScale = 0f;
        EndMenuUi.transform.Find("EndText").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = text;
        EndMenuUi.SetActive(true);
     }

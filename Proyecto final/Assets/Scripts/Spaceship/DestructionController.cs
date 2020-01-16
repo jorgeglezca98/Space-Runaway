@@ -37,6 +37,7 @@ public class DestructionController : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
 	  {
+      Debug.Log("Collision enter!");
 			if(collision.gameObject.tag == "bullet")
 				InflictBulletDamage(collision.gameObject.name);
 			else if (collision.gameObject.tag != "mothership")
@@ -45,6 +46,7 @@ public class DestructionController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+      Debug.Log("Trigger enter!");
 			if(other.gameObject.tag == "bullet")
 				InflictBulletDamage(other.gameObject.name);
 			else if(other.gameObject.tag != "mothership")
