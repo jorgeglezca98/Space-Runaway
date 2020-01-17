@@ -204,12 +204,12 @@ InputManager:
     negativeButton: 
     positiveButton: mouse 0
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: joystick 1 button 2
     gravity: 0
     dead: 0
     sensitivity: 0.1
     snap: 0
     invert: 0
-    type: 1
-    axis: 1
+    type: 0
+    axis: 0
     joyNum: 0
