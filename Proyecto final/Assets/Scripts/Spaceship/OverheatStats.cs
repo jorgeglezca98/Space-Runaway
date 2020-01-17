@@ -12,6 +12,19 @@ public class OverheatStats
     private float maxOverheat = 100f;
     private float overheatWaitTime = 5f;
 
+    private bool isCoolingDown = false;
+    private float cooldownStartTime;
+
+    public float getCooldownStartTime()
+    {
+        return cooldownStartTime;
+    }
+
+    public void setCooldownStartTime(float time)
+    {
+        cooldownStartTime = time;
+    }
+
     public float getOverheat()
     {
         return playerOverheat;
@@ -50,5 +63,13 @@ public class OverheatStats
         attackModeTime = time;
     }
 
+    public bool getIsCoolingDown()
+    {
+        return isCoolingDown;
+    }
 
+    public void setIsCoolingDown(bool isCoolingDown)
+    {
+        this.isCoolingDown = isCoolingDown;
+    }
 }

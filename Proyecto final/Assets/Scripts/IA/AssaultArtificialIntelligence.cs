@@ -30,52 +30,54 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
 
         ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
 
-        Parallel root = new Parallel();
+        /* TREE START */ 
 
-        Selector selectorMovebackOrForward = new Selector();
+        //Parallel root = new Parallel();
 
-        Sequence sequenceRetroceder = new Sequence();
-        sequenceRetroceder.AddChild(new IsTheTarjetClose(gameObject, DistanceCloseToTarget));
-        sequenceRetroceder.AddChild(new MoveBack(gameObject, Velocity));
-        Sequence sequenceAvanzar = new Sequence();
-        sequenceAvanzar.AddChild(new IsTheTarjetFar(gameObject, DistanceFarFromTarget));
-        sequenceAvanzar.AddChild(new MoveAlong(gameObject, Velocity));
+        //Selector selectorMovebackOrForward = new Selector();
 
-        selectorMovebackOrForward.AddChild(sequenceRetroceder);
-        selectorMovebackOrForward.AddChild(sequenceAvanzar);
+        //Sequence sequenceRetroceder = new Sequence();
+        //sequenceRetroceder.AddChild(new IsTheTarjetClose(gameObject, DistanceCloseToTarget));
+        //sequenceRetroceder.AddChild(new MoveBack(gameObject, Velocity));
+        //Sequence sequenceAvanzar = new Sequence();
+        //sequenceAvanzar.AddChild(new IsTheTarjetFar(gameObject, DistanceFarFromTarget));
+        //sequenceAvanzar.AddChild(new MoveAlong(gameObject, Velocity));
 
-        Sequence sequenceDashIfDamageIsReceived = new Sequence();
-        sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
-        sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject, DashSecureDistance, DashIntensity,
-                                                                 HalfTheShipsHeight, HalfTheShipsLength));
+        //selectorMovebackOrForward.AddChild(sequenceRetroceder);
+        //selectorMovebackOrForward.AddChild(sequenceAvanzar);
 
-        Sequence sequenceShootOrAvoid = new Sequence();
-        Sequence sequenceShootIfVisible = new Sequence();
+        //Sequence sequenceDashIfDamageIsReceived = new Sequence();
+        //sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
+        //sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject, DashSecureDistance, DashIntensity,
+        //                                                         HalfTheShipsHeight, HalfTheShipsLength));
 
-        sequenceShootIfVisible.AddChild(new IsNotOverheatedOrLifeIsLow(gameObject, GetComponent<DestructionController>(), overheatData,
-            OverheatThreshold, HealthThreshold));
-        sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance,
-            overheatIncrement, overheatDecrement, maxOverheatPenalizationTime, overheatData));
+        //Sequence sequenceShootOrAvoid = new Sequence();
+        //Sequence sequenceShootIfVisible = new Sequence();
 
-        Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
+        //sequenceShootIfVisible.AddChild(new IsNotOverheatedOrLifeIsLow(gameObject, GetComponent<DestructionController>(), overheatData,
+        //    OverheatThreshold, HealthThreshold));
+        //sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance,
+        //    overheatIncrement, overheatDecrement, maxOverheatPenalizationTime, overheatData));
 
-        Sequence sequenceAvoidAsteroids = new Sequence();
-        sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
-                                                                         HalfTheShipsLength, HalfTheShipsHeight));
-        sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
-                                                                         HalfTheShipsLength, HalfTheShipsHeight));
+        //Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
 
-        selectorAvoidAsteroidOrFaceTarget.AddChild(sequenceAvoidAsteroids);
-        selectorAvoidAsteroidOrFaceTarget.AddChild(new RotateTowardsPlayer(gameObject));
+        //Sequence sequenceAvoidAsteroids = new Sequence();
+        //sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
+        //                                                                 HalfTheShipsLength, HalfTheShipsHeight));
+        //sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
+        //                                                                 HalfTheShipsLength, HalfTheShipsHeight));
 
-        sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
-        sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-        root.AddChild(sequenceDashIfDamageIsReceived);
+        //selectorAvoidAsteroidOrFaceTarget.AddChild(sequenceAvoidAsteroids);
+        //selectorAvoidAsteroidOrFaceTarget.AddChild(new RotateTowardsPlayer(gameObject));
 
-        root.AddChild(sequenceShootOrAvoid);
-        root.AddChild(selectorMovebackOrForward);
+        //sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
+        //sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
+        //root.AddChild(sequenceDashIfDamageIsReceived);
 
-        Tree = new BehaviorTree.BehaviorTree(root);
+        //root.AddChild(sequenceShootOrAvoid);
+        //root.AddChild(selectorMovebackOrForward);
+
+        //Tree = new BehaviorTree.BehaviorTree(root);
     }
 
     private void Update()
