@@ -55,46 +55,50 @@ namespace BehaviorTree
 
             bool isOverheated = OverheatData.getOverheat() >= OverheatData.getMaxOverheat();
 
-            if (isInRange && collidesWithSomething && targetIsHit && !isOverheated)
+            if (isCoolingDown)
             {
-                foreach (Transform blaster in blasters)
-                {
-                    Debug.Log("Blaster name" + blaster.gameObject.name);
-                    Transform shotPoint = blaster.Find("ShotPoint");
-                    blaster.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
-                    GameObject bullet = UnityEngine.Object.Instantiate(ShotPrefab, shotPoint.position, blaster.rotation);
-                    bullet.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, ShotSpeed));
-                    ArtificialIntelligence.AudioManager.PlaySoundEffect("EnemyShot");
-                }
-                Debug.Log("SHOT");
-                OverheatData.setOverheat(OverheatData.getOverheat() + OverheatIncrement);
-                Debug.Log("Actual overheat: " + OverheatData.getOverheat());
-                return Status.BH_SUCCESS;
-            }
-            else if (!isCoolingDown && isOverheated)
-            {
-                Debug.Log("COULD NOT SHOOT IS OVERHEATED (isOverheated SAYS " + isOverheated + ")");
-                isCoolingDown = true;
-                coolDown();
-                return Status.BH_RUNNING;
-            }
-            else if (isCoolingDown)
-            {
-                Debug.Log("Is cooling Down!");
+                Debug.Log("Enemy is cooling down");
                 if (Math.Abs(coolDownStart - Time.time) >= MaxOverheatPenalizationTime)
                 {
-                    Debug.Log("Cooling Down now is done!");
+                    Debug.Log("Enemy is NO LONGER COOLING DOWN");
                     isCoolingDown = false;
                     OverheatData.setOverheat(0f);
                     return Status.BH_FAILURE;
                 }
                 else
+                {
+                    Debug.Log("Enemy is STILL cooling");
                     return Status.BH_RUNNING;
+                }
             }
             else
             {
-                return Status.BH_FAILURE;   
+                Debug.Log("Enemy is OKEY");
+                if (isOverheated)
+                {
+                    Debug.Log("Enemy is OVERHEATED");
+                    isCoolingDown = true;
+                    coolDownStart = Time.time;
+                    return Status.BH_RUNNING;
+                }
+                else if (isInRange && collidesWithSomething && targetIsHit)
+                {
+                    Debug.Log("Enemy SHOOOOOOOOOOOOOOOOOT");
+                    foreach (Transform blaster in blasters)
+                    {
+                        Transform shotPoint = blaster.Find("ShotPoint");
+                        blaster.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
+                        GameObject bullet = UnityEngine.Object.Instantiate(ShotPrefab, shotPoint.position, blaster.rotation);
+                        bullet.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, ShotSpeed));
+                        ArtificialIntelligence.AudioManager.PlaySoundEffect("EnemyShot");
+                    }
+                    OverheatData.setOverheat(OverheatData.getOverheat() + OverheatIncrement);
+                    return Status.BH_SUCCESS;
+                }
             }
+
+            Debug.Log("Cant shoot: " + isInRange + ", " + collidesWithSomething + ", " + targetIsHit);
+            return Status.BH_FAILURE;
         }
 
         void coolDown()

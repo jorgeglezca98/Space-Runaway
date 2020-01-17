@@ -53,7 +53,7 @@ namespace BehaviorTree
 
             Debug.Log("Should not shoot");
 
-            Debug.Log("Overhead threshold not exceeded: " + (overheat < overheatThreshold));
+            Debug.Log("Overhead threshold exceeded: " + (overheat > overheatThreshold));
             Debug.Log("Health threshold exceeded: " + (health < healthThreshold));
 
             return Status.BH_FAILURE;
