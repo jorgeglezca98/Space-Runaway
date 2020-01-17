@@ -25,7 +25,8 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
 
         Sequence sequenceShootOrAvoid = new Sequence();
         Sequence sequenceShootIfVisible = new Sequence();
-        sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance));
+        sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance,
+            overheatIncrement, overheatDecrement, maxOverheatPenalizationTime, overheatData));
 
 
         Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
@@ -46,6 +47,13 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
         root.AddChild(sequenceShootOrAvoid);
 
         Tree = new BehaviorTree.BehaviorTree(root);
+    }
 
+    private void Update()
+    {
+        if (overheatData.getOverheat() < overheatData.getMaxOverheat() && overheatData.getOverheat() > 0)
+        {
+            overheatData.setOverheat(overheatData.getOverheat() - overheatDecrement);
+        }
     }
 }

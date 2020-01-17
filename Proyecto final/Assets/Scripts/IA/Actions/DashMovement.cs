@@ -44,16 +44,9 @@ namespace BehaviorTree
             }
             else if (!objectLeft && !objectRight)
             {
-                switch(random.Next(2))
-                {
-                    case 0:
-                        Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
-                        break;
-                    case 1:
-                        Agent.GetComponent<Rigidbody>().AddRelativeForce(RightDash, ForceMode.Impulse);
-                        break;
-                }
-            }else return Status.BH_FAILURE;
+                Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
+            }
+            else return Status.BH_FAILURE;
 
             return Status.BH_SUCCESS;
         }

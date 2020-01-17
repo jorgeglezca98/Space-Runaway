@@ -4,29 +4,41 @@ using System.Linq;
 using UnityEngine;
 using BehaviorTree;
 
-namespace BehaviorTree{
-	class ArtificialIntelligence : MonoBehaviour {
+namespace BehaviorTree
+{
+    class ArtificialIntelligence : MonoBehaviour
+    {
+        public static GameObject Target;
+        public static AudioManager AudioManager;
+        protected BehaviorTree Tree;
 
-			public static GameObject Target;
-	    public static AudioManager AudioManager;
-	    protected BehaviorTree Tree;
+        protected int Velocity = 20;
+        protected GameObject ShotPrefab;
+        protected int ShotMaxDistance = 100;
+        protected int ShotMinDistance = 10;
+        protected int ShotSpeed = 10000;
+        protected int AimingHelpRange = 10;
+        protected float LookForCollisionDistance = 60f;
+        protected float ShipsWingspan = 10f;
+        protected float HalfTheShipsLength = 7.5f;
+        protected float HalfTheShipsHeight = 2.5f;
 
-	    protected int Velocity = 20;
-			protected GameObject ShotPrefab;
-	    protected int ShotMaxDistance = 100;
-	    protected int ShotMinDistance = 10;
-	    protected int ShotSpeed = 10000;
-	    protected int AimingHelpRange = 10;
-	    protected float LookForCollisionDistance = 60f;
-	    protected float ShipsWingspan = 10f;
-	    protected float HalfTheShipsLength = 7.5f;
-	    protected float HalfTheShipsHeight = 2.5f;
+        protected OverheatStats overheatData = new OverheatStats();
 
-	    void FixedUpdate() {
-			Tree.Tick();
-		}
+        // The amount of overheat the weapon produces everytime it shots.
+        protected float overheatIncrement = 3f;
+        // The amount of overheat the weapon cools down everytime it shots.
+        protected float overheatDecrement = 0.75f;
+        // The amount of time in seconds the weapon get disabled when the
+        // maximum overheat is achieved.
+        protected float maxOverheatPenalizationTime = 3f;
+        protected bool isCoolingDown = false;
 
-	}
+        void FixedUpdate()
+        {
+            Tree.Tick();
+        }
+    }
 }
 
 
@@ -64,6 +76,7 @@ public static class ExtDebug
     {
         DrawBox(new Box(origin, halfExtents, orientation));
     }
+
     public static void DrawBox(Box box)
     {
         Gizmos.DrawLine(box.frontTopLeft, box.frontTopRight);
