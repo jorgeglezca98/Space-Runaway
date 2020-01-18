@@ -9,7 +9,7 @@ namespace BehaviorTree
 
         public DashLeft(GameObject agent, int Intensity) : base(agent)
         {
-            LeftDash = new Vector3(Intensity, 0, 0);
+            LeftDash = new Vector3(-Intensity, 0, 0);
         }
 
         public override Status Update()

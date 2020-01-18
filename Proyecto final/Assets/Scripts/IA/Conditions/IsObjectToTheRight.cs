@@ -17,13 +17,16 @@ namespace BehaviorTree
 
         public override Status Update()
         {
+          Debug.Log("HOLA BUENOS MEDIO, EN EL NODO ESTOY POR LO MENOS.");
             bool objectRight = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
-                Agent.transform.TransformDirection(Vector3.right), Quaternion.identity, SecureDistance, ~(1 << 8) & ~(1 << 9));
+                Agent.transform.right, Agent.transform.rotation * Quaternion.Euler(0, 90, 0), SecureDistance, ~(1 << 8) & ~(1 << 10));
 
-            if (objectRight)
+            if (objectRight){
+              Debug.Log("HOLA BUENOS MEDIO DÍAS HAY UN ASTEROIDE.");
                 return Status.BH_SUCCESS;
-            else
+            }else{
                 return Status.BH_FAILURE;
+              }
         }
     }
 }

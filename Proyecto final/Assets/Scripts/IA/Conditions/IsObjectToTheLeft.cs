@@ -17,9 +17,10 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            bool objectLeft = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
-               Agent.transform.TransformDirection(Vector3.left), Quaternion.identity, SecureDistance, ~(1 << 8) & ~(1 << 9));
-            
+
+          bool objectLeft = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
+              -Agent.transform.right, Agent.transform.rotation * Quaternion.Euler(0, 90, 0), SecureDistance, ~(1 << 8) & ~(1 << 10));
+
             if (objectLeft)
                 return Status.BH_SUCCESS;
             else

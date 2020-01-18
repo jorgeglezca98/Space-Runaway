@@ -34,7 +34,7 @@ namespace BehaviorTree{
 			protected bool isCoolingDown = false;
 
 	    void FixedUpdate() {
-				// Tree.Tick();
+				Tree.Tick();
 			}
 
 

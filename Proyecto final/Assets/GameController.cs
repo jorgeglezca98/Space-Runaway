@@ -87,15 +87,15 @@ public class GameController : MonoBehaviour {
   }
 
   Vector3 GenerateFreePosition(){
-    GameObject[] asteroids = GameObject.FindGameObjectsWithTag("asteroid");
-    GameObject asteroid = asteroids[Random.Range(0, asteroids.Length - 1)];
-    Vector3 asteroidPosition = asteroid.transform.position;
-    float x = asteroidPosition.x + 60;
-    float y = asteroidPosition.y + 60;
-    float z = asteroidPosition.z + 60;
-    // float x = 0;
-    // float y = 0;
-    // float z = 200;
+    // GameObject[] asteroids = GameObject.FindGameObjectsWithTag("asteroid");
+    // GameObject asteroid = asteroids[Random.Range(0, asteroids.Length - 1)];
+    // Vector3 asteroidPosition = asteroid.transform.position;
+    // float x = asteroidPosition.x + 60;
+    // float y = asteroidPosition.y + 60;
+    // float z = asteroidPosition.z + 60;
+    float x = 0;
+    float y = 0;
+    float z = 200;
     return new Vector3(x,y,z);
   }
 

@@ -18,7 +18,8 @@ namespace BehaviorTree {
 						Debug.Log("Velocity: " + Velocity);
 						Debug.Log("The AI name is: " + Agent.transform.name);
 						// GameObject.Find("AssaultEnemy(Clone)").transform.Translate(Time.deltaTime * Velocity * Vector3.forward);
-            Agent.transform.Translate(Time.deltaTime * Velocity * Agent.transform.forward);
+            // Agent.transform.Translate(0,0,Time.deltaTime * Velocity * Agent.transform.forward.z);
+						Agent.transform.position += new Vector3(0,0,Time.deltaTime * Velocity * Agent.transform.forward.z);
 						// Agent.transform.position += Agent.transform.TransformDirection(new Vector3(0, 0, Time.deltaTime * Velocity));
 						// Agent.transform.position += Agent.transform.forward * Time.deltaTime * Velocity;
 						// rb.velocity += Agent.transform.forward * Time.deltaTime * Velocity;

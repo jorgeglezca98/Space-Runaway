@@ -15,7 +15,7 @@ public class SpaceshipMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 		rg = GetComponent<Rigidbody>();
 		rg.drag = 0.5f;
 		rg.angularDrag = 0.5f;

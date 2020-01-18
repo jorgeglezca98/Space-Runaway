@@ -11,7 +11,7 @@ namespace BehaviorTree
         float actualHealth;
         float lastHealth;
 
-        float diff = 10f;
+        float diff = 20f;
         private GameObject gameObject;
         private DestructionController destructionController;
 
@@ -27,7 +27,6 @@ namespace BehaviorTree
             actualHealth = stats.getHealth();
             if (Math.Abs(lastHealth - actualHealth) >= diff)
             {
-                Debug.Log("Im goin' to dash!");
                 lastHealth = actualHealth;
                 return Status.BH_SUCCESS;
             }
