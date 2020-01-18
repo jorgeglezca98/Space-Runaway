@@ -5,6 +5,12 @@ namespace BehaviorTree
 {
     class Selector : Composite
     {
+        public Selector() { }
+
+        public Selector(Behavior b) : base(b) { }
+
+        public Selector(List<Behavior> b) : base(b) { }    
+
         public override Status Update()
         {
             //Keep going until a child behavior says it’s running.

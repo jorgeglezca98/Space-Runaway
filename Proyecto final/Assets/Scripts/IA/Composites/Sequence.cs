@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BehaviorTree
@@ -5,6 +6,12 @@ namespace BehaviorTree
     // TODO: improve syntax, make the for loop simpler
     class Sequence : Composite
     {
+        public Sequence() { }
+
+        public Sequence(Behavior b) : base(b) { }
+
+        public Sequence(List<Behavior> b) : base(b) { }
+
         public override Status Update()
         {
             //Keep going until a child behavior says it’s running.

@@ -11,7 +11,8 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
     private int DashSecureDistance = 0;
     private int DashIntensity = 10;
     private float HealthThreshold;
-    private float OverheatThreshold;
+    private float OverheatUpperThreshold;
+    private float OverheatLowerThreshold;
 
     void Start()
     {
@@ -20,19 +21,88 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
         if (Target == null)
             Target = GameObject.Find("PlayerSpaceship");
 
-
         ShipsWingspan = 10f;
         HalfTheShipsLength = 7.5f;
         HalfTheShipsHeight = 2.5f;
 
         HealthThreshold = GetComponent<DestructionController>().Stats.getMaxHealth() * 0.3f; // 30 % of health
-        OverheatThreshold = overheatData.getMaxOverheat() * 0.75f; // 75 % of overheat
+        OverheatUpperThreshold = overheatData.getMaxOverheat() * 0.75f; // 75 % of overheat
+        OverheatLowerThreshold = overheatData.getMaxOverheat() * 0.25f; // 25 % of overheat
 
         ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
 
-        /* TREE START */ 
+        /* TREE START */
 
-        //Parallel root = new Parallel();
+        Parallel root = new Parallel(new List<Behavior>
+        {
+            new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR FACE TARGET */
+            {
+                new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
+                {
+
+                }),
+                new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
+                {
+                    new RotateTowardsPlayer(gameObject),
+                    new Parallel(new List<Behavior> /* UNTITLED PARALLEL */
+                    {
+                        new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
+                        {
+                            new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
+                            {
+                                new IsHealthLow(gameObject, GetComponent<DestructionController>(), HealthThreshold),
+                                new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, over))
+                            }),
+                            new Selector(new List<Behavior> /* SELECTOR COOLING DOWN */
+                            {
+
+                            })
+                        }),
+                        new Filter(new List<Behavior> /* FILTER REDUCE OVERHEAT */
+                        {
+
+                        })
+                    })
+                })
+            }),
+
+            new Filter(new List<Behavior> /* FILTER DASH */
+            {
+                new ShouldDash(gameObject, GetComponent<DestructionController>()),
+                new Selector(new List<Behavior> /* SELECTOR DASH LEFT OR DASH RIGHT */
+                {
+                    new Filter(new List<Behavior> /* FILTER DASH LEFT */
+                    {
+                        new Invert(new IsObjectToTheLeft(gameObject, DashSecureDistance, HalfTheShipsHeight, HalfTheShipsLength)),
+                        new DashLeft(gameObject, DashIntensity)
+                    }),
+                    new Filter(new List<Behavior> /* FILTER DASH RIGHT */
+                    {
+                        new Invert(new IsObjectToTheRight(gameObject, DashSecureDistance, HalfTheShipsHeight, HalfTheShipsLength)),
+                        new DashRight(gameObject, DashIntensity)
+                    }),
+                })
+            }),
+
+            new Selector(new List<Behavior> /* SELECTOR MOVE BACK OR FORWARD */
+            {
+                new Sequence(new List<Behavior> /* SEQUENCE MOVE FORWARD */
+                {
+                    new Selector(new List<Behavior> /* SELECTOR CONDITIONS TO MOVE FORWARD */
+                    {
+                        new IsTheTarjetFar(gameObject, DistanceFarFromTarget),
+                        new Invert(new IsTargetVisible(gameObject, ShotMaxDistance))
+                    }),
+                    new MoveAlong(gameObject, Velocity)
+                }),
+                new Filter(new List<Behavior> /* FILTER MOVE BACK */
+                {
+                    new IsTheTarjetClose(gameObject, DistanceCloseToTarget),
+                    new MoveBack(gameObject, Velocity)
+                })
+            })
+        });
+
 
         //Selector selectorMovebackOrForward = new Selector();
 

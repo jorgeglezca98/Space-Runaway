@@ -1,5 +1,7 @@
 
 
+using System.Collections.Generic;
+
 namespace BehaviorTree
 {
     class Parallel : Composite
@@ -12,6 +14,12 @@ namespace BehaviorTree
 
         public Policy failurePolicy = Policy.RequireAll;
         public Policy successPolicy = Policy.RequireAll;
+
+        public Parallel() { }
+
+        public Parallel (Behavior b) : base(b) { }
+
+        public Parallel(List<Behavior> b) : base(b) { }
 
         public override Status Update()
         {
