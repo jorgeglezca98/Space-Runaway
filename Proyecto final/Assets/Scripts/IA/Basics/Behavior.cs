@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace BehaviorTree {
 
-	abstract class Behavior {
+    abstract class Behavior {
 
-		private Status status = Status.BH_INVALID;
-
+        private Status status = Status.BH_INVALID;
+ 
 		public virtual void OnInitialize() {}
 		public abstract Status Update();
 		public virtual void OnTerminate(Status s) {}
@@ -29,5 +29,10 @@ namespace BehaviorTree {
 	    public override int GetHashCode() {
 	        return base.GetHashCode();
 	    }
+
+        public Status GetStatus()
+        {
+            return status;
+        }
 	}
 }

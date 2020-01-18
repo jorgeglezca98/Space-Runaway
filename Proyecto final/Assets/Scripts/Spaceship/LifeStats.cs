@@ -22,4 +22,9 @@ public class LifeStats{
 		float healthPct = playerHealth / maxHealth;	
 	}
 
+    public float getMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }

@@ -1,32 +1,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BehaviorTree {
-  
-  class Selector : Composite {
-      
-      protected IEnumerator<Behavior> CurrentChild;
+namespace BehaviorTree
+{
+    class Selector : Composite
+    {
+        public Selector() { }
 
-      public override void OnInitialize() {
-        CurrentChild = Children.GetEnumerator();
-      }
+        public Selector(Behavior b) : base(b) { }
 
-      public override Status Update() {
-        //Keep going until a child behavior says it’s running.
-        if (!CurrentChild.MoveNext()) return Status.BH_FAILURE;
-        while (true) {
-          Status s = CurrentChild.Current.Tick();
-          //If child succeeds or keeps running, do the same.
-          if (s != Status.BH_FAILURE) return s;
-          //Continue search for fallback until the last child.
-          bool end = !CurrentChild.MoveNext();
-          if (end)
-            return Status.BH_FAILURE;
+        public Selector(List<Behavior> b) : base(b) { }    
+
+        public override Status Update()
+        {
+            //Keep going until a child behavior says it’s running.
+            try
+            {
+                if (GetStatus() != Status.BH_RUNNING) // Sequence Status
+                {
+                    foreach (Behavior child in Children)
+                    {
+                        Status s = child.Tick();
+                        if (s != Status.BH_FAILURE) return s;
+
+                    }
+                    return Status.BH_FAILURE;
+                }
+                else
+                {
+                    int i = 0;
+                    while (i < Children.Count && Children[i].GetStatus() != Status.BH_RUNNING)
+                        i++;
+
+                    for (; i < Children.Count; i++)
+                    {
+                        Status s = Children[i].Tick();
+                        if (s != Status.BH_FAILURE) return s;
+                    }
+                    return Status.BH_FAILURE;
+                }
+            }
+            catch
+            {
+                return Status.BH_INVALID;
+            }
         }
-        return Status.BH_INVALID;//”Unexpected loop exit.”
-      }
-  }
-}
+    }
+} 
 //class Selector : Composite {
 //
 //    public virtual Status Update() {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace BehaviorTree
         public override Status Update()
         {
             actualHealth = stats.getHealth();
-            if ((lastHealth - actualHealth) >= diff)
+            if (Math.Abs(lastHealth - actualHealth) >= diff)
             {
                 Debug.Log("Im goin' to dash!");
                 lastHealth = actualHealth;

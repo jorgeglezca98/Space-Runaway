@@ -22,6 +22,17 @@ namespace BehaviorTree{
 	    protected float HalfTheShipsLength = 7.5f;
 	    protected float HalfTheShipsHeight = 2.5f;
 
+			protected OverheatStats overheatData = new OverheatStats();
+
+			// The amount of overheat the weapon produces everytime it shots.
+			protected float overheatIncrement = 3f;
+			// The amount of overheat the weapon cools down everytime it shots.
+			protected float overheatDecrement = 0.75f;
+			// The amount of time in seconds the weapon get disabled when the
+			// maximum overheat is achieved.
+			protected float maxOverheatPenalizationTime = 3f;
+			protected bool isCoolingDown = false;
+
 	    void FixedUpdate() {
 			Tree.Tick();
 		}
@@ -70,6 +81,7 @@ public static class ExtDebug
     {
         DrawBox(new Box(origin, halfExtents, orientation));
     }
+
     public static void DrawBox(Box box)
     {
         Gizmos.DrawLine(box.frontTopLeft, box.frontTopRight);
