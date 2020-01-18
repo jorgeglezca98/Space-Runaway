@@ -30,9 +30,9 @@ namespace BehaviorTree
         public override Status Update()
         {
             bool objectLeft = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
-                Agent.transform.TransformDirection(Vector3.left), Quaternion.identity, SecureDistance, ~(1 << 8) & ~(1 << 9));
+                -Agent.transform.right, Agent.transform.rotation * Quaternion.Euler(0, 90, 0), SecureDistance, ~(1 << 8) & ~(1 << 10));
             bool objectRight = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
-                Agent.transform.TransformDirection(Vector3.right), Quaternion.identity, SecureDistance, ~(1 << 8) & ~(1 << 9));
+                Agent.transform.right, Agent.transform.rotation * Quaternion.Euler(0, 90, 0), SecureDistance, ~(1 << 8) & ~(1 << 10));
 
             if (objectLeft && !objectRight)
             {
@@ -44,15 +44,7 @@ namespace BehaviorTree
             }
             else if (!objectLeft && !objectRight)
             {
-                switch(random.Next(2))
-                {
-                    case 0:
-                        Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
-                        break;
-                    case 1:
-                        Agent.GetComponent<Rigidbody>().AddRelativeForce(RightDash, ForceMode.Impulse);
-                        break;
-                }
+                Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
             }else return Status.BH_FAILURE;
 
             return Status.BH_SUCCESS;

@@ -31,7 +31,7 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
         Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
 
         Sequence sequenceAvoidAsteroids = new Sequence();
-        sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
+        sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan,
                                                                          HalfTheShipsLength, HalfTheShipsHeight));
         sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
                                                                          HalfTheShipsLength, HalfTheShipsHeight));

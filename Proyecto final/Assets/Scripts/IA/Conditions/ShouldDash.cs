@@ -10,7 +10,7 @@ namespace BehaviorTree
         float actualHealth;
         float lastHealth;
 
-        float diff = 20;
+        float diff = 10f;
         private GameObject gameObject;
         private DestructionController destructionController;
 
@@ -24,7 +24,7 @@ namespace BehaviorTree
         public override Status Update()
         {
             actualHealth = stats.getHealth();
-            if (lastHealth != actualHealth)
+            if ((lastHealth - actualHealth) >= diff)
             {
                 Debug.Log("Im goin' to dash!");
                 lastHealth = actualHealth;

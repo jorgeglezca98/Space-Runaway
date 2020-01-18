@@ -46,6 +46,7 @@ namespace BehaviorTree
             {
                 if (HittedObject.collider.tag == "asteroid")
                 {
+                    Debug.Log("Condition says there's obstacle!");
                     HittedAsteroid = HittedObject;
                     return true;
                 }

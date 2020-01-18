@@ -50,6 +50,7 @@ namespace BehaviorTree
         {
             if (ThereIsObstacleInFront())
             {
+              Debug.Log("Action says there's obstacle!");
                 if (FacingNewAsteroid())
                 {
                     CurrentDirection = DirectionTo(ArtificialIntelligence.Target);
@@ -171,7 +172,7 @@ namespace BehaviorTree
 
 
 
-    
+
 
 /*This class is purely used to draw the boxcast.*/
 //public static class ExtDebug

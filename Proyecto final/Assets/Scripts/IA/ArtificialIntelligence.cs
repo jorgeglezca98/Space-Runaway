@@ -11,7 +11,7 @@ namespace BehaviorTree{
 	    public static AudioManager AudioManager;
 	    protected BehaviorTree Tree;
 
-	    protected int Velocity = 20;
+	    protected int Velocity = 40;
 			protected GameObject ShotPrefab;
 	    protected int ShotMaxDistance = 100;
 	    protected int ShotMinDistance = 10;
@@ -26,8 +26,14 @@ namespace BehaviorTree{
 			Tree.Tick();
 		}
 
+
+		public Vector3 GetSpaceshipDimension(){
+					return new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength);
+		}
+
 	}
 }
+
 
 
 /*This class is purely used to draw the boxcast.*/

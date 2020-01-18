@@ -6,11 +6,11 @@ using UnityEngine;
 public class Shots : MonoBehaviour {
 
 	private GameObject shotPrefab;
-    private AudioManager AudioManager;
+  private AudioManager AudioManager;
 	private int shotSpeed = 10000;
-    private float ShotMaxDistance = 100f;
-    private float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
-    private float RangeSize = 10f;
+  private float ShotMaxDistance = 100f;
+  private float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
+  private float RangeSize = 15f;
 	private Transform shotPoint;
 	private GameObject lastShot;
 	private float lastShotSize;
@@ -23,12 +23,12 @@ public class Shots : MonoBehaviour {
 	private float maxAttackModeTimer = 2f;
 
 	// The amount of overheat the weapon produces everytime it shots.
-	private float overheatIncrement = 5f;
+	private float overheatIncrement = 4f;
 	// The amount of overheat the weapon cools down everytime it shots.
 	private float overheatDecrement = 2f;
 	// The amount of time in seconds the weapon get disabled when the
 	// maximum overheat is achieved.
-	private float maxOverheatPenalization = 5f;
+	private float maxOverheatPenalization = 3f;
 
 	private bool isCoolingDown = false;
 
@@ -63,7 +63,7 @@ public class Shots : MonoBehaviour {
 					HUD.transform.position,
 					new Vector3(RangeSize, RangeSize, ShotMinDistance),
 					transform.TransformDirection(Vector3.forward),
-					Quaternion.identity,
+					HUD.transform.rotation,
 					ShotMaxDistance,
 					(1 << 10));
 
@@ -82,7 +82,14 @@ public class Shots : MonoBehaviour {
 
 					if (hit.transform.tag == "enemy")
 			        {
-			        	transform.rotation = Quaternion.LookRotation(hit.point - shotPoint.position, Vector3.up);
+								float enemyWingspan;
+
+								if(hit.transform.name == "AssaultEnemy(Clone)")
+									enemyWingspan = hit.transform.GetComponent<AssaultArtificialIntelligence>().GetSpaceshipDimension().x;
+								else enemyWingspan = hit.transform.GetComponent<KamikazeArtificialIntelligence>().GetSpaceshipDimension().x;
+
+								Vector3 enemyFuturePosition = hit.transform.position + hit.transform.GetComponent<Rigidbody>().velocity.normalized * enemyWingspan;
+			        	transform.rotation = Quaternion.LookRotation(enemyFuturePosition - shotPoint.position, Vector3.up);
 		            } else {
 		            	transform.localRotation = Quaternion.Euler(0,0,0);
 		            }
@@ -150,15 +157,15 @@ public class Shots : MonoBehaviour {
 		}
 	}
 
-	void OnDrawGizmos()
-    {
-    	GameObject HUD = GameObject.FindWithTag("playerHUD");
-        ExtDebug.DrawBoxCastBox(
-        	HUD.transform.position,
-			new Vector3(RangeSize, RangeSize, ShotMinDistance),
-			Quaternion.identity,
-			transform.TransformDirection(Vector3.forward),
-			ShotMaxDistance);
-    }
+	// void OnDrawGizmos()
+  //   {
+  //   	GameObject HUD = GameObject.FindWithTag("playerHUD");
+  //       ExtDebug.DrawBoxCastBox(
+  //       	HUD.transform.position,
+	// 		new Vector3(RangeSize, RangeSize, ShotMinDistance),
+	// 		HUD.transform.rotation,
+	// 		transform.TransformDirection(Vector3.forward),
+	// 		ShotMaxDistance);
+  //   }
 
 }

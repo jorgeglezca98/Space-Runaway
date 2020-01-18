@@ -8,7 +8,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence {
 
     protected int DistanceFarFromTarget = 100;
     protected int DistanceCloseToTarget = 50;
-    private int DashSecureDistance = 0;
+    private int DashSecureDistance = 20;
     private int DashIntensity = 10;
 
     void Start () {
@@ -19,9 +19,9 @@ class AssaultArtificialIntelligence : ArtificialIntelligence {
         Target = GameObject.Find("PlayerSpaceship");
 
 
-        ShipsWingspan = 10f;
-        HalfTheShipsLength = 7.5f;
-        HalfTheShipsHeight = 2.5f;
+        ShipsWingspan = 15f;
+        HalfTheShipsLength = 9f;
+        HalfTheShipsHeight = 4f;
 
         ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
 
@@ -52,7 +52,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence {
         Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
 
         Sequence sequenceAvoidAsteroids = new Sequence();
-        sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
+        sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan,
                                                                          HalfTheShipsLength, HalfTheShipsHeight));
         sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
                                                                          HalfTheShipsLength, HalfTheShipsHeight));
@@ -69,5 +69,16 @@ class AssaultArtificialIntelligence : ArtificialIntelligence {
 
         Tree = new BehaviorTree.BehaviorTree(root);
     }
+
+    // void OnDrawGizmos()
+    //   {
+    //     ExtDebug.DrawBoxCastBox(
+    //     transform.position,
+    //     new Vector3(ShipsWingspan,HalfTheShipsLength, HalfTheShipsHeight),
+    //     transform.rotation * Quaternion.Euler(0, 90, 0),
+    //     -transform.right,
+    //     LookForCollisionDistance);
+    //   }
+
 
 }
