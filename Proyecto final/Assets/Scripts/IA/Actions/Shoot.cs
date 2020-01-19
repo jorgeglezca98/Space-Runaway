@@ -30,6 +30,8 @@ namespace BehaviorTree
                 bullet.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, ShotSpeed));
                 ArtificialIntelligence.AudioManager.PlaySoundEffect("EnemyShot");
             }
+
+            Debug.Log("SHOOOOOOOOOOOOOOOOOOOT");
             return Status.BH_SUCCESS;
         }
     }

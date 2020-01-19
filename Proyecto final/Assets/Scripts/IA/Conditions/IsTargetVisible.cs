@@ -23,7 +23,16 @@ namespace BehaviorTree
                 ArtificialIntelligence.Target.transform.position - Agent.transform.position, out hit, ShotMaxDistance, ~(1 << 8));
             bool targetIsHit = GameObject.ReferenceEquals(ArtificialIntelligence.Target, hit.transform.gameObject);
 
-            return (collidesWithSomething && targetIsHit) ? Status.BH_SUCCESS : Status.BH_FAILURE;
+            if (collidesWithSomething && targetIsHit)
+            {
+                Debug.Log("Target is visible");
+                return Status.BH_SUCCESS;
+            }
+            else
+            {
+                Debug.Log("Target is NOT visible");
+                return Status.BH_FAILURE;
+            }
         }
     }
 }

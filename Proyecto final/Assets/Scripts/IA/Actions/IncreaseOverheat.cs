@@ -19,6 +19,7 @@ namespace BehaviorTree
         public override Status Update()
         {
             OverheatData.setOverheat(OverheatData.getOverheat() + OverheatIncrement);
+            Debug.Log("Increasing overheat " + OverheatData.getMaxOverheat());
             return Status.BH_SUCCESS;
         }
     }

@@ -13,13 +13,18 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-          if (ArtificialIntelligenceInfo.GetCurrentDirection() == ArtificialIntelligenceInfo.Direction.Right){
-              Agent.transform.rotation *= Quaternion.Euler(0, 1f, 0);
-          }else{
-              Agent.transform.rotation *= Quaternion.Euler(0, -1f, 0);
-          }
+            if (ArtificialIntelligenceInfo.GetCurrentDirection() == ArtificialIntelligenceInfo.Direction.Right)
+            {
+                Debug.Log("Yaw to RIGHT");
+                Agent.transform.rotation *= Quaternion.Euler(0, 1f, 0);
+            }
+            else
+            {
+                Debug.Log("Yaw to LEFT");
+                Agent.transform.rotation *= Quaternion.Euler(0, -1f, 0);
+            }
 
-          return Status.BH_SUCCESS;
+            return Status.BH_SUCCESS;
         }
     }
 }

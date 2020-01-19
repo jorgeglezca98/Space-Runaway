@@ -21,18 +21,28 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-          RaycastHit HittedObject;
-          bool ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, Agent.transform.forward, out HittedObject, Agent.transform.rotation, LookForCollisionDistance);
-          if (ThereIsCollision){
-              if (HittedObject.collider.tag == "asteroid"){
-                  ArtificialIntelligenceInfo.SetCurrentAsteroidPosition(HittedObject.transform.position);
-                  return Status.BH_SUCCESS;
-              }else{
-                  return Status.BH_FAILURE;
-              }
-          }else{
-              return Status.BH_FAILURE;
-          }
+            RaycastHit HittedObject;
+            bool ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, Agent.transform.forward, 
+                out HittedObject, Agent.transform.rotation, LookForCollisionDistance);
+            if (ThereIsCollision)
+            {
+                if (HittedObject.collider.tag == "asteroid")
+                {
+                    Debug.Log("There is AN ASTEROID in FRONT!");
+                    ArtificialIntelligenceInfo.SetCurrentAsteroidPosition(HittedObject.transform.position);
+                    return Status.BH_SUCCESS;
+                }
+                else
+                {
+                    Debug.Log("There is something in front that is NOT an ASTEROID!");
+                    return Status.BH_FAILURE;
+                }
+            }
+            else
+            {
+                Debug.Log("There is NOTHING in FRONT!");
+                return Status.BH_FAILURE;
+            }
         }
-      }
     }
+}
