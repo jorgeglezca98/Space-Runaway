@@ -15,7 +15,7 @@ namespace BehaviorTree
         public AreAsteroidsInFront(GameObject agent, float lookForCollisionDistance, float shipsWingspan, float halfTheShipsLength, float halfTheShipsHeight,
                                     ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
         {
-            BoxcastDimension = new Vector3(shipsWingspan * 2, halfTheShipsHeight * 2, 0);
+            BoxcastDimension = new Vector3(shipsWingspan*1.5f, halfTheShipsHeight*1.5f, 0);
             HalfTheShipsLength = halfTheShipsLength;
             LookForCollisionDistance = lookForCollisionDistance;
             ArtificialIntelligenceInfo = artificialIntelligenceInfo;

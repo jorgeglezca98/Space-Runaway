@@ -50,7 +50,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
              {
                  new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
                  {
-                     new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan),
+                     new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
                      new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
                      new Parallel(new List<Behavior> /* PARALLEL ROTATE ASTEROID */
                      {
@@ -71,11 +71,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
 
                  new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
                  {
-                     new Filter(new List<Behavior>
-                     {
-                        new Invert(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan)),
-                        new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
-                     }),
+                     new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
 
                      new ApplyRotation(gameObject, ArtificialIntelligenceInfo),
 

@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
 
     enum EnemyType { Assault, Kamikaze };
 
-    private EnemyType[] EnemiesList = { EnemyType.Assault, EnemyType.Assault, EnemyType.Kamikaze };
+    private EnemyType[] EnemiesList = { EnemyType.Assault, EnemyType.Assault};
     private int CurrentEnemy = 0;
     public static bool EnemyIsUp = false;
 
@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //GenerateEnemy();
+        GenerateEnemy();
     }
 
 
