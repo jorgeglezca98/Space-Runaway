@@ -27,12 +27,12 @@ namespace BehaviorTree
 
             if (isInRange)
             {
-                //Debug.Log("Shot in range");
+                //Debug.Log("TARGET in range");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                //Debug.Log("Shot NOT in range");
+                //Debug.Log("TARGET NOT in range");
                 return Status.BH_FAILURE;
             }
         }

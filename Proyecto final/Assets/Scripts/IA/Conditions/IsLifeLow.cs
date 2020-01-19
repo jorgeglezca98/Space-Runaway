@@ -20,8 +20,6 @@ namespace BehaviorTree
             actualHealth = stats.getHealth();
             //Debug.Log("Actual: " + actualHealth + ", Healt Threshold: " + healthThreshold + ", " + stats.getMaxHealth());
 
-
-
             if (actualHealth <= healthThreshold)
             {
                 //Debug.Log("Health is LOW");

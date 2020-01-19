@@ -1,5 +1,3 @@
-
-
 using System.Collections.Generic;
 
 namespace BehaviorTree
@@ -10,50 +8,56 @@ namespace BehaviorTree
         {
             RequireOne,
             RequireAll,
+            RequireNone
         }
 
-        public Policy failurePolicy = Policy.RequireAll;
-        public Policy successPolicy = Policy.RequireOne;
 
-        public Parallel() { }
+        public Policy successPolicy;
 
-        public Parallel (Behavior b) : base(b) { }
+        public Parallel(Policy successPolicy = Policy.RequireAll)
+        {
+            this.successPolicy = successPolicy;
+        }
 
-        public Parallel(List<Behavior> b) : base(b) { }
+        public Parallel(Behavior b, Policy successPolicy = Policy.RequireAll) : base(b)
+        {
+            this.successPolicy = successPolicy;
+        }
+
+        public Parallel(List<Behavior> b, Policy successPolicy = Policy.RequireAll) : base(b)
+        {
+            this.successPolicy = successPolicy;
+        }
 
         public override Status Update()
         {
             int successCount = 0;
-            int failureCount = 0;
-
             try
             {
-                foreach (Behavior child in Children)
-                {
-                    Status s = child.Tick();
+                int i = 0;
+                if (GetStatus() == Status.BH_RUNNING)
+                    while (i < Children.Count && Children[i].GetStatus() != Status.BH_RUNNING)
+                        i++;
 
+                for (; i < Children.Count; i++)
+                {
+                    Status s = Children[i].Tick();
                     if (s == Status.BH_SUCCESS)
+                    {
                         successCount++;
-                   
-                    if (s == Status.BH_FAILURE)
-                        failureCount++;
+                    }
+                    else if (s != Status.BH_FAILURE)
+                    {
+                        return s;
+                    }
                 }
 
-                if (failurePolicy == Policy.RequireOne && failureCount >= 1)
-                    return Status.BH_FAILURE;
+                if (successCount == Children.Count)
+                    return successPolicy == Policy.RequireAll ? Status.BH_SUCCESS : Status.BH_FAILURE;
+                if (successCount == 0)
+                    return successPolicy == Policy.RequireNone ? Status.BH_SUCCESS : Status.BH_FAILURE;
+                return successPolicy == Policy.RequireOne ? Status.BH_SUCCESS : Status.BH_FAILURE;
 
-                if (successPolicy == Policy.RequireOne && successCount >= 1)
-                    return Status.BH_SUCCESS;
-
-                if (failurePolicy == Policy.RequireAll && failureCount == Children.Count)
-                    return Status.BH_FAILURE;
-
-                if (successPolicy == Policy.RequireAll && successCount == Children.Count)
-                    return Status.BH_SUCCESS;
-
-                // if all policies are "requireAll" and some BH fails, then BH_RUNNING will be returned, 
-                // even if there are no behaviours running at the moment
-                return Status.BH_RUNNING;
             }
             catch
             {
@@ -61,43 +65,5 @@ namespace BehaviorTree
             }
         }
 
-        /*public:
-            enum Policy {
-               RequireOne,
-               RequireAll,
-            }
-            public Parallel(Policy success, Policy failure);
-            protected Policy m_eSuccessPolicy;
-            protected Policy m_eFailurePolicy;
-            protected virtual Status update() override;
-
-            virtual Status update() {
-                size_t iSuccessCount = 0, iFailureCount = 0;
-                for (auto it: m_Children) {
-                   Behavior& b = **it;
-                   if (!b.isTerminated()) b.tick();
-                   if (b.getStatus() == BH_SUCCESS) {
-                       ++iSuccessCount;
-                       if (m_eSuccessPolicy == RequireOne)
-                           return BH_SUCCESS;
-                   }
-                   if (b.getStatus() == BH_FAILURE) {
-                       ++iFailureCount;
-                       if (m_eFailurePolicy == RequireOne)
-                           return BH_FAILURE;
-                    } 
-                }
-                if (m_eFailurePolicy == RequireAll && iFailureCount == size)
-                   return BH_FAILURE;
-                if (m_eSuccessPolicy == RequireAll && iSuccessCount == size)
-                   return BH_SUCCESS;
-                return BH_RUNNING;
-            }
-            void Parallel::onTerminate(Status) {
-                for (auto it: m_Children) {
-                   Behavior& b = **it;
-                   if (b.isRunning()) b.abort();
-                }
-            }*/
     }
 }

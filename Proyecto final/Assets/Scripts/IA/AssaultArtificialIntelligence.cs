@@ -9,84 +9,156 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
     protected int DistanceFarFromTarget = 100;
     protected int DistanceCloseToTarget = 50;
     private int DashSecureDistance = 40;
-    private int DashIntensity = 5;
+    private int DashIntensity = 25;
     private float HealthThreshold;
     private float OverheatUpperThreshold;
     private float OverheatLowerThreshold;
-    private ArtificialIntelligenceInfo ArtificialIntelligenceInfo = new ArtificialIntelligenceInfo();
 
     void Start()
     {
+        LookForCollisionDistance = Velocity + ShipsWingspan * 2;
+        Debug.unityLogger.logEnabled = false;
+
         if (AudioManager == null)
             AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         if (Target == null)
             Target = GameObject.Find("PlayerSpaceship");
-
-        //Debug.unityLogger.logEnabled = false;
 
         ShipsWingspan = 10f;
         HalfTheShipsLength = 7.5f;
         HalfTheShipsHeight = 2.5f;
 
         HealthThreshold = GetComponent<DestructionController>().Stats.getMaxHealth() * 0.3f; // 30 % of health
-        //Debug.Log("Healt Threshold: " + HealthThreshold + ", " + GetComponent<DestructionController>().Stats.getMaxHealth());
 
-        OverheatUpperThreshold = overheatData.getMaxOverheat() * 0.75f; // 75 % of overheat
-        OverheatLowerThreshold = overheatData.getMaxOverheat() * 0.25f; // 25 % of overheat
+        OverheatUpperThreshold = overheatData.getMaxOverheat() * 0.75f;
+        OverheatLowerThreshold = overheatData.getMaxOverheat() * 0.25f;
 
         ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
 
         Rigidbody rg = GetComponent<Rigidbody>();
-        rg.drag = 0.5f;
+        rg.drag = 2f;
         rg.angularDrag = 0.5f;
         rg.centerOfMass = Vector3.zero;
 
+        ArtificialIntelligenceInfo ArtificialIntelligenceInfo = new ArtificialIntelligenceInfo();
 
         /* TREE START */
 
-        Parallel root = new Parallel(new List<Behavior>{
+        Parallel root = new Parallel(new List<Behavior>
+        {
              new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR FACE TARGET */
              {
-                 new Sequence(new List<Behavior> /* FILTER AVOID ASTEROIDS */
+                 new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
                  {
-                    new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
-                    new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, HalfTheShipsLength, HalfTheShipsHeight, ArtificialIntelligenceInfo),
-                    new Parallel(new List<Behavior> /* PARALLEL ROTATE ASTEROID */
-                    {
-                        new Filter(new List<Behavior> /* FILTER CHANGE ASTEROID */
-                        {
-                            new IsFacingNewAsteroid(gameObject, ArtificialIntelligenceInfo),
-                            new ChangeFacingAsteroid(gameObject, ArtificialIntelligenceInfo),
-                            new ChangeCurrentYawDirection(gameObject, ArtificialIntelligenceInfo)
-                        }),
-                        new While(new Sequence(new List<Behavior> /* SEQUENCE ROTATE AROUND ASTEROID */
-                        {
-                            new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, HalfTheShipsLength, HalfTheShipsHeight, ArtificialIntelligenceInfo),
-                            new Yaw(gameObject, ArtificialIntelligenceInfo)
-                        }))
-                    }),
-                    new ApplyRotation(gameObject, ArtificialIntelligenceInfo)
+                     new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan),
+                     new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
+                     new Parallel(new List<Behavior> /* PARALLEL ROTATE ASTEROID */
+                     {
+                         new Filter(new List<Behavior> /* FILTER CHANGE ASTEROID */
+                         {
+                             new IsFacingNewAsteroid(gameObject, ArtificialIntelligenceInfo),
+                             new ChangeFacingAsteroid(gameObject, ArtificialIntelligenceInfo),
+                             new ChangeCurrentYawDirection(gameObject, ArtificialIntelligenceInfo)
+                         }),
+                         new While(new Sequence(new List<Behavior> /* SEQUENCE ROTATE AROUND ASTEROID */
+                         {
+                             new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
+                             new Yaw(gameObject, ArtificialIntelligenceInfo)
+                         }))
+                     }, Parallel.Policy.RequireOne),
+                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo)
                  }),
-                 new Invert(new ApplyRotation(gameObject, ArtificialIntelligenceInfo))
+
+                 new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
+                 {
+                     new Filter(new List<Behavior>
+                     {
+                        new Invert(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan)),
+                        new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
+                     }),
+
+                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo),
+
+                     new Parallel(new List<Behavior> /* UNTITLED PARALLEL */
+                     {
+                         new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
+                         {
+                             new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
+                             {
+                                 new IsHealthLow(gameObject, GetComponent<DestructionController>(), HealthThreshold),
+                                 new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, OverheatUpperThreshold, OverheatLowerThreshold))
+                             }),
+                             new Selector(new List<Behavior> /* SELECTOR COOLING DOWN */
+                             {
+                                 new Filter(new List<Behavior> /* FILTER COOLING DOWN */
+                                 {
+                                     new IsCoolingDown(gameObject, overheatData),
+                                     new IsCoolingDownDone(gameObject, overheatData),
+                                     new EndCooldown(gameObject, overheatData)
+                                 }),
+                                 new Selector(new List<Behavior> /* SELECTOR NOT COOLING DOWN */
+                                 {
+                                     new Sequence(new List<Behavior> /* SEQUENCE IF OVERHEAT COOL DOWN */
+                                     {
+                                         new IsOverheated(gameObject, overheatData),
+                                         new StartCooldown(gameObject, overheatData)
+                                     }),
+                                     new Filter(new List<Behavior> /* FILTER SHOOT IF VISIBLE */
+                                     {
+                                         new IsTargetInRange(gameObject, ShotMaxDistance, AimingHelpRange, ShotMinDistance),
+                                         new IsTargetVisible(gameObject),
+                                         new Shoot(gameObject, ShotPrefab, ShotSpeed),
+                                         new IncreaseOverheat(gameObject, overheatData)
+                                     })
+                                 })
+                             })
+                         }),
+                     })
+                 })
+             }),
+
+             new Filter(new List<Behavior> /* FILTER DASH */
+             {
+                 new ShouldDash(gameObject, GetComponent<DestructionController>()),
+                 new Selector(new List<Behavior> /* SELECTOR DASH LEFT OR DASH RIGHT */
+                 {
+                     new Filter(new List<Behavior> /* FILTER DASH LEFT */
+                     {
+                         new Invert(new IsObjectToTheLeft(gameObject, DashSecureDistance, HalfTheShipsHeight, HalfTheShipsLength)),
+                         new DashLeft(gameObject, DashIntensity)
+                     }),
+                     new Filter(new List<Behavior> /* FILTER DASH RIGHT */
+                     {
+                         new Invert(new IsObjectToTheRight(gameObject, DashSecureDistance, HalfTheShipsHeight, HalfTheShipsLength)),
+                         new DashRight(gameObject, DashIntensity)
+                     }),
+                 })
              }),
 
              new Selector(new List<Behavior> /* SELECTOR MOVE BACK OR FORWARD */
              {
-                new Sequence(new List<Behavior> /* SEQUENCE MOVE FORWARD */
-                {
-                    new Selector(new List<Behavior> /* SELECTOR CONDITIONS TO MOVE FORWARD */
-                    {
-                        new IsTheTarjetFar(gameObject, DistanceFarFromTarget),
-                        new Invert(new IsTargetVisible(gameObject, ShotMaxDistance))
-                    }),
-                    new MoveAlong(gameObject, Velocity)
-                }),
-                new Filter(new List<Behavior> /* FILTER MOVE BACK */
-                {
-                    new IsTheTarjetClose(gameObject, DistanceCloseToTarget),
-                    new MoveBack(gameObject, Velocity)
-                })
-             })
+                 new Sequence(new List<Behavior> /* SEQUENCE MOVE FORWARD */
+                 {
+                     new Selector(new List<Behavior> /* SELECTOR CONDITIONS TO MOVE FORWARD */
+                     {
+                         new IsTheTarjetFar(gameObject, DistanceFarFromTarget),
+                         new Invert(new IsTargetVisible(gameObject))
+                     }),
+                     new MoveAlong(gameObject, Velocity)
+                 }),
+                 new Filter(new List<Behavior> /* FILTER MOVE BACK */
+                 {
+                     new IsTheTarjetClose(gameObject, DistanceCloseToTarget),
+                     new MoveBack(gameObject, Velocity)
+                 })
+             }),
+
+             new Filter(new List<Behavior> /* FILTER REDUCE OVERHEAT */
+             {
+                new Invert(new IsCoolingDown(gameObject, overheatData)),
+                new IsOverheatGreaterThanZero(gameObject, overheatData),
+                new ReduceOverheat(gameObject, overheatData)
+             }),
          });
 
 
@@ -138,13 +210,12 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
 
     void OnDrawGizmos()
     {
-        
         ExtDebug.DrawBoxCastBox(
-          transform.position - HalfTheShipsLength * transform.forward,
-          new Vector3(ShipsWingspan * 2, HalfTheShipsHeight * 2, 0),
-          ArtificialIntelligenceInfo.GetSpaceshipRotation(),
-          ArtificialIntelligenceInfo.GetSpaceshipRotation() * Vector3.forward,
-          LookForCollisionDistance);
+          transform.position,
+          new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
+          transform.rotation * Quaternion.Euler(0, 90, 0),
+          transform.right,
+          DashSecureDistance);
     }
 
 }

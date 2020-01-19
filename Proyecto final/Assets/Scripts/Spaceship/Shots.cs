@@ -33,6 +33,8 @@ public class Shots : MonoBehaviour
 
     private bool isCoolingDown = false;
 
+    public int bulletsShot;
+
     // Use this for initialization
     void Start()
     {
@@ -113,6 +115,8 @@ public class Shots : MonoBehaviour
 
                 Rigidbody shotRb = shot.GetComponent<Rigidbody>();
                 shotRb.AddRelativeForce(new Vector3(0, 0, shotSpeed));
+
+                bulletsShot++;
 
                 lastShot = shot;
                 lastShotSize = lastShot.GetComponent<Renderer>().bounds.size.z;

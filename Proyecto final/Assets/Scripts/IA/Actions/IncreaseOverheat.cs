@@ -6,20 +6,17 @@ namespace BehaviorTree
 {
     class IncreaseOverheat : LeafNode
     {
-        float OverheatIncrement;
-        OverheatStats OverheatData;
+        OverheatStats overheatData;
 
-        public IncreaseOverheat(GameObject agent, float overheatIncrement,
-                        OverheatStats overheatData) : base(agent)
+        public IncreaseOverheat(GameObject agent, OverheatStats overheatData) : base(agent)
         {
-            OverheatIncrement = overheatIncrement;
-            OverheatData = overheatData;
+            this.overheatData = overheatData;
         }
 
         public override Status Update()
         {
-            OverheatData.setOverheat(OverheatData.getOverheat() + OverheatIncrement);
-            //Debug.Log("Increasing overheat " + OverheatData.getMaxOverheat());
+            overheatData.setOverheat(overheatData.getOverheat() + overheatData.overheatIncrement);
+            //Debug.Log("Increasing overheat " + overheatData.getMaxOverheat());
             return Status.BH_SUCCESS;
         }
     }

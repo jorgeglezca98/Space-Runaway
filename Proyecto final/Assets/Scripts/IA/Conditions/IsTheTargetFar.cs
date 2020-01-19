@@ -21,12 +21,12 @@ namespace BehaviorTree
             double distance = (Agent.transform.position - ArtificialIntelligence.Target.transform.position).magnitude;
             if (distance > FarLimit)
             {
-                //Debug.Log("The AI name is: " + Agent.transform.name + ", Distance " + distance + " is far from target. SUCCESS");
+                Debug.Log("Distance " + distance + " is far from target. SUCCESS");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                //Debug.Log("The AI name is: " + Agent.transform.name + ", Distance " + distance + " is NOT! far from target. FAILURE");
+                Debug.Log("Distance " + distance + " is NOT far from target. FAILURE");
                 return Status.BH_FAILURE;
             }
         }
