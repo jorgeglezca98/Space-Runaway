@@ -58,7 +58,6 @@ public class GameController : MonoBehaviour
             {
                 CurrentEnemy = 0;
             }
-            Debug.Log("Creating ONE enemy");
             EnemySpaceship = CreateEnemy(EnemiesList[CurrentEnemy]);
             EnemySpaceship.transform.Rotate(0, 180f, 0);
             CurrentEnemy += 1;

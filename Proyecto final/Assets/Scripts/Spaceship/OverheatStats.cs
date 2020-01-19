@@ -14,6 +14,14 @@ public class OverheatStats
 
     private bool isCoolingDown = false;
     private float cooldownStartTime;
+    
+    // The amount of overheat the weapon produces everytime it shots.
+    public float overheatIncrement = 3f;
+    // The amount of overheat the weapon cools down everytime it shots.
+    public float overheatDecrement = 0.75f;
+    // The amount of time in seconds the weapon get disabled when the
+    // maximum overheat is achieved.
+    public float maxOverheatPenalizationTime = 3f;
 
     public float getCooldownStartTime()
     {

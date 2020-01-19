@@ -23,9 +23,14 @@ namespace BehaviorTree
             float angle2 = Quaternion.Angle(Agent.transform.rotation * Quaternion.Euler(0f, -45f, 0f), ArtificialIntelligence.Target.transform.rotation) % 360;
             if (angle1 < angle2)
             {
+                Debug.Log("Change current dir to right");
                 return ArtificialIntelligenceInfo.Direction.Right;
             }
-            else return ArtificialIntelligenceInfo.Direction.Left;
+            else
+            {
+                Debug.Log("Change current dir to left");
+                return ArtificialIntelligenceInfo.Direction.Left;
+            }
         }
 
     }

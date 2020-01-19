@@ -11,7 +11,7 @@ namespace BehaviorTree{
 
         public override Status Update()
         {
-            Debug.Log("Rotate towards PLAYER!");
+            //Debug.Log("Rotate towards PLAYER!");
             Agent.transform.LookAt(ArtificialIntelligence.Target.transform);
             return Status.BH_SUCCESS;
         }

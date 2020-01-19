@@ -47,9 +47,7 @@ public class DestructionController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision enter!");
-        if (collision.gameObject.tag == "bullet")
-            InflictBulletDamage(collision.gameObject.name);
-        else if (collision.gameObject.tag != "mothership")
+        if (collision.gameObject.tag != "mothership")
             DestroySpaceship();
     }
 
