@@ -33,7 +33,6 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            Debug.Log("HEY!");
             if (ThereIsObstacleTowardsTarget())
             {
                 Debug.Log("THERE IS ASTEROID towards the player");

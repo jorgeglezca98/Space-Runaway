@@ -24,6 +24,7 @@ namespace BehaviorTree
             }
             else
             {
+                Debug.Log("NO New asteroid");
                 return Status.BH_FAILURE;
             }
         }

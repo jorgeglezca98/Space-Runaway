@@ -21,12 +21,12 @@ namespace BehaviorTree
             double distance = (Agent.transform.position - ArtificialIntelligence.Target.transform.position).magnitude;
             if ((distance < ClosenessLimit))
             {
-                //Debug.Log("Target is Close!");
+                Debug.Log("Target is Close!");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                //Debug.Log("Target is not Close!");
+                Debug.Log("Target is not Close!");
                 return Status.BH_FAILURE;
             }
             // return (distance < ClosenessLimit) ? Status.BH_SUCCESS : Status.BH_FAILURE;

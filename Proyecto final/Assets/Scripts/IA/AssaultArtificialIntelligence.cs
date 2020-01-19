@@ -9,7 +9,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
     protected int DistanceFarFromTarget = 100;
     protected int DistanceCloseToTarget = 50;
     private int DashSecureDistance = 40;
-    private int DashIntensity = 5;
+    private int DashIntensity = 25;
     private float HealthThreshold;
     private float OverheatUpperThreshold;
     private float OverheatLowerThreshold;
@@ -17,7 +17,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
     void Start()
     {
         LookForCollisionDistance = Velocity + ShipsWingspan * 2;
-        //Debug.unityLogger.logEnabled = false;
+        Debug.unityLogger.logEnabled = false;
 
         if (AudioManager == null)
             AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
@@ -36,7 +36,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
         ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
 
         Rigidbody rg = GetComponent<Rigidbody>();
-        rg.drag = 0.5f;
+        rg.drag = 2f;
         rg.angularDrag = 0.5f;
         rg.centerOfMass = Vector3.zero;
 
