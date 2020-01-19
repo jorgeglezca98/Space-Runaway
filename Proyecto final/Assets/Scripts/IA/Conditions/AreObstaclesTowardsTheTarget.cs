@@ -34,14 +34,24 @@ namespace BehaviorTree
         public override Status Update()
         {
             if (ThereIsObstacleTowardsTarget())
+            {
+                Debug.Log("THERE IS ASTEROID towards the player");
                 return Status.BH_SUCCESS;
-            else return Status.BH_FAILURE;
+            }
+            else
+            {
+                Debug.Log("THERE IS NOT ASTEROID towards the player");
+                return Status.BH_FAILURE;
+            }
         }
 
         bool ThereIsObstacleTowardsTarget()
         {
 
-            ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, ArtificialIntelligence.Target.transform.position - Agent.transform.position, out HittedObject, Agent.transform.rotation, LookForCollisionDistance, ~(1 << 8));
+            ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, 
+                ArtificialIntelligence.Target.transform.position - Agent.transform.position, 
+                out HittedObject, Agent.transform.rotation, LookForCollisionDistance, ~(1 << 8));
+
             if (ThereIsCollision)
             {
                 if (HittedObject.collider.tag == "asteroid")
@@ -50,7 +60,10 @@ namespace BehaviorTree
                     HittedAsteroid = HittedObject;
                     return true;
                 }
-                else return false;
+                else
+                {
+                    return false;
+                }
 
             }
             else

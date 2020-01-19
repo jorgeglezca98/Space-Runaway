@@ -14,6 +14,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
+            Debug.Log("MOVE LEFT");
             Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
             return Status.BH_SUCCESS;
         }

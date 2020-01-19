@@ -13,6 +13,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
+            Debug.Log("Start cooling down");
             overheatData.setIsCoolingDown(true);
             overheatData.setCooldownStartTime(Time.time);
             return Status.BH_SUCCESS;

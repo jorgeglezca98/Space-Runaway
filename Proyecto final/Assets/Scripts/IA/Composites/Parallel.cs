@@ -13,7 +13,7 @@ namespace BehaviorTree
         }
 
         public Policy failurePolicy = Policy.RequireAll;
-        public Policy successPolicy = Policy.RequireAll;
+        public Policy successPolicy = Policy.RequireOne;
 
         public Parallel() { }
 
@@ -25,31 +25,31 @@ namespace BehaviorTree
         {
             int successCount = 0;
             int failureCount = 0;
+
             try
             {
                 foreach (Behavior child in Children)
                 {
                     Status s = child.Tick();
-                    if (s == Status.BH_SUCCESS)
-                    {
-                        successCount++;
-                        if (successPolicy == Policy.RequireOne)
-                            return Status.BH_SUCCESS;
-                    }
 
+                    if (s == Status.BH_SUCCESS)
+                        successCount++;
+                   
                     if (s == Status.BH_FAILURE)
-                    {
                         failureCount++;
-                        if (failurePolicy == Policy.RequireOne)
-                            return Status.BH_FAILURE;
-                    }
                 }
 
-                if (successPolicy == Policy.RequireAll && successCount == Children.Count)
+                if (failurePolicy == Policy.RequireOne && failureCount >= 1)
+                    return Status.BH_FAILURE;
+
+                if (successPolicy == Policy.RequireOne && successCount >= 1)
                     return Status.BH_SUCCESS;
 
                 if (failurePolicy == Policy.RequireAll && failureCount == Children.Count)
                     return Status.BH_FAILURE;
+
+                if (successPolicy == Policy.RequireAll && successCount == Children.Count)
+                    return Status.BH_SUCCESS;
 
                 // if all policies are "requireAll" and some BH fails, then BH_RUNNING will be returned, 
                 // even if there are no behaviours running at the moment
