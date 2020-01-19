@@ -4,45 +4,43 @@ using System.Linq;
 using UnityEngine;
 using BehaviorTree;
 
-namespace BehaviorTree{
-	class ArtificialIntelligence : MonoBehaviour {
+namespace BehaviorTree
+{
+    class ArtificialIntelligence : MonoBehaviour
+    {
 
-			public static GameObject Target;
-	    public static AudioManager AudioManager;
-	    protected BehaviorTree Tree;
+        public static GameObject Target;
+        public static AudioManager AudioManager;
+        protected BehaviorTree Tree;
 
-	    protected int Velocity = 40;
-			protected GameObject ShotPrefab;
-	    protected int ShotMaxDistance = 100;
-	    protected int ShotMinDistance = 10;
-	    protected int ShotSpeed = 10000;
-	    protected int AimingHelpRange = 10;
-	    protected float LookForCollisionDistance = 60f;
-	    protected float ShipsWingspan = 10f;
-	    protected float HalfTheShipsLength = 7.5f;
-	    protected float HalfTheShipsHeight = 2.5f;
+        protected int Velocity = 40;
+        protected GameObject ShotPrefab;
+        protected int ShotMaxDistance = 100;
+        protected int ShotMinDistance = 10;
+        protected int ShotSpeed = 10000;
+        protected int AimingHelpRange = 10;
+        protected float LookForCollisionDistance = 60f;
+        protected float ShipsWingspan = 10f;
+        protected float HalfTheShipsLength = 7.5f;
+        protected float HalfTheShipsHeight = 2.5f;
 
-			protected OverheatStats overheatData = new OverheatStats();
+        protected OverheatStats overheatData = new OverheatStats();
 
-			// The amount of overheat the weapon produces everytime it shots.
-			protected float overheatIncrement = 3f;
-			// The amount of overheat the weapon cools down everytime it shots.
-			protected float overheatDecrement = 0.75f;
-			// The amount of time in seconds the weapon get disabled when the
-			// maximum overheat is achieved.
-			protected float maxOverheatPenalizationTime = 3f;
-			protected bool isCoolingDown = false;
+        private void Start()
+        {
+        }
 
-	    void FixedUpdate() {
-				Tree.Tick();
-			}
+        void FixedUpdate()
+        {
+            Tree.Tick();
+        }
 
 
-		public Vector3 GetSpaceshipDimension(){
-					return new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength);
-		}
-
-	}
+        public Vector3 GetSpaceshipDimension()
+        {
+            return new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength);
+        }
+    }
 }
 
 

@@ -31,7 +31,7 @@ namespace BehaviorTree
                 ArtificialIntelligence.AudioManager.PlaySoundEffect("EnemyShot");
             }
 
-            Debug.Log("SHOOOOOOOOOOOOOOOOOOOT");
+            //Debug.Log("SHOOOOOOOOOOOOOOOOOOOT");
             return Status.BH_SUCCESS;
         }
     }

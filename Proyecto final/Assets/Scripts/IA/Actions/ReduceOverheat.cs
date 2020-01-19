@@ -7,19 +7,17 @@ namespace BehaviorTree
 
     class ReduceOverheat : LeafNode
     {
-        float OverheatDecrement;
-        OverheatStats OverheatData;
+        OverheatStats overheatData;
 
-        public ReduceOverheat(GameObject agent, float overheatDecrement, 
-                        OverheatStats overheatData) : base(agent)
+        public ReduceOverheat(GameObject agent, OverheatStats overheatData) : base(agent)
         {
-            OverheatDecrement = overheatDecrement;
-            OverheatData = overheatData;
+            this.overheatData = overheatData;
         }
 
         public override Status Update()
         {
-            OverheatData.setOverheat(OverheatData.getOverheat() - OverheatDecrement);
+            //Debug.Log("Reducing overheat");
+            overheatData.setOverheat(overheatData.getOverheat() - overheatData.overheatDecrement);
             return Status.BH_SUCCESS;
         }
 

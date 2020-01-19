@@ -21,26 +21,26 @@ namespace BehaviorTree
         {
             float overheat = overheatData.getOverheat();
 
-            Debug.Log("ACTUAL OVERHEAT : " + overheat + ", Upper: " + overheatUpperThreshold + ", MAX" + overheatData.getMaxOverheat());
+            //Debug.Log("ACTUAL OVERHEAT : " + overheat + ", Upper: " + overheatUpperThreshold + ", MAX" + overheatData.getMaxOverheat());
 
             if (overheat >= overheatUpperThreshold)
             {
-                Debug.Log("Is over threshold overheat! It has to wait to shoot");
+                //Debug.Log("Is over threshold overheat! It has to wait to shoot");
                 waitToShoot = true;
             }
             else if (overheat <= overheatLowerThreshold)
             {
-                Debug.Log("Lower overheat threshold reached, no longer has to wait to shoot");
+                //Debug.Log("Lower overheat threshold reached, no longer has to wait to shoot");
                 waitToShoot = false;
                 return Status.BH_FAILURE;
             }
             else if (!waitToShoot)
             {
-                Debug.Log("Doesn't have to wait to shoot. Do it");
+                //Debug.Log("Doesn't have to wait to shoot. Do it");
                 return Status.BH_FAILURE;
             }
 
-            Debug.Log("Can't shoot yet. It hasn't reached lower limit");
+            //Debug.Log("Can't shoot yet. It hasn't reached lower limit");
             return Status.BH_SUCCESS;
         }
     }

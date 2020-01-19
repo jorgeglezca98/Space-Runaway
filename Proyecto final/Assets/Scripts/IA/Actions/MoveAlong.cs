@@ -32,7 +32,7 @@ namespace BehaviorTree
             // Agent.transform.position += Agent.transform.forward * Time.deltaTime * Velocity;
             // rb.velocity += Agent.transform.forward * Time.deltaTime * Velocity;
             // rb.MovePosition(Agent.transform.position + Agent.transform.forward * Velocity * Time.deltaTime);
-            Debug.Log("MOVE FORWARD!!");
+            //Debug.Log("MOVE FORWARD!!");
             return Status.BH_SUCCESS;
         }
     }

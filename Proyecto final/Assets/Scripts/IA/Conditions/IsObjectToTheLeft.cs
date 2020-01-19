@@ -21,15 +21,15 @@ namespace BehaviorTree
           bool objectLeft = Physics.BoxCast(Agent.transform.position, new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
               -Agent.transform.right, Agent.transform.rotation * Quaternion.Euler(0, 90, 0), SecureDistance, ~(1 << 8) & ~(1 << 10));
 
-            Debug.Log("Entering IS OBJECT LEFT");
+            //Debug.Log("Entering IS OBJECT LEFT");
             if (objectLeft)
             {
-                Debug.Log("Yes, there is object at left");
+                //Debug.Log("Yes, there is object at left");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                Debug.Log("NO, there isn't object at left");
+                //Debug.Log("NO, there isn't object at left");
                 return Status.BH_FAILURE;
             }
         }
