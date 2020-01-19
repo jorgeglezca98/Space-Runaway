@@ -65,7 +65,8 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
                              new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
                              new Yaw(gameObject, ArtificialIntelligenceInfo)
                          }))
-                     }, Parallel.Policy.RequireOne)
+                     }, Parallel.Policy.RequireOne),
+                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo)
                  }),
 
                  new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
@@ -73,8 +74,10 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
                      new Filter(new List<Behavior>
                      {
                         new Invert(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan)),
-                        new RotateTowardsPlayer(gameObject),
+                        new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
                      }),
+
+                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo),
 
                      new Parallel(new List<Behavior> /* UNTITLED PARALLEL */
                      {

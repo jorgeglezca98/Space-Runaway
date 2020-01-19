@@ -16,12 +16,12 @@ namespace BehaviorTree
             if (ArtificialIntelligenceInfo.GetCurrentDirection() == ArtificialIntelligenceInfo.Direction.Right)
             {
                 Debug.Log("Yaw to RIGHT");
-                Agent.transform.rotation *= Quaternion.Euler(0, 1f, 0);
+                ArtificialIntelligenceInfo.SetSpaceshipRotation(ArtificialIntelligenceInfo.GetSpaceshipRotation() * Quaternion.Euler(0, 1f, 0));
             }
             else
             {
                 Debug.Log("Yaw to LEFT");
-                Agent.transform.rotation *= Quaternion.Euler(0, -1f, 0);
+                ArtificialIntelligenceInfo.SetSpaceshipRotation(ArtificialIntelligenceInfo.GetSpaceshipRotation() * Quaternion.Euler(0, -1f, 0));
             }
 
             return Status.BH_SUCCESS;

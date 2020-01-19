@@ -2,18 +2,18 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    class ChangeFacingAsteroid : LeafNode
+    class ApplyRotation : LeafNode
     {
         ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
 
-        public ChangeFacingAsteroid(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+        public ApplyRotation(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
         {
             ArtificialIntelligenceInfo = artificialIntelligenceInfo;
         }
 
         public override Status Update()
         {
-            ArtificialIntelligenceInfo.SetPreviousAsteroidPosition(ArtificialIntelligenceInfo.GetCurrentAsteroidPosition());
+            Agent.transform.rotation = ArtificialIntelligenceInfo.GetSpaceshipRotation();
             return Status.BH_SUCCESS;
         }
     }
