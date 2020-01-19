@@ -35,12 +35,12 @@ namespace BehaviorTree
         {
             if (ThereIsObstacleTowardsTarget())
             {
-                Debug.Log("THERE IS ASTEROID towards the player");
+                //Debug.Log("THERE IS ASTEROID towards the player");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                Debug.Log("THERE IS NOT ASTEROID towards the player");
+                //Debug.Log("THERE IS NOT ASTEROID towards the player");
                 return Status.BH_FAILURE;
             }
         }
@@ -56,7 +56,7 @@ namespace BehaviorTree
             {
                 if (HittedObject.collider.tag == "asteroid")
                 {
-                    Debug.Log("Condition says there's obstacle!");
+                    //Debug.Log("Condition says there's obstacle!");
                     HittedAsteroid = HittedObject;
                     return true;
                 }

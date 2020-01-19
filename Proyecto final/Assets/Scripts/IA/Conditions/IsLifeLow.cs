@@ -18,13 +18,13 @@ namespace BehaviorTree
         public override Status Update()
         {
             actualHealth = stats.getHealth();
-            Debug.Log("Actual: " + actualHealth + ", Healt Threshold: " + healthThreshold + ", " + stats.getMaxHealth());
+            //Debug.Log("Actual: " + actualHealth + ", Healt Threshold: " + healthThreshold + ", " + stats.getMaxHealth());
 
 
 
             if (actualHealth <= healthThreshold)
             {
-                Debug.Log("Health is LOW");
+                //Debug.Log("Health is LOW");
                 return Status.BH_SUCCESS;
             }
             

@@ -25,12 +25,12 @@ namespace BehaviorTree
 
             if (collidesWithSomething && targetIsHit)
             {
-                Debug.Log("Target is visible");
+                //Debug.Log("Target is visible");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                Debug.Log("Target is NOT visible");
+                //Debug.Log("Target is NOT visible");
                 return Status.BH_FAILURE;
             }
         }

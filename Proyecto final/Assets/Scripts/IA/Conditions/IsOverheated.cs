@@ -18,12 +18,12 @@ namespace BehaviorTree
         {
             if (OverheatData.getOverheat() >= OverheatData.getMaxOverheat())
             {
-                Debug.Log("Is overheated (" + OverheatData.getOverheat() + ", " + OverheatData.getMaxOverheat() + ")");
+                //Debug.Log("Is overheated (" + OverheatData.getOverheat() + ", " + OverheatData.getMaxOverheat() + ")");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                Debug.Log("Is not overheated");
+                //Debug.Log("Is not overheated");
                 return Status.BH_FAILURE;
             }
         }

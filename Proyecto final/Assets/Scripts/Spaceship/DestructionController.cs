@@ -49,8 +49,10 @@ public class DestructionController : MonoBehaviour
         Debug.Log("Collision enter!");
         if (collision.gameObject.tag == "bullet")
             InflictBulletDamage(collision.gameObject.name);
-        else if (collision.gameObject.tag != "mothership")
+        else if (collision.gameObject.tag != "mothership") {
+            Debug.Log("Muerte por " + collision.gameObject.tag);
             DestroySpaceship();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -58,8 +60,6 @@ public class DestructionController : MonoBehaviour
         Debug.Log("Trigger enter!");
         if (other.gameObject.tag == "bullet")
             InflictBulletDamage(other.gameObject.name);
-        else if (other.gameObject.tag != "mothership")
-            DestroySpaceship();
     }
 
     protected virtual void Initialize()

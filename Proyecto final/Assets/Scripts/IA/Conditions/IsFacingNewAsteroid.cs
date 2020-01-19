@@ -18,8 +18,12 @@ namespace BehaviorTree
         public override Status Update()
         {
             if(ArtificialIntelligenceInfo.GetCurrentAsteroidPosition() != ArtificialIntelligenceInfo.GetPreviousAsteroidPosition()){
+                Debug.Log("Facing new asteroid");
               return Status.BH_SUCCESS;
-            }else return Status.BH_FAILURE;
+            }else{
+                Debug.Log("Facing last asteroid");
+                return Status.BH_FAILURE;
+            }
         }
       }
 }

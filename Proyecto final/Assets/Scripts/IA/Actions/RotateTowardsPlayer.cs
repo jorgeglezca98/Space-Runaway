@@ -4,15 +4,17 @@ namespace BehaviorTree{
 
     class RotateTowardsPlayer : LeafNode{
 
-        public RotateTowardsPlayer(GameObject agent) : base(agent)
-        {
+        ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
 
+        public RotateTowardsPlayer(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+        {
+            ArtificialIntelligenceInfo = artificialIntelligenceInfo;
         }
 
         public override Status Update()
         {
             Debug.Log("Rotate towards PLAYER!");
-            Agent.transform.LookAt(ArtificialIntelligence.Target.transform);
+            ArtificialIntelligenceInfo.SetSpaceshipRotation(Quaternion.LookRotation(ArtificialIntelligence.Target.transform.position - Agent.transform.position));
             return Status.BH_SUCCESS;
         }
 

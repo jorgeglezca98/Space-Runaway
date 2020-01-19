@@ -19,13 +19,17 @@ namespace BehaviorTree
 
         ArtificialIntelligenceInfo.Direction DirectionToTarget()
         {
-            float angle1 = Quaternion.Angle(Agent.transform.rotation * Quaternion.Euler(0f, 45f, 0f), ArtificialIntelligence.Target.transform.rotation) % 360;
-            float angle2 = Quaternion.Angle(Agent.transform.rotation * Quaternion.Euler(0f, -45f, 0f), ArtificialIntelligence.Target.transform.rotation) % 360;
+            float angle1 = Quaternion.Angle(ArtificialIntelligenceInfo.GetSpaceshipRotation() * Quaternion.Euler(0f, 45f, 0f), ArtificialIntelligence.Target.transform.rotation) % 360;
+            float angle2 = Quaternion.Angle(ArtificialIntelligenceInfo.GetSpaceshipRotation() * Quaternion.Euler(0f, -45f, 0f), ArtificialIntelligence.Target.transform.rotation) % 360;
             if (angle1 < angle2)
             {
+                Debug.Log("change yaw to right");
                 return ArtificialIntelligenceInfo.Direction.Right;
             }
-            else return ArtificialIntelligenceInfo.Direction.Left;
+            else {
+                Debug.Log("change yaw to left");
+                return ArtificialIntelligenceInfo.Direction.Left;
+            }
         }
 
     }

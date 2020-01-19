@@ -51,10 +51,10 @@ namespace BehaviorTree
                 return Status.BH_SUCCESS;
             }
 
-            Debug.Log("Should not shoot");
+            //Debug.Log("Should not shoot");
 
-            Debug.Log("Overhead threshold exceeded: " + (overheat > overheatThreshold));
-            Debug.Log("Health threshold exceeded: " + (health < healthThreshold));
+            //Debug.Log("Overhead threshold exceeded: " + (overheat > overheatThreshold));
+            //Debug.Log("Health threshold exceeded: " + (health < healthThreshold));
 
             return Status.BH_FAILURE;
         }
