@@ -88,7 +88,7 @@ public class Shots : MonoBehaviour {
 									enemyWingspan = hit.transform.GetComponent<AssaultArtificialIntelligence>().GetSpaceshipDimension().x;
 								else enemyWingspan = hit.transform.GetComponent<KamikazeArtificialIntelligence>().GetSpaceshipDimension().x;
 
-								Vector3 enemyFuturePosition = hit.transform.position + hit.transform.GetComponent<Rigidbody>().velocity.normalized * enemyWingspan;
+								Vector3 enemyFuturePosition = hit.transform.position + hit.transform.GetComponent<Rigidbody>().velocity;
 			        	transform.rotation = Quaternion.LookRotation(enemyFuturePosition - shotPoint.position, Vector3.up);
 		            } else {
 		            	transform.localRotation = Quaternion.Euler(0,0,0);
