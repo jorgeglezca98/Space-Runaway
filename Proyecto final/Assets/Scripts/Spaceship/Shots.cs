@@ -156,7 +156,7 @@ public class Shots : MonoBehaviour
 
     private void CoolDown()
     {
-        StartCoroutine("coolDown_");
+        StartCoroutine(CoolDown_());
     }
 
     private IEnumerator CoolDown_()

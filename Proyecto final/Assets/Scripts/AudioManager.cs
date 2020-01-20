@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    private static AudioManager instance;
-    private Sound[] soundEffects;
-    private Sound[] songs;
+    public static AudioManager instance;
+    public Sound[] soundEffects;
+    public Sound[] songs;
     private Sound currentSong;
     private float musicVolume;
     private float soundEffectsVolume;
@@ -92,7 +92,7 @@ public class AudioManager : MonoBehaviour
             yield return null;
         }
     }
-    
+
     public void PlaySoundEffect(string soundEffectName)
     {
         Sound soundEffect = FindSoundEffect(soundEffectName);

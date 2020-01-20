@@ -15,15 +15,15 @@ public class SpotlightController : MonoBehaviour
         GameEventsController.eventController.OnAttackModeEnter += InAttackMode;
         GameEventsController.eventController.OnAttackModeExit += OutAttackMode;
     }
-    
+
     private void InAttackMode()
     {
-        StartCoroutine("inAttackModeRoutine");
+        StartCoroutine(InAttackModeRoutine());
     }
 
     private void OutAttackMode()
     {
-        StartCoroutine("outAttackModeRoutine");
+        StartCoroutine(OutAttackModeRoutine());
     }
 
     private IEnumerator InAttackModeRoutine()
