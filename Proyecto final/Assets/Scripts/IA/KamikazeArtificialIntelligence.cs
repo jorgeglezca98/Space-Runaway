@@ -19,7 +19,7 @@ internal class KamikazeArtificialIntelligence : ArtificialIntelligence
 
         Parallel root = new Parallel(new List<Behavior>
         {
-             new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR FACE TARGET */
+             new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR SHOOT */
              {
                  new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
                  {
@@ -33,7 +33,7 @@ internal class KamikazeArtificialIntelligence : ArtificialIntelligence
                              new ChangeFacingAsteroid(gameObject, rotationInfo),
                              new ChangeCurrentYawDirection(gameObject, rotationInfo)
                          }),
-                         new While(new Sequence(new List<Behavior> /* SEQUENCE ROTATE AROUND ASTEROID */
+                         new While(new Filter(new List<Behavior> /* FILTER ROTATE AROUND ASTEROID */
                          {
                              new AreAsteroidsInFront(gameObject, lookForCollisionDistance, shipsWingspan, shipsWingspan, shipsWingspan, rotationInfo),
                              new Yaw(gameObject, rotationInfo)
@@ -46,7 +46,7 @@ internal class KamikazeArtificialIntelligence : ArtificialIntelligence
                  {
                      new ApplyRotation(gameObject, rotationInfo),
 
-                     new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
+                     new Sequence(new List<Behavior> /* SEQUENCE SHOOT */
                      {
                          new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
                          {
@@ -63,7 +63,7 @@ internal class KamikazeArtificialIntelligence : ArtificialIntelligence
                              }),
                              new Selector(new List<Behavior> /* SELECTOR NOT COOLING DOWN */
                              {
-                                 new Sequence(new List<Behavior> /* SEQUENCE IF OVERHEAT COOL DOWN */
+                                 new Filter(new List<Behavior> /* FILTER IF OVERHEAT COOL DOWN */
                                  {
                                      new IsOverheated(gameObject, overheatData),
                                      new StartCooldown(gameObject, overheatData)

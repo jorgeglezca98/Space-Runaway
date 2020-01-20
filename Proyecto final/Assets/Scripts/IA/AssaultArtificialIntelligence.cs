@@ -24,7 +24,7 @@ internal class AssaultArtificialIntelligence : ArtificialIntelligence
 
         Parallel root = new Parallel(new List<Behavior>
         {
-             new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR FACE TARGET */
+             new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR SHOOT */
              {
                  new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
                  {
@@ -38,7 +38,7 @@ internal class AssaultArtificialIntelligence : ArtificialIntelligence
                              new ChangeFacingAsteroid(gameObject, rotationInfo),
                              new ChangeCurrentYawDirection(gameObject, rotationInfo)
                          }),
-                         new While(new Sequence(new List<Behavior> /* SEQUENCE ROTATE AROUND ASTEROID */
+                         new While(new Filter(new List<Behavior> /* FILTER ROTATE AROUND ASTEROID */
                          {
                              new AreAsteroidsInFront(gameObject, lookForCollisionDistance, shipsWingspan, shipsWingspan, shipsWingspan, rotationInfo),
                              new Yaw(gameObject, rotationInfo)
@@ -51,7 +51,7 @@ internal class AssaultArtificialIntelligence : ArtificialIntelligence
                  {
                      new ApplyRotation(gameObject, rotationInfo),
 
-                     new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
+                     new Sequence(new List<Behavior> /* SEQUENCE SHOOT */
                      {
                          new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
                          {
@@ -68,7 +68,7 @@ internal class AssaultArtificialIntelligence : ArtificialIntelligence
                              }),
                              new Selector(new List<Behavior> /* SELECTOR NOT COOLING DOWN */
                              {
-                                 new Sequence(new List<Behavior> /* SEQUENCE IF OVERHEAT COOL DOWN */
+                                 new Filter(new List<Behavior> /* FILTER IF OVERHEAT COOL DOWN */
                                  {
                                      new IsOverheated(gameObject, overheatData),
                                      new StartCooldown(gameObject, overheatData)
@@ -111,7 +111,7 @@ internal class AssaultArtificialIntelligence : ArtificialIntelligence
                      new Selector(new List<Behavior> /* SELECTOR CONDITIONS TO MOVE FORWARD */
                      {
                          new IsTheTarjetFar(gameObject, distanceFarFromTarget),
-                         new Invert(new IsTargetVisible(gameObject))
+                         new Invert(new IsTargetVisibleInFront(gameObject))
                      }),
                      new MoveForward(gameObject, velocity)
                  }),
@@ -130,61 +130,6 @@ internal class AssaultArtificialIntelligence : ArtificialIntelligence
              }),
          });
 
-
-        //Selector selectorMovebackOrForward = new Selector();
-
-        //Sequence sequenceRetroceder = new Sequence();
-        //sequenceRetroceder.AddChild(new IsTheTarjetClose(gameObject, DistanceCloseToTarget));
-        //sequenceRetroceder.AddChild(new MoveBack(gameObject, Velocity));
-        //Sequence sequenceAvanzar = new Sequence();
-        //sequenceAvanzar.AddChild(new IsTheTarjetFar(gameObject, DistanceFarFromTarget));
-        //sequenceAvanzar.AddChild(new MoveAlong(gameObject, Velocity));
-
-        //selectorMovebackOrForward.AddChild(sequenceRetroceder);
-        //selectorMovebackOrForward.AddChild(sequenceAvanzar);
-
-        //Sequence sequenceDashIfDamageIsReceived = new Sequence();
-        //sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
-        //sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject, DashSecureDistance, DashIntensity,
-        //                                                         HalfTheShipsHeight, HalfTheShipsLength));
-
-        //Sequence sequenceShootOrAvoid = new Sequence();
-        //Sequence sequenceShootIfVisible = new Sequence();
-
-        //sequenceShootIfVisible.AddChild(new IsNotOverheatedOrLifeIsLow(gameObject, GetComponent<DestructionController>(), overheatData,
-        //    OverheatThreshold, HealthThreshold));
-        //sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance,
-        //    overheatIncrement, overheatDecrement, maxOverheatPenalizationTime, overheatData));
-
-        //Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
-
-        //Sequence sequenceAvoidAsteroids = new Sequence();
-        //sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
-        //                                                                 HalfTheShipsLength, HalfTheShipsHeight));
-        //sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
-        //                                                                 HalfTheShipsLength, HalfTheShipsHeight));
-
-        //selectorAvoidAsteroidOrFaceTarget.AddChild(sequenceAvoidAsteroids);
-        //selectorAvoidAsteroidOrFaceTarget.AddChild(new RotateTowardsPlayer(gameObject));
-
-        //sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
-        //sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-        //root.AddChild(sequenceDashIfDamageIsReceived);
-
-        //root.AddChild(sequenceShootOrAvoid);
-        //root.AddChild(selectorMovebackOrForward);
-
         tree = new BehaviorTree.BehaviorTree(root);
     }
-
-    private void OnDrawGizmos()
-    {
-        ExtDebug.DrawBoxCastBox(
-          transform.position,
-          new Vector3(halfTheShipsLength, halfTheShipsHeight, 0),
-          transform.rotation * Quaternion.Euler(0, 90, 0),
-          transform.right,
-          dashSecureDistance);
-    }
-
 }
