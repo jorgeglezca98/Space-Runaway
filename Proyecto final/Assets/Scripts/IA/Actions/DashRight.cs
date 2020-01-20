@@ -2,24 +2,21 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    class DashRight : LeafNode
+    public class DashRight : LeafNode
     {
-        private Vector3 RightDash;
-        private int Intensity;
+        private Vector3 rightDash;
+        private System.Random random = new System.Random();
 
-        System.Random random = new System.Random();
-
-        public DashRight(GameObject agent, int Intensity) : base(agent)
+        public DashRight(GameObject agent, int intensity) : base(agent)
         {
-            RightDash = new Vector3(Intensity, 0, 0);
+            rightDash = new Vector3(intensity, 0, 0);
         }
 
         public override Status Update()
         {
             //Debug.Log("MOVE RIGHT");
-            Agent.GetComponent<Rigidbody>().AddRelativeForce(RightDash, ForceMode.Impulse);
+            agent.GetComponent<Rigidbody>().AddRelativeForce(rightDash, ForceMode.Impulse);
             return Status.BH_SUCCESS;
         }
     }
 }
-

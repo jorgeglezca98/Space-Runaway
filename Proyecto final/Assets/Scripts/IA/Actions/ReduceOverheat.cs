@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 namespace BehaviorTree
 {
-
-    class ReduceOverheat : LeafNode
+    internal class ReduceOverheat : LeafNode
     {
-        OverheatStats overheatData;
+        private OverheatStats overheatData;
 
         public ReduceOverheat(GameObject agent, OverheatStats overheatData) : base(agent)
         {
@@ -17,9 +14,8 @@ namespace BehaviorTree
         public override Status Update()
         {
             //Debug.Log("Reducing overheat");
-            overheatData.setOverheat(overheatData.getOverheat() - overheatData.overheatDecrement);
+            overheatData.SetOverheat(overheatData.GetOverheat() - overheatData.overheatDecrement);
             return Status.BH_SUCCESS;
         }
-
     }
 }

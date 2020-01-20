@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class OverheatBarController : MonoBehaviour {
+public class OverheatBarController : MonoBehaviour
+{
+    // Use this for initialization
+    private Slider overheatBar;
 
-	// Use this for initialization
-	private Slider OverheatBar;
+    // Use this for initialization
+    private void Start()
+    {
+        overheatBar = gameObject.GetComponent<Slider>();
+        GameEventsController.eventController.OnOverheatPctChanged += ChangeOverheat;
+    }
 
-	// Use this for initialization
-	void Start () {
-		OverheatBar = gameObject.GetComponent<Slider>();
-		GameEventsController.eventController.OnOverheatPctChanged += ChangeOverheat;
-	}
-
-	void ChangeOverheat(float overheat){
-		this.OverheatBar.value = overheat;
-	}
-
+    private void ChangeOverheat(float overheat)
+    {
+        overheatBar.value = overheat;
+    }
 }

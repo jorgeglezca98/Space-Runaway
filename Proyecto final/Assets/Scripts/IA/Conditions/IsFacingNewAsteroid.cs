@@ -1,29 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BehaviorTree
 {
-
-    class IsFacingNewAsteroid : LeafNode
+    internal class IsFacingNewAsteroid : LeafNode
     {
+        private RotationInfo rotationInfo;
 
-        ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
-
-        public IsFacingNewAsteroid(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+        public IsFacingNewAsteroid(GameObject agent, RotationInfo rotationInfo) : base(agent)
         {
-            ArtificialIntelligenceInfo = artificialIntelligenceInfo;
+            this.rotationInfo = rotationInfo;
         }
 
         public override Status Update()
         {
-            if(ArtificialIntelligenceInfo.GetCurrentAsteroidPosition() != ArtificialIntelligenceInfo.GetPreviousAsteroidPosition()){
-                Debug.Log("Facing new asteroid");
-              return Status.BH_SUCCESS;
-            }else{
-                Debug.Log("Facing last asteroid");
+            if (rotationInfo.CurrentAsteroidPosition != rotationInfo.PreviousAsteroidPosition)
+            {
+                //Debug.Log("Facing new asteroid");
+                return Status.BH_SUCCESS;
+            }
+            else
+            {
+                //Debug.Log("Facing last asteroid");
                 return Status.BH_FAILURE;
             }
         }
-      }
+    }
 }

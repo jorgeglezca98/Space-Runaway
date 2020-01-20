@@ -15,9 +15,9 @@ namespace BehaviorTree
         {
             RaycastHit hit;
 
-            bool collidesWithSomething = Physics.Raycast(Agent.transform.position,
-                ArtificialIntelligence.Target.transform.position - Agent.transform.position, out hit, Mathf.Infinity, ~(1 << 8));
-            bool targetIsHit = GameObject.ReferenceEquals(ArtificialIntelligence.Target, hit.transform.gameObject);
+            bool collidesWithSomething = Physics.Raycast(agent.transform.position,
+                ArtificialIntelligence.target.transform.position - agent.transform.position, out hit, Mathf.Infinity, ~(1 << 8));
+            bool targetIsHit = GameObject.ReferenceEquals(ArtificialIntelligence.target, hit.transform.gameObject);
 
             if (collidesWithSomething && targetIsHit)
             {

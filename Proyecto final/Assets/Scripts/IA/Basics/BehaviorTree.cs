@@ -1,15 +1,17 @@
-﻿namespace BehaviorTree {
+﻿namespace BehaviorTree
+{
+    public class BehaviorTree
+    {
+        protected Behavior Root { get; set; }
 
-	class BehaviorTree {
+        public BehaviorTree(Behavior initialNode)
+        {
+            Root = initialNode;
+        }
 
-		protected Behavior root;
-
-		public BehaviorTree(Behavior initialNode) {
-			root = initialNode;
-		}
-
-		public void Tick() {
-			root.Tick();
-		}
-	}
+        public void Tick()
+        {
+            Root.Tick();
+        }
+    }
 }

@@ -1,62 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using BehaviorTree;
+using System.Collections.Generic;
+using UnityEngine;
 
-class KamikazeArtificialIntelligence : ArtificialIntelligence {
-
-    void Start () {
+public class KamikazeArtificialIntelligence : ArtificialIntelligence
+{
+    private void Start()
+    {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if(players.Length > 0 && Target == null)
-            Target = players[0];
-        
-        if(AudioManager == null)
-          AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-        if(Target == null)
-          Target = GameObject.Find("PlayerSpaceship");
-        
-        ShipsWingspan = 18f;
-        HalfTheShipsLength = 14f;
-        HalfTheShipsHeight = 5f;
-        
-    	  ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
-        
+        if (players.Length > 0 && target == null)
+        {
+            target = players[0];
+        }
+
+        if (audioManager == null)
+        {
+            audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        }
+
+        if (target == null)
+        {
+            target = GameObject.Find("PlayerSpaceship");
+        }
+
+        shipsWingspan = 18f;
+        halfTheShipsLength = 14f;
+        halfTheShipsHeight = 5f;
+
+        shotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
+
         Parallel root = new Parallel(new List<Behavior>
         {
              new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR FACE TARGET */
              {
                  new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
                  {
-                     new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
-                     new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
+                     new RotateTowardsPlayer(gameObject, rotationInfo),
+                     new AreAsteroidsInFront(gameObject, lookForCollisionDistance, shipsWingspan, shipsWingspan, shipsWingspan, rotationInfo),
                      new Parallel(new List<Behavior> /* PARALLEL ROTATE ASTEROID */
                      {
                          new Filter(new List<Behavior> /* FILTER CHANGE ASTEROID */
                          {
-                             new IsFacingNewAsteroid(gameObject, ArtificialIntelligenceInfo),
-                             new ChangeFacingAsteroid(gameObject, ArtificialIntelligenceInfo),
-                             new ChangeCurrentYawDirection(gameObject, ArtificialIntelligenceInfo)
+                             new IsFacingNewAsteroid(gameObject, rotationInfo),
+                             new ChangeFacingAsteroid(gameObject, rotationInfo),
+                             new ChangeCurrentYawDirection(gameObject, rotationInfo)
                          }),
                          new While(new Sequence(new List<Behavior> /* SEQUENCE ROTATE AROUND ASTEROID */
                          {
-                             new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
-                             new Yaw(gameObject, ArtificialIntelligenceInfo)
+                             new AreAsteroidsInFront(gameObject, lookForCollisionDistance, shipsWingspan, shipsWingspan, shipsWingspan, rotationInfo),
+                             new Yaw(gameObject, rotationInfo)
                          }))
                      }, Parallel.Policy.RequireOne),
-                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo)
+                     new ApplyRotation(gameObject, rotationInfo)
                  }),
 
                  new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
                  {
-                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo),
+                     new ApplyRotation(gameObject, rotationInfo),
 
                      new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
                      {
                          new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
                          {
-                             new IsHealthLow(gameObject, GetComponent<DestructionController>(), HealthThreshold),
-                             new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, OverheatUpperThreshold, OverheatLowerThreshold))
+                             new IsHealthLow(gameObject, GetComponent<DestructionController>(), healthThreshold),
+                             new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, overheatUpperThreshold, overheatLowerThreshold))
                          }),
                          new Selector(new List<Behavior> /* SELECTOR COOLING DOWN */
                          {
@@ -75,9 +81,9 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
                                  }),
                                  new Filter(new List<Behavior> /* FILTER SHOOT IF VISIBLE */
                                  {
-                                     new IsTargetInRange(gameObject, ShotMaxDistance, AimingHelpRange, ShotMinDistance),
+                                     new IsTargetInRange(gameObject, shotMaxDistance, aimingHelpRange, shotMinDistance),
                                      new IsTargetVisible(gameObject),
-                                     new Shoot(gameObject, ShotPrefab, ShotSpeed),
+                                     new Shoot(gameObject, shotPrefab, shotSpeed),
                                      new IncreaseOverheat(gameObject, overheatData)
                                  })
                              })
@@ -86,7 +92,7 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
                  })
              }),
 
-             new MoveAlong(gameObject, Velocity),
+             new MoveForward(gameObject, velocity),
 
              new Filter(new List<Behavior> /* FILTER REDUCE OVERHEAT */
              {
@@ -95,7 +101,7 @@ class KamikazeArtificialIntelligence : ArtificialIntelligence {
                 new ReduceOverheat(gameObject, overheatData)
              })
          });
-        
-        Tree = new BehaviorTree.BehaviorTree(root);
+
+        tree = new BehaviorTree.BehaviorTree(root);
     }
 }

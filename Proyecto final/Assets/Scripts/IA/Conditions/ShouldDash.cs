@@ -18,13 +18,13 @@ namespace BehaviorTree
         public ShouldDash(GameObject agent, DestructionController destructionController) : base(agent)
         {
             stats = destructionController.Stats;
-            actualHealth = stats.getHealth();
+            actualHealth = stats.GetHealth();
             lastHealth = actualHealth;
         }
 
         public override Status Update()
         {
-            actualHealth = stats.getHealth();
+            actualHealth = stats.GetHealth();
             if (Math.Abs(lastHealth - actualHealth) >= diff)
             {
                 lastHealth = actualHealth;

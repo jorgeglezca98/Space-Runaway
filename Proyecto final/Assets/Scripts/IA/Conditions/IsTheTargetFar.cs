@@ -18,7 +18,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            double distance = (Agent.transform.position - ArtificialIntelligence.Target.transform.position).magnitude;
+            double distance = (agent.transform.position - ArtificialIntelligence.target.transform.position).magnitude;
             if (distance > FarLimit)
             {
                 Debug.Log("Distance " + distance + " is far from target. SUCCESS");

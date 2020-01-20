@@ -1,38 +1,51 @@
-using System;
-using UnityEngine;
+namespace BehaviorTree
+{
+    public abstract class Behavior
+    {
+        public Status Status { get; set; }
 
-namespace BehaviorTree {
+        public virtual void OnInitialize() { }
+        public virtual void OnTerminate(Status s) { }
 
-    abstract class Behavior {
+        public abstract Status Update();
 
-        private Status status = Status.BH_INVALID;
- 
-		public virtual void OnInitialize() {}
-		public abstract Status Update();
-		public virtual void OnTerminate(Status s) {}
-
-	    public Status Tick() {
-	       if (status != Status.BH_RUNNING) OnInitialize();
-	       status = Update();
-	       if (status != Status.BH_RUNNING) OnTerminate(status);
-	       return status;
-		}
-
-		public override bool Equals(System.Object obj) {
-			if ((obj == null) || ! this.GetType().Equals(obj.GetType())) {
-				return false;
-			} else {
-				return this == obj;
-			}
-	    }
-
-	    public override int GetHashCode() {
-	        return base.GetHashCode();
-	    }
-
-        public Status GetStatus()
+        protected Behavior()
         {
-            return status;
+            Status = Status.BH_INVALID;
         }
-	}
+
+        public Status Tick()
+        {
+            if (Status != Status.BH_RUNNING)
+            {
+                OnInitialize();
+            }
+
+            Status = Update();
+
+            if (Status != Status.BH_RUNNING)
+            {
+                OnTerminate(Status);
+            }
+
+            return Status;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                return this == obj;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyDestructionController : DestructionController
 {
@@ -14,8 +12,8 @@ public class EnemyDestructionController : DestructionController
     {
         if (bulletType == "player_shot_prefab(Clone)")
         {
-            Stats.setHealth(Stats.getHealth() - 1f);
-            Debug.Log("Enemy: Receiving damage. Life : " + Stats.getHealth());
+            Stats.SetHealth(Stats.GetHealth() - 1f);
+            Debug.Log("Enemy: Receiving damage. Life : " + Stats.GetHealth());
             PlayImpactSound(0f);
         }
     }
@@ -24,7 +22,7 @@ public class EnemyDestructionController : DestructionController
     /*It receives a parameter because the Delegate requires it*/
     protected override void PlayImpactSound(float damage)
     {
-        AudioManager.PlaySoundEffect("OnEnemyImpact");
+        audioManager.PlaySoundEffect("OnEnemyImpact");
     }
 
 
@@ -33,6 +31,6 @@ public class EnemyDestructionController : DestructionController
         SplitSpaceship();
         PlayExplosionSound();
         Destroy(gameObject, destructionDelay);
-        GameEventsController.eventController.enemyDestroyed();
+        GameEventsController.eventController.EnemyDestroyed();
     }
 }

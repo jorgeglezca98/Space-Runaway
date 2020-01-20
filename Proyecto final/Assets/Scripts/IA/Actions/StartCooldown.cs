@@ -2,9 +2,9 @@
 
 namespace BehaviorTree
 {
-    class StartCooldown : LeafNode
+    internal class StartCooldown : LeafNode
     {
-        OverheatStats overheatData;
+        private OverheatStats overheatData;
 
         public StartCooldown(GameObject agent, OverheatStats overheatData) : base(agent)
         {
@@ -14,8 +14,8 @@ namespace BehaviorTree
         public override Status Update()
         {
             //Debug.Log("Start cooling down");
-            overheatData.setIsCoolingDown(true);
-            overheatData.setCooldownStartTime(Time.time);
+            overheatData.SetIsCoolingDown(true);
+            overheatData.SetCooldownStartTime(Time.time);
             return Status.BH_SUCCESS;
         }
     }

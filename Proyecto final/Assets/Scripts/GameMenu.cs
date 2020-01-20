@@ -1,70 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMenu : MonoBehaviour {
+public class GameMenu : MonoBehaviour
+{
+    public static bool gameIsPaused;
+    private bool gameIsInitiating;
+    private GameObject initialMenuUi;
+    private GameObject pauseMenuUi;
+    private GameObject mainMenuUi;
+    private GameObject endMenuUi;
 
-    public static bool GameIsPaused;
-    private bool GameIsInitiating;
-    private GameObject InitialMenuUi;
-    private GameObject PauseMenuUi;
-    private GameObject MainMenuUi;
-    private GameObject EndMenuUi;
-
-    void Start(){
-      GameIsPaused = true;
-      GameIsInitiating = true;
-      InitialMenuUi = gameObject.transform.Find("InitialMenu").gameObject;
-      PauseMenuUi = gameObject.transform.Find("PauseMenu").gameObject;
-      MainMenuUi = gameObject.transform.Find("MainMenu").gameObject;
-      EndMenuUi = gameObject.transform.Find("EndMenu").gameObject;
-      GameEventsController.eventController.OnPlayerDestruction += FinalScreen;
-      GameEventsController.eventController.OnPlayerWon += FinalScreen;
+    private void Start()
+    {
+        gameIsPaused = true;
+        gameIsInitiating = true;
+        initialMenuUi = gameObject.transform.Find("InitialMenu").gameObject;
+        pauseMenuUi = gameObject.transform.Find("PauseMenu").gameObject;
+        mainMenuUi = gameObject.transform.Find("MainMenu").gameObject;
+        endMenuUi = gameObject.transform.Find("EndMenu").gameObject;
+        GameEventsController.eventController.OnPlayerDestruction += FinalScreen;
+        GameEventsController.eventController.OnPlayerWon += FinalScreen;
     }
 
-    private void DisplayInitialMenu(){
-      InitialMenuUi.SetActive(true);
-      Time.timeScale = 0f;
+    private void DisplayInitialMenu()
+    {
+        initialMenuUi.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     private void Update()
     {
+        if (gameIsInitiating)
+        {
+            DisplayInitialMenu();
+        }
 
-    if(GameIsInitiating)
-       DisplayInitialMenu();
-
-		if (Input.GetButtonDown("Start")){
-            if (GameIsPaused && PauseMenuUi.activeSelf)
+        if (Input.GetButtonDown("Start"))
+        {
+            if (gameIsPaused && pauseMenuUi.activeSelf)
             {
                 Resume();
             }
-            else if (!MainMenuUi.activeSelf && !InitialMenuUi.activeSelf && !EndMenuUi.activeSelf)
+            else if (!mainMenuUi.activeSelf && !initialMenuUi.activeSelf && !endMenuUi.activeSelf)
             {
                 Pause();
             }
         }
     }
 
-    public void Play(){
-      InitialMenuUi.SetActive(false);
-      Time.timeScale = 1f;
-      GameIsPaused = false;
-      GameIsInitiating = false;
+    public void Play()
+    {
+        initialMenuUi.SetActive(false);
+        Time.timeScale = 1f;
+        gameIsPaused = false;
+        gameIsInitiating = false;
     }
 
     public void Resume()
     {
-        PauseMenuUi.SetActive(false);
+        pauseMenuUi.SetActive(false);
         Time.timeScale = 1f;
-        GameIsPaused = false;
+        gameIsPaused = false;
     }
 
-    void Pause()
+    private void Pause()
     {
-        PauseMenuUi.SetActive(true);
+        pauseMenuUi.SetActive(true);
         Time.timeScale = 0f;
-        GameIsPaused = true;
+        gameIsPaused = true;
     }
 
     public void Restart()
@@ -72,10 +75,11 @@ public class GameMenu : MonoBehaviour {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void FinalScreen(string text){
-       Time.timeScale = 0f;
-       EndMenuUi.transform.Find("EndText").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = text;
-       EndMenuUi.SetActive(true);
+    public void FinalScreen(string text)
+    {
+        Time.timeScale = 0f;
+        endMenuUi.transform.Find("EndText").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = text;
+        endMenuUi.SetActive(true);
     }
 
     public void QuitGame()

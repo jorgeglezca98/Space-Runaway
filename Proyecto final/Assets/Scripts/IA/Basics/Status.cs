@@ -1,3 +1,10 @@
-namespace BehaviorTree {
-	enum Status {BH_RUNNING, BH_SUCCESS, BH_INVALID, BH_FAILURE};
+namespace BehaviorTree
+{
+    public enum Status
+    {
+        BH_SUCCESS,
+        BH_FAILURE,
+        BH_RUNNING,
+        BH_INVALID,
+    };
 }

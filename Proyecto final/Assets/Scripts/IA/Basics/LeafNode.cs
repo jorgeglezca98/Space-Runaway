@@ -1,13 +1,14 @@
 using UnityEngine;
 
-namespace BehaviorTree {
+namespace BehaviorTree
+{
+    public abstract class LeafNode : Behavior
+    {
+        protected GameObject agent;
 
-	abstract class LeafNode : Behavior {
-
-		protected GameObject Agent;
-
-		public LeafNode(GameObject agent) {
-			Agent = agent;
-		}
-	}
+        protected LeafNode(GameObject agent)
+        {
+            this.agent = agent;
+        }
+    }
 }

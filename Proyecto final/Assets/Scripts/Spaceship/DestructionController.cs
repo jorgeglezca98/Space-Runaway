@@ -1,23 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DestructionController : MonoBehaviour
 {
+    public LifeStats Stats { get; set; }
 
     protected int destructionDelay = 1;
-    // private int Health = 200;
-    public LifeStats Stats;
-    protected AudioManager AudioManager;
-    bool SpaceshipHasBeenDestroyed = false;
+    protected AudioManager audioManager;
 
-    private void Start()
+    private bool spaceshipHasBeenDestroyed = false;
+    
+    private void Awake()
     {
-        // Stats = new LifeStats(Health);
         SetHealth();
-        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
-
 
     private void SetHealth()
     {
@@ -35,29 +31,35 @@ public class DestructionController : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (Stats.getHealth() <= 0 && !SpaceshipHasBeenDestroyed)
+        if (Stats.GetHealth() <= 0 && !spaceshipHasBeenDestroyed)
         {
             DestroySpaceship();
-            SpaceshipHasBeenDestroyed = true;
+            spaceshipHasBeenDestroyed = true;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision enter!");
+        //Debug.Log("Collision enter!");
         if (collision.gameObject.tag != "mothership")
+        {
             DestroySpaceship();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger enter!");
+        //Debug.Log("Trigger enter!");
         if (other.gameObject.tag == "bullet")
+        {
             InflictBulletDamage(other.gameObject.name);
+        }
         else if (other.gameObject.tag != "mothership")
+        {
             DestroySpaceship();
+        }
     }
 
     protected virtual void Initialize()
@@ -82,7 +84,7 @@ public class DestructionController : MonoBehaviour
 
     public void PlayExplosionSound()
     {
-        AudioManager.PlaySoundEffect("Explosion");
+        audioManager.PlaySoundEffect("Explosion");
     }
 
     public void SplitSpaceship()
@@ -98,11 +100,7 @@ public class DestructionController : MonoBehaviour
             childrg.AddExplosionForce(1000, center, radius);
             Destroy(child.gameObject, destructionDelay);
         }
-        var ps = GetComponent<ParticleSystem>();
+        ParticleSystem ps = GetComponent<ParticleSystem>();
         ps.Play();
     }
-
-
-
-
 }

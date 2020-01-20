@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 namespace BehaviorTree
 {
-    class IncreaseOverheat : LeafNode
+    public class IncreaseOverheat : LeafNode
     {
-        OverheatStats overheatData;
+        private OverheatStats overheatData;
 
         public IncreaseOverheat(GameObject agent, OverheatStats overheatData) : base(agent)
         {
@@ -15,7 +13,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            overheatData.setOverheat(overheatData.getOverheat() + overheatData.overheatIncrement);
+            overheatData.SetOverheat(overheatData.GetOverheat() + overheatData.overheatIncrement);
             //Debug.Log("Increasing overheat " + overheatData.getMaxOverheat());
             return Status.BH_SUCCESS;
         }

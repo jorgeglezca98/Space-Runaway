@@ -19,7 +19,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            float overheat = overheatData.getOverheat();
+            float overheat = overheatData.GetOverheat();
 
             //Debug.Log("ACTUAL OVERHEAT : " + overheat + ", Upper: " + overheatUpperThreshold + ", MAX" + overheatData.getMaxOverheat());
 

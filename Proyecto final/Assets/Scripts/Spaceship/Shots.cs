@@ -1,21 +1,19 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Shots : MonoBehaviour
 {
 
     private GameObject shotPrefab;
-    private AudioManager AudioManager;
+    private AudioManager audioManager;
     private int shotSpeed = 10000;
-    private float ShotMaxDistance = 100f;
-    private float ShotMinDistance = 15f; // If it is less than 10 it could be problematic
-    private float RangeSize = 15f;
+    private float shotMaxDistance = 100f;
+    private float shotMinDistance = 15f; // If it is less than 10 it could be problematic
+    private float rangeSize = 15f;
     private Transform shotPoint;
     private GameObject lastShot;
     private float lastShotSize;
-    private OverheatStats Stats = new OverheatStats();
+    private OverheatStats stats = new OverheatStats();
 
     // Time since the last time the player attacked.
     private float attackModeTimer = 0.0f;
@@ -35,15 +33,11 @@ public class Shots : MonoBehaviour
 
     public int bulletsShot;
 
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
-
-        AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         shotPrefab = Resources.Load("player_shot_prefab") as GameObject;
-
-
-        GameEventsController.eventController.OnMaximumOverheat += coolDown;
+        GameEventsController.eventController.OnMaximumOverheat += CoolDown;
 
         shotPoint = null;
         foreach (Transform child in transform)
@@ -54,31 +48,29 @@ public class Shots : MonoBehaviour
                 break;
             }
         }
-
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (Stats.getOverheat() < Stats.getMaxOverheat())
+        if (stats.GetOverheat() < stats.GetMaxOverheat())
         {
             if (Input.GetButton("Shoot") && (lastShot == null || Vector3.Distance(shotPoint.position, lastShot.transform.position - new Vector3(0, 0, lastShotSize / 2)) > lastShotSize))
             {
                 RaycastHit hit;
-                GameObject HUD = GameObject.FindWithTag("playerHUD");
+                GameObject hud = GameObject.FindWithTag("playerHUD");
 
                 RaycastHit[] hitsInRange = Physics.BoxCastAll(
-                    HUD.transform.position,
-                    new Vector3(RangeSize, RangeSize, ShotMinDistance),
+                    hud.transform.position,
+                    new Vector3(rangeSize, rangeSize, shotMinDistance),
                     transform.TransformDirection(Vector3.forward),
-                    HUD.transform.rotation,
-                    ShotMaxDistance,
+                    hud.transform.rotation,
+                    shotMaxDistance,
                     (1 << 10));
 
                 if (hitsInRange.Length > 0)
                 {
                     int i = 0;
-                    Vector3 origenRaycast = HUD.transform.position;
+                    Vector3 origenRaycast = hud.transform.position;
                     do
                     {
                         Physics.Raycast(
@@ -95,8 +87,13 @@ public class Shots : MonoBehaviour
                         float enemyWingspan;
 
                         if (hit.transform.name == "AssaultEnemy(Clone)")
+                        {
                             enemyWingspan = hit.transform.GetComponent<AssaultArtificialIntelligence>().GetSpaceshipDimension().x;
-                        else enemyWingspan = hit.transform.GetComponent<KamikazeArtificialIntelligence>().GetSpaceshipDimension().x;
+                        }
+                        else
+                        {
+                            enemyWingspan = hit.transform.GetComponent<KamikazeArtificialIntelligence>().GetSpaceshipDimension().x;
+                        }
 
                         Vector3 enemyFuturePosition = hit.transform.position + hit.transform.GetComponent<Rigidbody>().velocity;
                         transform.rotation = Quaternion.LookRotation(enemyFuturePosition - shotPoint.position, Vector3.up);
@@ -121,48 +118,48 @@ public class Shots : MonoBehaviour
                 lastShot = shot;
                 lastShotSize = lastShot.GetComponent<Renderer>().bounds.size.z;
 
-                if (!Stats.isAttacking())
+                if (!stats.IsAttacking())
                 {
-                    Stats.setAttackMode(true);
-                    GameEventsController.eventController.attackModeEnter();
+                    stats.SetAttackMode(true);
+                    GameEventsController.eventController.AttackModeEnter();
                 }
 
                 attackModeTimer = Time.time + maxAttackModeTimer;
                 //Stats.setOverheat(Stats.getOverheat() + overheatIncrement);
-                ChangeOverheat(Stats.getOverheat() + overheatIncrement);
-                AudioManager.PlaySoundEffect("PlayerShot");
+                ChangeOverheat(stats.GetOverheat() + overheatIncrement);
+                audioManager.PlaySoundEffect("PlayerShot");
 
             }
         }
         else if (!isCoolingDown)
         {
             isCoolingDown = true;
-            coolDown();
+            CoolDown();
         }
     }
 
-    void ChangeOverheat(float amount)
+    private void ChangeOverheat(float amount)
     {
-        Stats.setOverheat(amount);
-        GameEventsController.eventController.overheatPctChanged(Stats.getOverheat());
+        stats.SetOverheat(amount);
+        GameEventsController.eventController.OverheatPctChanged(stats.GetOverheat());
     }
 
-    void Update()
+    private void Update()
     {
-        manageAttackMode();
-        if (Stats.getOverheat() < Stats.getMaxOverheat() && Stats.getOverheat() > 0)
+        ManageAttackMode();
+        if (stats.GetOverheat() < stats.GetMaxOverheat() && stats.GetOverheat() > 0)
         {
-            ChangeOverheat(Stats.getOverheat() - overheatDecrement);
+            ChangeOverheat(stats.GetOverheat() - overheatDecrement);
             //Stats.setOverheat(Stats.getOverheat() - overheatDecrement);
         }
     }
 
-    void coolDown()
+    private void CoolDown()
     {
         StartCoroutine("coolDown_");
     }
 
-    IEnumerator coolDown_()
+    private IEnumerator CoolDown_()
     {
         yield return new WaitForSeconds(maxOverheatPenalization);
         ChangeOverheat(0f);
@@ -172,14 +169,14 @@ public class Shots : MonoBehaviour
 
     // When the time in "maxAttackModeTimer" has passed
     // the attack mode sets to false.
-    void manageAttackMode()
+    private void ManageAttackMode()
     {
-        if (Stats.isAttacking())
+        if (stats.IsAttacking())
         {
             if (attackModeTimer <= Time.time)
             {
-                GameEventsController.eventController.attackModeExit();
-                Stats.setAttackMode(false);
+                GameEventsController.eventController.AttackModeExit();
+                stats.SetAttackMode(false);
             }
         }
     }

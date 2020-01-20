@@ -2,20 +2,19 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    class DashLeft : LeafNode
+    public class DashLeft : LeafNode
     {
-        private Vector3 LeftDash;
-        private int Intensity;
+        private Vector3 leftDash;
 
-        public DashLeft(GameObject agent, int Intensity) : base(agent)
+        public DashLeft(GameObject agent, int intensity) : base(agent)
         {
-            LeftDash = new Vector3(-Intensity, 0, 0);
+            leftDash = new Vector3(-intensity, 0, 0);
         }
 
         public override Status Update()
         {
             //Debug.Log("MOVE LEFT");
-            Agent.GetComponent<Rigidbody>().AddRelativeForce(LeftDash, ForceMode.Impulse);
+            agent.GetComponent<Rigidbody>().AddRelativeForce(leftDash, ForceMode.Impulse);
             return Status.BH_SUCCESS;
         }
     }

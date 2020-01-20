@@ -1,34 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BehaviorTree
 {
-
-    class AreObstaclesTowardsTheTarget : LeafNode
+    public class AreObstaclesTowardsTheTarget : LeafNode
     {
+        private float lookForCollisionDistance;
+        private float shipsWingspan;
+        private float halfTheShipsLength;
+        private float halfTheShipsHeight;
 
-        float LookForCollisionDistance;
-        float ShipsWingspan;
-        float HalfTheShipsLength;
-        float HalfTheShipsHeight;
-
-        bool ThereIsCollision;
-
-        RaycastHit HittedObject;
-        RaycastHit HittedAsteroid;
-
-
-        Vector3 BoxcastDimension;
+        private Vector3 boxcastDimension;
 
         public AreObstaclesTowardsTheTarget(GameObject agent, float lookForCollisionDistance, float shipsWingspan,
                                             float halfTheShipsLength, float halfTheShipsHeight) : base(agent)
         {
-            LookForCollisionDistance = lookForCollisionDistance;
-            ShipsWingspan = shipsWingspan;
-            HalfTheShipsLength = halfTheShipsLength;
-            HalfTheShipsHeight = halfTheShipsHeight;
-            BoxcastDimension = new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength);
+            this.lookForCollisionDistance = lookForCollisionDistance;
+            this.shipsWingspan = shipsWingspan;
+            this.halfTheShipsLength = halfTheShipsLength;
+            this.halfTheShipsHeight = halfTheShipsHeight;
+            boxcastDimension = new Vector3(this.shipsWingspan, this.halfTheShipsHeight, this.halfTheShipsLength);
         }
 
         public override Status Update()
@@ -45,26 +35,25 @@ namespace BehaviorTree
             }
         }
 
-        bool ThereIsObstacleTowardsTarget()
+        private bool ThereIsObstacleTowardsTarget()
         {
+            RaycastHit hittedObject;
 
-            ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, 
-                ArtificialIntelligence.Target.transform.position - Agent.transform.position, 
-                out HittedObject, Agent.transform.rotation, LookForCollisionDistance, ~(1 << 8));
+            bool thereIsCollision = Physics.BoxCast(agent.transform.position, boxcastDimension,
+                    ArtificialIntelligence.target.transform.position - agent.transform.position,
+                    out hittedObject, agent.transform.rotation, lookForCollisionDistance, ~(1 << 8));
 
-            if (ThereIsCollision)
+            if (thereIsCollision)
             {
-                if (HittedObject.collider.tag == "asteroid")
+                if (hittedObject.collider.tag == "asteroid")
                 {
                     //Debug.Log("Condition says there's obstacle!");
-                    HittedAsteroid = HittedObject;
                     return true;
                 }
                 else
                 {
                     return false;
                 }
-
             }
             else
             {

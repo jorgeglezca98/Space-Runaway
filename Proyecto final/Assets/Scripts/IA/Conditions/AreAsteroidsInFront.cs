@@ -1,48 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BehaviorTree
 {
-
-    class AreAsteroidsInFront : LeafNode
+    public class AreAsteroidsInFront : LeafNode
     {
-        Vector3 BoxcastDimension;
-        float LookForCollisionDistance;
-        ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
-        float HalfTheShipsLength;
+        private Vector3 boxcastDimension;
+        private float lookForCollisionDistance;
+        private RotationInfo rotationInfo;
+        private float halfTheShipsLength;
 
         public AreAsteroidsInFront(GameObject agent, float lookForCollisionDistance, float shipsWingspan, float halfTheShipsLength, float halfTheShipsHeight,
-                                    ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+                                    RotationInfo rotationInfo) : base(agent)
         {
-            BoxcastDimension = new Vector3(shipsWingspan*1.5f, halfTheShipsHeight*1.5f, 0);
-            HalfTheShipsLength = halfTheShipsLength;
-            LookForCollisionDistance = lookForCollisionDistance;
-            ArtificialIntelligenceInfo = artificialIntelligenceInfo;
+            boxcastDimension = new Vector3(shipsWingspan * 1.5f, halfTheShipsHeight * 1.5f, 0);
+            this.halfTheShipsLength = halfTheShipsLength;
+            this.lookForCollisionDistance = lookForCollisionDistance;
+            this.rotationInfo = rotationInfo;
         }
 
         public override Status Update()
         {
-            RaycastHit HittedObject;
-            bool ThereIsCollision = Physics.BoxCast(Agent.transform.position - HalfTheShipsLength * Agent.transform.forward, BoxcastDimension, ArtificialIntelligenceInfo.GetSpaceshipRotation() * Vector3.forward, 
-                out HittedObject, ArtificialIntelligenceInfo.GetSpaceshipRotation(), LookForCollisionDistance, ~(1 << 8) & ~(1 << 10));
-            if (ThereIsCollision)
+            RaycastHit hittedObject;
+            bool thereIsCollision = Physics.BoxCast(agent.transform.position - halfTheShipsLength * agent.transform.forward, boxcastDimension, 
+                rotationInfo.SpaceshipRotation * Vector3.forward, out hittedObject, rotationInfo.SpaceshipRotation, 
+                lookForCollisionDistance, ~(1 << 8) & ~(1 << 10));
+
+            if (thereIsCollision)
             {
-                if (HittedObject.collider.tag == "asteroid")
+                if (hittedObject.collider.tag == "asteroid")
                 {
-                    Debug.Log("There is AN ASTEROID in FRONT!");
-                    ArtificialIntelligenceInfo.SetCurrentAsteroidPosition(HittedObject.transform.position);
+                    //Debug.Log("There is AN ASTEROID in FRONT!");
+                    rotationInfo.CurrentAsteroidPosition = hittedObject.transform.position;
                     return Status.BH_SUCCESS;
                 }
                 else
                 {
-                    Debug.Log("There is something in front that is NOT an ASTEROID!");
+                    //Debug.Log("There is something in front that is NOT an ASTEROID!");
                     return Status.BH_FAILURE;
                 }
             }
             else
             {
-                Debug.Log("There is NOTHING in FRONT!");
+                //Debug.Log("There is NOTHING in FRONT!");
                 return Status.BH_FAILURE;
             }
         }

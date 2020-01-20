@@ -13,22 +13,22 @@ namespace BehaviorTree
 
         public void AddCondition(Behavior condition)
         {
-            Children.Add(condition);
+            children.Add(condition);
         }
 
         public void AddCondition(List<Behavior> conditions)
         {
-            Children.AddRange(conditions);
+            children.AddRange(conditions);
         }
 
         public void AddAction(Behavior action)
         {
-            Children.Add(action);
+            children.Add(action);
         }
 
         public void AddAction(List<Behavior> actions)
         {
-            Children.AddRange(actions);
+            children.AddRange(actions);
         }
     }
 }

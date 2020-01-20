@@ -1,50 +1,51 @@
-﻿using UnityEngine.Audio;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
-public class Sound{
-    public string Name;
-    public AudioClip Clip;
+public class Sound
+{
+    public string name;
+    public AudioClip clip;
 
     [Range(0f, 1f)]
-    public float Volume;
+    public float volume;
     [Range(.1f, 3f)]
-    public float Pitch;
+    public float pitch;
 
-    public bool Loop;
+    public bool loop;
     [HideInInspector]
-    public AudioSource AudioSource;
+    public AudioSource audioSource;
 
     public void AddSource(AudioSource source)
     {
-        source.clip = this.Clip;
-        source.volume = this.Volume;
-        source.pitch = this.Pitch;
-        this.AudioSource = source;
+        source.clip = this.clip;
+        source.volume = this.volume;
+        source.pitch = this.pitch;
+        this.audioSource = source;
     }
 
     public void Play()
     {
-        this.AudioSource.Play();
+        this.audioSource.Play();
     }
 
     public void Stop()
     {
-        this.AudioSource.Stop();
+        this.audioSource.Stop();
     }
 
     public void SetVolume(float volume)
     {
-        this.Volume = volume;
-        this.AudioSource.volume = volume;
+        this.volume = volume;
+        this.audioSource.volume = volume;
     }
 
-    public float GetVolume(){
-      return this.AudioSource.volume;
+    public float GetVolume()
+    {
+        return this.audioSource.volume;
     }
 
     public bool IsPlaying()
     {
-        return this.AudioSource.isPlaying;
+        return this.audioSource.isPlaying;
     }
 }

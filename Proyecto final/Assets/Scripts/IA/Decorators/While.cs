@@ -13,7 +13,7 @@ namespace BehaviorTree
         {
             while (true)
             {
-                Status s = Child.Tick();
+                Status s = child.Tick();
                 if (s == Status.BH_FAILURE) break;
                 if (s != Status.BH_SUCCESS) return s;
             }

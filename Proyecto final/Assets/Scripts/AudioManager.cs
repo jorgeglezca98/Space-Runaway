@@ -1,31 +1,26 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // TODO : When the user changes the volume in the menu this class should change for each sound
 // its volume.
 
-public class AudioManager : MonoBehaviour {
-
-    public Sound[] SoundEffects;
-    public Sound[] Songs;
-    private Sound CurrentSong;
-
-    private float MusicVolume;
-    private float SoundEffectsVolume;
-
-    public static AudioManager instance;
-
-    int CurrentSongIndex;
+public class AudioManager : MonoBehaviour
+{
+    private static AudioManager instance;
+    private Sound[] soundEffects;
+    private Sound[] songs;
+    private Sound currentSong;
+    private float musicVolume;
+    private float soundEffectsVolume;
+    private int currentSongIndex;
 
     private void Awake()
     {
-
         DontDestroyOnLoad(gameObject);
         if (instance == null)
         {
-            MusicVolume = 1f;
-            SoundEffectsVolume = 1f;
+            musicVolume = 1f;
+            soundEffectsVolume = 1f;
             instance = this;
         }
         else
@@ -34,39 +29,39 @@ public class AudioManager : MonoBehaviour {
             return;
         }
 
-
-        foreach (Sound sound in SoundEffects)
+        foreach (Sound sound in soundEffects)
         {
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
             sound.AddSource(audioSource);
         }
 
-        foreach (Sound song in Songs)
+        foreach (Sound song in songs)
         {
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
             song.AddSource(audioSource);
         }
-
     }
 
     private void Start()
     {
-        CurrentSong = Songs[CurrentSongIndex];
+        currentSong = songs[currentSongIndex];
         StartCoroutine(PlaySong());
     }
 
-    public float GetMusicVolume(){
-      return MusicVolume;
+    public float GetMusicVolume()
+    {
+        return musicVolume;
     }
 
-    public float GetSoundEffectsVolume(){
-      return SoundEffectsVolume;
+    public float GetSoundEffectsVolume()
+    {
+        return soundEffectsVolume;
     }
 
     public void ChangeSoundEffectSVolume(float volume)
     {
-      SoundEffectsVolume = volume;
-        foreach (Sound sound in SoundEffects)
+        soundEffectsVolume = volume;
+        foreach (Sound sound in soundEffects)
         {
             sound.SetVolume(volume);
         }
@@ -74,37 +69,42 @@ public class AudioManager : MonoBehaviour {
 
     public void ChangeMusicVolume(float volume)
     {
-      MusicVolume = volume;
-        foreach (Sound song in Songs)
+        musicVolume = volume;
+        foreach (Sound song in songs)
         {
             song.SetVolume(volume);
         }
     }
 
-    IEnumerator PlaySong()
+    private IEnumerator PlaySong()
     {
         while (true)
         {
-            if (!CurrentSong.IsPlaying())
+            if (!currentSong.IsPlaying())
             {
-                if(++CurrentSongIndex == Songs.Length) {
-                    CurrentSongIndex = 0;
+                if (++currentSongIndex == songs.Length)
+                {
+                    currentSongIndex = 0;
                 }
-                CurrentSong = Songs[CurrentSongIndex];
-                CurrentSong.Play();
-            } yield return null;
+                currentSong = songs[currentSongIndex];
+                currentSong.Play();
+            }
+            yield return null;
         }
     }
-
-
-
+    
     public void PlaySoundEffect(string soundEffectName)
     {
         Sound soundEffect = FindSoundEffect(soundEffectName);
 
         if (soundEffect != null)
+        {
             soundEffect.Play();
-        else Debug.LogWarning("Sound effect: " + soundEffectName + " not found.");
+        }
+        else
+        {
+            Debug.LogWarning("Sound effect: " + soundEffectName + " not found.");
+        }
     }
 
     public void StopSoundEffect(string soundEffectName)
@@ -112,22 +112,24 @@ public class AudioManager : MonoBehaviour {
         Sound soundEffect = FindSoundEffect(soundEffectName);
 
         if (soundEffect != null)
+        {
             soundEffect.Stop();
-        else Debug.LogWarning("Sound effect: " + soundEffectName + " not found.");
+        }
+        else
+        {
+            Debug.LogWarning("Sound effect: " + soundEffectName + " not found.");
+        }
     }
 
     public Sound FindSoundEffect(string soundEffectName)
     {
-
-        foreach (Sound sound in SoundEffects)
+        foreach (Sound sound in soundEffects)
         {
-            if (sound.Name == soundEffectName)
+            if (sound.name == soundEffectName)
             {
                 return sound;
             }
         }
         return null;
     }
-
-
 }

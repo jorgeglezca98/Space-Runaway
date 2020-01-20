@@ -16,7 +16,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            if (OverheatData.getOverheat() > 0)
+            if (OverheatData.GetOverheat() > 0)
             {
                 //Debug.Log("Overheat is over 0");
                 return Status.BH_SUCCESS;
