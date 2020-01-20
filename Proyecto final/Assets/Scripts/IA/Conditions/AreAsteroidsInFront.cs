@@ -10,11 +10,13 @@ namespace BehaviorTree
         Vector3 BoxcastDimension;
         float LookForCollisionDistance;
         ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
+        float HalfTheShipsLength;
 
         public AreAsteroidsInFront(GameObject agent, float lookForCollisionDistance, float shipsWingspan, float halfTheShipsLength, float halfTheShipsHeight,
                                     ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
         {
-            BoxcastDimension = new Vector3(shipsWingspan, halfTheShipsHeight, halfTheShipsLength);
+            BoxcastDimension = new Vector3(shipsWingspan*1.5f, halfTheShipsHeight*1.5f, 0);
+            HalfTheShipsLength = halfTheShipsLength;
             LookForCollisionDistance = lookForCollisionDistance;
             ArtificialIntelligenceInfo = artificialIntelligenceInfo;
         }
@@ -22,10 +24,8 @@ namespace BehaviorTree
         public override Status Update()
         {
             RaycastHit HittedObject;
-            // bool ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, Agent.transform.forward,
-            //     out HittedObject, Agent.transform.rotation, LookForCollisionDistance);
-            bool ThereIsCollision = Physics.BoxCast(Agent.transform.position - BoxcastDimension.x * Agent.transform.forward, BoxcastDimension, Agent.transform.forward,
-                out HittedObject, Agent.transform.rotation, LookForCollisionDistance, ~(1 << 8) & ~(1 << 10));
+            bool ThereIsCollision = Physics.BoxCast(Agent.transform.position - HalfTheShipsLength * Agent.transform.forward, BoxcastDimension, ArtificialIntelligenceInfo.GetSpaceshipRotation() * Vector3.forward, 
+                out HittedObject, ArtificialIntelligenceInfo.GetSpaceshipRotation(), LookForCollisionDistance, ~(1 << 8) & ~(1 << 10));
             if (ThereIsCollision)
             {
                 if (HittedObject.collider.tag == "asteroid")

@@ -10,9 +10,6 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
     protected int DistanceCloseToTarget = 50;
     private int DashSecureDistance = 40;
     private int DashIntensity = 25;
-    private float HealthThreshold;
-    private float OverheatUpperThreshold;
-    private float OverheatLowerThreshold;
 
     void Start()
     {
@@ -39,9 +36,6 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
         rg.drag = 2f;
         rg.angularDrag = 0.5f;
         rg.centerOfMass = Vector3.zero;
-
-        ArtificialIntelligenceInfo ArtificialIntelligenceInfo = new ArtificialIntelligenceInfo();
-
         /* TREE START */
 
         Parallel root = new Parallel(new List<Behavior>
@@ -50,7 +44,7 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
              {
                  new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
                  {
-                     new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan),
+                     new RotateTowardsPlayer(gameObject, ArtificialIntelligenceInfo),
                      new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
                      new Parallel(new List<Behavior> /* PARALLEL ROTATE ASTEROID */
                      {
@@ -65,52 +59,46 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
                              new AreAsteroidsInFront(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan, ArtificialIntelligenceInfo),
                              new Yaw(gameObject, ArtificialIntelligenceInfo)
                          }))
-                     }, Parallel.Policy.RequireOne)
+                     }, Parallel.Policy.RequireOne),
+                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo)
                  }),
 
                  new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
                  {
-                     new Filter(new List<Behavior>
-                     {
-                        new Invert(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan, ShipsWingspan, ShipsWingspan)),
-                        new RotateTowardsPlayer(gameObject),
-                     }),
+                     new ApplyRotation(gameObject, ArtificialIntelligenceInfo),
 
-                     new Parallel(new List<Behavior> /* UNTITLED PARALLEL */
+                     new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
                      {
-                         new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
+                         new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
                          {
-                             new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
+                             new IsHealthLow(gameObject, GetComponent<DestructionController>(), HealthThreshold),
+                             new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, OverheatUpperThreshold, OverheatLowerThreshold))
+                         }),
+                         new Selector(new List<Behavior> /* SELECTOR COOLING DOWN */
+                         {
+                             new Filter(new List<Behavior> /* FILTER COOLING DOWN */
                              {
-                                 new IsHealthLow(gameObject, GetComponent<DestructionController>(), HealthThreshold),
-                                 new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, OverheatUpperThreshold, OverheatLowerThreshold))
+                                 new IsCoolingDown(gameObject, overheatData),
+                                 new IsCoolingDownDone(gameObject, overheatData),
+                                 new EndCooldown(gameObject, overheatData)
                              }),
-                             new Selector(new List<Behavior> /* SELECTOR COOLING DOWN */
+                             new Selector(new List<Behavior> /* SELECTOR NOT COOLING DOWN */
                              {
-                                 new Filter(new List<Behavior> /* FILTER COOLING DOWN */
+                                 new Sequence(new List<Behavior> /* SEQUENCE IF OVERHEAT COOL DOWN */
                                  {
-                                     new IsCoolingDown(gameObject, overheatData),
-                                     new IsCoolingDownDone(gameObject, overheatData),
-                                     new EndCooldown(gameObject, overheatData)
+                                     new IsOverheated(gameObject, overheatData),
+                                     new StartCooldown(gameObject, overheatData)
                                  }),
-                                 new Selector(new List<Behavior> /* SELECTOR NOT COOLING DOWN */
+                                 new Filter(new List<Behavior> /* FILTER SHOOT IF VISIBLE */
                                  {
-                                     new Sequence(new List<Behavior> /* SEQUENCE IF OVERHEAT COOL DOWN */
-                                     {
-                                         new IsOverheated(gameObject, overheatData),
-                                         new StartCooldown(gameObject, overheatData)
-                                     }),
-                                     new Filter(new List<Behavior> /* FILTER SHOOT IF VISIBLE */
-                                     {
-                                         new IsTargetInRange(gameObject, ShotMaxDistance, AimingHelpRange, ShotMinDistance),
-                                         new IsTargetVisible(gameObject),
-                                         new Shoot(gameObject, ShotPrefab, ShotSpeed),
-                                         new IncreaseOverheat(gameObject, overheatData)
-                                     })
+                                     new IsTargetInRange(gameObject, ShotMaxDistance, AimingHelpRange, ShotMinDistance),
+                                     new IsTargetVisible(gameObject),
+                                     new Shoot(gameObject, ShotPrefab, ShotSpeed),
+                                     new IncreaseOverheat(gameObject, overheatData)
                                  })
                              })
-                         }),
-                     })
+                         })
+                     }),
                  })
              }),
 

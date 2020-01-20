@@ -35,12 +35,12 @@ namespace BehaviorTree
         {
             if (ThereIsObstacleTowardsTarget())
             {
-                Debug.Log("THERE IS ASTEROID towards the player");
+                //Debug.Log("THERE IS ASTEROID towards the player");
                 return Status.BH_SUCCESS;
             }
             else
             {
-                Debug.Log("THERE IS NOT ASTEROID towards the player");
+                //Debug.Log("THERE IS NOT ASTEROID towards the player");
                 return Status.BH_FAILURE;
             }
         }

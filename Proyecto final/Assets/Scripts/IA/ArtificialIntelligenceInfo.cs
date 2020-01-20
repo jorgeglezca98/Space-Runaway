@@ -13,11 +13,20 @@ public class ArtificialIntelligenceInfo{
 	public Vector3 PreviousAsteroidPosition;
 	public Vector3 CurrentAsteroidPosition;
 	private Direction CurrentDirection;
+	private Quaternion SpaceshipRotation;
 
 	public ArtificialIntelligenceInfo(){
 		PreviousAsteroidPosition = new Vector3(0,0,0);
 		CurrentAsteroidPosition = new Vector3(0,0,0);
 		CurrentDirection = Direction.Left;
+	}
+
+	public Quaternion GetSpaceshipRotation(){
+		return SpaceshipRotation;
+	}
+
+	public void SetSpaceshipRotation(Quaternion rotation){
+		SpaceshipRotation = rotation;
 	}
 
 	public Direction GetCurrentDirection(){
