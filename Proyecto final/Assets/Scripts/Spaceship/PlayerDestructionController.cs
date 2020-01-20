@@ -10,21 +10,21 @@ public class PlayerDestructionController : DestructionController {
 
 	protected override void InflictBulletDamage(string bulletType){
 		if(bulletType == "enemy_shot_prefab(Clone)"){
-			Stats.setHealth(Stats.getHealth() - 1f);
+			Stats.SetHealth(Stats.GetHealth() - 1f);
 			PlayImpactSound(0f);
-			GameEventsController.eventController.healthPctChanged(Stats.getHealth());
+			GameEventsController.eventController.HealthPctChanged(Stats.GetHealth());
 		}
 	}
 
 	protected override void PlayImpactSound(float damage){
-			AudioManager.PlaySoundEffect("OnPlayerImpact");
+			audioManager.PlaySoundEffect("OnPlayerImpact");
 	}
 
 	protected override void DestroySpaceship(){
 		//SplitSpaceship();
 		PlayExplosionSound();
 		//Destroy(gameObject, destructionDelay);
-		GameEventsController.eventController.playerDestroyed();
+		GameEventsController.eventController.PlayerDestroyed();
 	}
 
 }

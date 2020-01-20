@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace BehaviorTree
 {
-    class IsCoolingDownDone : LeafNode
+    public class IsCoolingDownDone : LeafNode
     {
-        OverheatStats overheatData;
+        private OverheatStats overheatData;
 
         public IsCoolingDownDone(GameObject agent, OverheatStats overheatData) : base(agent)
         {
@@ -14,7 +14,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            if (Math.Abs(overheatData.getCooldownStartTime() - Time.time) <= overheatData.maxOverheatPenalizationTime)
+            if (Math.Abs(overheatData.GetCooldownStartTime() - Time.time) <= overheatData.maxOverheatPenalizationTime)
             {
                 //Debug.Log("Is STILL cooling down");
                 return Status.BH_RUNNING;

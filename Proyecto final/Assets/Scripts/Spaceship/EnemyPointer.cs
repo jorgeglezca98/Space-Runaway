@@ -1,47 +1,54 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPointer : MonoBehaviour {
+public class EnemyPointer : MonoBehaviour
+{
+    private GameObject enemy;
 
-	private GameObject enemy;
+    private float lastHealth;
+    private DateTime lastShot;
 
-	private float lastHealth;
-	private DateTime lastShot;
+    private Renderer arrowRenderer;
+    private DestructionController playerDestructionController;
 
-	private Renderer ArrowRenderer;
-	private DestructionController PlayerDestructionController;
+    private void Start()
+    {
+        arrowRenderer = gameObject.GetComponent<Renderer>();
+        arrowRenderer.material.color = Color.blue;
 
-	void Start () {
-		ArrowRenderer = gameObject.GetComponent<Renderer> ();
-		ArrowRenderer.material.color = Color.blue;
+        playerDestructionController = GameObject.Find("PlayerSpaceship").GetComponent<PlayerDestructionController>();
+        lastHealth = playerDestructionController.Stats.GetHealth();
 
-		PlayerDestructionController = GameObject.Find("PlayerSpaceship").GetComponent<PlayerDestructionController>();
-		lastHealth = PlayerDestructionController.Stats.getHealth();
+        lastShot = DateTime.Now;
+    }
 
-		lastShot = DateTime.Now;
-	}
+    private void Update()
+    {
+        if (!enemy)
+        {
+            enemy = GameObject.FindWithTag("enemy");
+        }
+        if (enemy)
+        {
+            arrowRenderer.enabled = true;
 
-	void Update () {
-		if(!enemy) {
-			enemy = GameObject.FindWithTag("enemy");
-		}
-		if(enemy) {
-			ArrowRenderer.enabled = true;
+            transform.LookAt(enemy.transform);
+            transform.Rotate(90, 0, 0);
 
-			transform.LookAt(enemy.transform);
-			transform.Rotate(90, 0, 0);
-
-			if(lastHealth != PlayerDestructionController.Stats.getHealth()) {
-				lastHealth = PlayerDestructionController.Stats.getHealth();
-				lastShot = DateTime.Now;
-				ArrowRenderer.material.color = Color.red;
-			} else if((DateTime.Now - lastShot).TotalSeconds >= 1f) {
-				ArrowRenderer.material.color = Color.blue;
-			}
-		} else {
-			ArrowRenderer.enabled = false;
-		}
-	}
+            if (lastHealth != playerDestructionController.Stats.GetHealth())
+            {
+                lastHealth = playerDestructionController.Stats.GetHealth();
+                lastShot = DateTime.Now;
+                arrowRenderer.material.color = Color.red;
+            }
+            else if ((DateTime.Now - lastShot).TotalSeconds >= 1f)
+            {
+                arrowRenderer.material.color = Color.blue;
+            }
+        }
+        else
+        {
+            arrowRenderer.enabled = false;
+        }
+    }
 }

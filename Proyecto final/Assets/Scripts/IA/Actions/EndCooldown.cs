@@ -2,9 +2,9 @@
 
 namespace BehaviorTree
 {
-    class EndCooldown : LeafNode
+    public class EndCooldown : LeafNode
     {
-        OverheatStats overheatData;
+        private OverheatStats overheatData;
 
         public EndCooldown(GameObject agent, OverheatStats overheatData) : base(agent)
         {
@@ -14,7 +14,7 @@ namespace BehaviorTree
         public override Status Update()
         {
             //Debug.Log("End Cooldown");
-            overheatData.setIsCoolingDown(false);
+            overheatData.SetIsCoolingDown(false);
             return Status.BH_SUCCESS;
         }
     }

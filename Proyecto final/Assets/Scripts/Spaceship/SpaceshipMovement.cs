@@ -1,52 +1,62 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SpaceshipMovement : MonoBehaviour {
+public class SpaceshipMovement : MonoBehaviour
+{
+    private Rigidbody rg;
+    private AudioManager audioManager;
 
-	private Rigidbody rg;
-    private AudioManager AudioManager;
+    private int velocidadRotacion = 500;
+    private int velocidad = 1800;
 
-	private int velocidadRotacion = 500;
-	private int velocidad = 1800;
+    private float noticeableSoundThreshold = 1f;
+    private bool movementSoundEffectPlaying;
 
-    private float NoticeableSoundThreshold = 1f;
-    private bool MovementSoundEffectPlaying;
+    private void Start()
+    {
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        rg = GetComponent<Rigidbody>();
+        rg.drag = 0.5f;
+        rg.angularDrag = 0.5f;
+        rg.centerOfMass = Vector3.zero;
+    }
 
-	// Use this for initialization
-	void Start () {
-    AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-		rg = GetComponent<Rigidbody>();
-		rg.drag = 0.5f;
-		rg.angularDrag = 0.5f;
-		rg.centerOfMass = Vector3.zero;
-	}
-
-	// Update is called once per frame
-	void FixedUpdate () {
-        MovementSoundEffectPlaying = AudioManager.FindSoundEffect("Movement").IsPlaying();
+    private void FixedUpdate()
+    {
+        movementSoundEffectPlaying = audioManager.FindSoundEffect("Movement").IsPlaying();
         //Debug.Log("Magnitude: " + rg.velocity.magnitude);
 
-        if (rg.velocity.magnitude < NoticeableSoundThreshold && MovementSoundEffectPlaying)
+        if (rg.velocity.magnitude < noticeableSoundThreshold && movementSoundEffectPlaying)
         {
             Debug.Log("Audio being stopped!");
-            AudioManager.StopSoundEffect("Movement");
+            audioManager.StopSoundEffect("Movement");
         }
 
-		rg.AddRelativeTorque((Vector3.back * Input.GetAxis("Horizontal") + Vector3.right * Input.GetAxis("Vertical")) * Time.deltaTime * velocidadRotacion);
-		rg.AddRelativeForce(new Vector3(0, 0, (Input.GetButton("Run") ? 1 : 0) - (Input.GetButton("Stop") ? 1 : 0)) * Time.deltaTime * velocidad);
+        float horizontalInput = Input.GetAxis("HorizontalGamepad");
+        float verticalInput = Input.GetAxis("VerticalGamepad");
 
-        if (Input.GetButton("Run") || Input.GetButton("Stop")){
-            if (!MovementSoundEffectPlaying)
-                AudioManager.PlaySoundEffect("Movement");
-        }else{
-            if(MovementSoundEffectPlaying)
-                AudioManager.StopSoundEffect("Movement");
+        if (horizontalInput == 0 && verticalInput == 0)
+        {
+            horizontalInput = Input.GetAxis("HorizontalJoystick");
+            verticalInput = Input.GetAxis("VerticalJoystick");
         }
 
+        rg.AddRelativeTorque((Vector3.back * horizontalInput + Vector3.right * verticalInput) * Time.deltaTime * velocidadRotacion);
+        rg.AddRelativeForce(new Vector3(0, 0, (Input.GetButton("Run") ? 1 : 0) - (Input.GetButton("Stop") ? 1 : 0)) * Time.deltaTime * velocidad);
 
-
-
-
+        if (Input.GetButton("Run") || Input.GetButton("Stop"))
+        {
+            if (!movementSoundEffectPlaying)
+            {
+                audioManager.PlaySoundEffect("Movement");
+            }
+        }
+        else
+        {
+            if (movementSoundEffectPlaying)
+            {
+                audioManager.StopSoundEffect("Movement");
+            }
+        }
     }
 }
+

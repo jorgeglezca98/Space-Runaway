@@ -1,80 +1,88 @@
 using System;
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GameEventsController : MonoBehaviour {
+public class GameEventsController : MonoBehaviour
+{
+    // You need an instance to call the events!
+    public static GameEventsController eventController;
 
-	// You need an instance to call the events!
-	public static GameEventsController eventController;
+    // Health delegate.
+    public event Action<float> OnHealthPctChanged = delegate { };
+    public event Action<float> OnOverheatPctChanged = delegate { };
+    public event Action OnMaximumOverheat = delegate { };
+    public event Action OnAttackModeEnter = delegate { };
+    public event Action OnAttackModeExit = delegate { };
+    public event Action<string> OnPlayerDestruction = delegate { };
+    public event Action<string> OnPlayerWon = delegate { };
+    public event Action OnEnemyDestruction = delegate { };
 
-	// Health delegate.
-	public event Action<float> OnHealthPctChanged = delegate{};
-	public event Action<float> OnOverheatPctChanged = delegate{};
-	public event Action OnMaximumOverheat = delegate{};
-	public event Action OnAttackModeEnter = delegate{};
-	public event Action OnAttackModeExit = delegate{};
-	public event Action<string> OnPlayerDestruction = delegate{};
-	public event Action<string> OnPlayerWon = delegate{};
-	public event Action OnEnemyDestruction = delegate{};
+    public void HealthPctChanged(float health)
+    {
+        if (OnHealthPctChanged != null)
+        {
+            OnHealthPctChanged(health);
+        }
+    }
 
+    public void PlayerDestroyed()
+    {
+        if (OnPlayerDestruction != null)
+        {
+            OnPlayerDestruction("YOU LOSE!");
+        }
+    }
 
+    public void EnemyDestroyed()
+    {
+        if (OnEnemyDestruction != null)
+        {
+            OnEnemyDestruction();
+        }
+    }
 
-	public void healthPctChanged(float health){
-		if(OnHealthPctChanged != null){
-			OnHealthPctChanged(health);
-		}
-	}
+    public void PlayerWon()
+    {
+        if (OnPlayerWon != null)
+        {
+            OnPlayerWon("YOU WON!");
+        }
+    }
 
-	public void playerDestroyed(){
-		if(OnPlayerDestruction != null){
-			OnPlayerDestruction("YOU LOSE!");
-		}
-	}
+    public void OverheatPctChanged(float overheat)
+    {
+        if (OnOverheatPctChanged != null)
+        {
+            OnOverheatPctChanged(overheat);
+        }
+    }
 
-	public void enemyDestroyed(){
-		if(OnEnemyDestruction != null){
-			OnEnemyDestruction();
-		}
-	}
+    public void MaximumOverheat()
+    {
+        if (OnMaximumOverheat != null)
+        {
+            OnMaximumOverheat();
+        }
+    }
 
-	public void playerWon(){
-		if(OnPlayerWon != null){
-			OnPlayerWon("YOU WON!");
-		}
-	}
+    public void AttackModeEnter()
+    {
+        if (OnAttackModeEnter != null)
+        {
+            OnAttackModeEnter();
+        }
+    }
 
-	public void overheatPctChanged(float overheat){
-		if(OnOverheatPctChanged != null){
-			OnOverheatPctChanged(overheat);
-		}
-	}
+    public void AttackModeExit()
+    {
+        if (OnAttackModeExit != null)
+        {
+            OnAttackModeExit();
+        }
+    }
 
-	public void maximumOverheat(){
-		if(OnMaximumOverheat != null){
-			OnMaximumOverheat();
-		}
-	}
-
-	public void attackModeEnter(){
-		if(OnAttackModeEnter != null){
-			OnAttackModeEnter();
-		}
-	}
-
-	public void attackModeExit(){
-		if(OnAttackModeExit != null){
-			OnAttackModeExit();
-		}
-	}
-
-	// Use this for initialization
-	void Awake () {
-		eventController = this;
-	}
-
-	// Update is called once per frame
-	void Update () {
-
-	}
+    // Use this for initialization
+    private void Awake()
+    {
+        eventController = this;
+    }
 }

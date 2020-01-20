@@ -22,8 +22,8 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            bool isInRange = Physics.BoxCast(Agent.transform.position, new Vector3(RangeSize, RangeSize, ShotMinDistance),
-                Agent.transform.TransformDirection(Vector3.forward), Quaternion.identity, ShotMaxDistance, (1 << 9));
+            bool isInRange = Physics.BoxCast(agent.transform.position, new Vector3(RangeSize, RangeSize, ShotMinDistance),
+                agent.transform.TransformDirection(Vector3.forward), Quaternion.identity, ShotMaxDistance, (1 << 9));
 
             if (isInRange)
             {

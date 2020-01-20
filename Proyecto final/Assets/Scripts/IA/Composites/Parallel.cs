@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace BehaviorTree
 {
-    class Parallel : Composite
+    public class Parallel : Composite
     {
         public enum Policy
         {
@@ -10,7 +10,6 @@ namespace BehaviorTree
             RequireAll,
             RequireNone
         }
-
 
         public Policy successPolicy;
 
@@ -35,13 +34,17 @@ namespace BehaviorTree
             try
             {
                 int i = 0;
-                if (GetStatus() == Status.BH_RUNNING)
-                    while (i < Children.Count && Children[i].GetStatus() != Status.BH_RUNNING)
-                        i++;
-
-                for (; i < Children.Count; i++)
+                if (Status == Status.BH_RUNNING)
                 {
-                    Status s = Children[i].Tick();
+                    while (i < children.Count && children[i].Status != Status.BH_RUNNING)
+                    {
+                        i++;
+                    }
+                }
+
+                for (; i < children.Count; i++)
+                {
+                    Status s = children[i].Tick();
                     if (s == Status.BH_SUCCESS)
                     {
                         successCount++;
@@ -52,10 +55,16 @@ namespace BehaviorTree
                     }
                 }
 
-                if (successCount == Children.Count)
+                if (successCount == children.Count)
+                {
                     return successPolicy == Policy.RequireAll ? Status.BH_SUCCESS : Status.BH_FAILURE;
+                }
+
                 if (successCount == 0)
+                {
                     return successPolicy == Policy.RequireNone ? Status.BH_SUCCESS : Status.BH_FAILURE;
+                }
+
                 return successPolicy == Policy.RequireOne ? Status.BH_SUCCESS : Status.BH_FAILURE;
 
             }
@@ -64,6 +73,5 @@ namespace BehaviorTree
                 return Status.BH_INVALID;
             }
         }
-
     }
 }

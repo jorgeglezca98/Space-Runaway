@@ -25,13 +25,13 @@ namespace BehaviorTree
             this.overheatThreshold = overheatThreshold;
             this.healthThreshold = healthThreshold;
 
-            this.lowThreshold = /*lowThreshold*/ overheatData.getMaxOverheat() * 0.2f;
+            this.lowThreshold = /*lowThreshold*/ overheatData.GetMaxOverheat() * 0.2f;
         }
 
         public override Status Update()
         {
-            float health = destructionController.Stats.getHealth();
-            float overheat = overheatData.getOverheat();
+            float health = destructionController.Stats.GetHealth();
+            float overheat = overheatData.GetOverheat();
 
             if (health < healthThreshold)
             {

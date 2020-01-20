@@ -1,35 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ButtonVRController : MonoBehaviour {
+public class ButtonVRController : MonoBehaviour
+{
 
-			private bool IsActive;
-			private Button Button;
+    private bool isActive;
+    private Button button;
 
-			void Start () {
-					IsActive = false;
-					Button = GetComponent<Button>();
-			}
+    private void Start()
+    {
+        isActive = false;
+        button = GetComponent<Button>();
+    }
 
-			void Update () {
-					if (IsActive == true && Input.GetButtonDown("Click")) {
-							Button.onClick.Invoke();
-							IsActive = false;
-					}
-			}
+    private void Update()
+    {
+        if (isActive == true && Input.GetButtonDown("Click"))
+        {
+            button.onClick.Invoke();
+            isActive = false;
+        }
+    }
 
-			public void Activate(){
-				Debug.Log("I'm activating!");
-					IsActive = true;
-			}
+    public void Activate()
+    {
+        Debug.Log("I'm activating!");
+        isActive = true;
+    }
 
-			public void Deactivate(){
-				Debug.Log("I'm deactivating!");
-					IsActive = false;
-			}
+    public void Deactivate()
+    {
+        Debug.Log("I'm deactivating!");
+        isActive = false;
+    }
 
 
 }

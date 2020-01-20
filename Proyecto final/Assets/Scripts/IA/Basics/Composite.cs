@@ -2,41 +2,40 @@ using System.Collections.Generic;
 
 namespace BehaviorTree
 {
-
-    abstract class Composite : Behavior
+    public abstract class Composite : Behavior
     {
-        protected List<Behavior> Children = new List<Behavior>();
+        protected List<Behavior> children = new List<Behavior>();
 
         protected Composite() { }
 
         protected Composite(Behavior behavior)
         {
-            Children.Add(behavior);
+            children.Add(behavior);
         }
 
         protected Composite(List<Behavior> behaviors)
         {
-            Children.AddRange(behaviors);
+            children.AddRange(behaviors);
         }
 
         public void AddChild(Behavior b)
         {
-            Children.Add(b);
+            children.Add(b);
         }
 
         public void AddChild(List<Behavior> behaviorList)
         {
-            Children.AddRange(behaviorList);
+            children.AddRange(behaviorList);
         }
 
         public void RemoveChild(Behavior b)
         {
-            Children.Remove(b);
+            children.Remove(b);
         }
 
         public void ClearChildren()
         {
-            Children.Clear();
+            children.Clear();
         }
     }
 }

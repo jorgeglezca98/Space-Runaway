@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-class MotherShipIndicator: MonoBehaviour
+internal class MotherShipIndicator : MonoBehaviour
 {
 
     private GameObject Pointer;
     private GameObject MotherShip;
     private float Distance = 3;
 
-		public void Start(){
-			Pointer = GameObject.Find("MotherShipIcon");
-			MotherShip = GameObject.Find("MotherShip");
-		}
+    public void Start()
+    {
+        Pointer = GameObject.Find("MotherShipIcon");
+        MotherShip = GameObject.Find("MotherShip");
+    }
 
     public void LateUpdate()
     {

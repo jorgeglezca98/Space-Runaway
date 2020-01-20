@@ -1,23 +1,21 @@
 ﻿using UnityEngine;
 
-namespace BehaviorTree{
+namespace BehaviorTree
+{
+    public class RotateTowardsPlayer : LeafNode
+    {
+        private RotationInfo rotationInfo;
 
-    class RotateTowardsPlayer : LeafNode{
-
-        ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
-
-        public RotateTowardsPlayer(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+        public RotateTowardsPlayer(GameObject agent, RotationInfo rotationInfo) : base(agent)
         {
-            ArtificialIntelligenceInfo = artificialIntelligenceInfo;
+            this.rotationInfo = rotationInfo;
         }
 
         public override Status Update()
         {
-            Debug.Log("Rotate towards PLAYER!");
-            ArtificialIntelligenceInfo.SetSpaceshipRotation(Quaternion.LookRotation(ArtificialIntelligence.Target.transform.position - Agent.transform.position));
+            //Debug.Log("Rotate towards PLAYER!");
+            rotationInfo.SpaceshipRotation = Quaternion.LookRotation(ArtificialIntelligence.target.transform.position - agent.transform.position);
             return Status.BH_SUCCESS;
         }
-
     }
 }
-

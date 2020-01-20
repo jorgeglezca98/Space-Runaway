@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BulletPerformance : MonoBehaviour
 {
@@ -8,37 +6,35 @@ public class BulletPerformance : MonoBehaviour
     private Vector3 initialPosition;
     private bool imTriggered = false;
 
-    // Use this for initialization
-    void Start()
+    private void Start()
     {
         initialPosition = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (Vector3.Distance(initialPosition, transform.position) >= maxDistace)
         {
-            destroyBullet();
+            DestroyBullet();
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag != "bullet" && !imTriggered)
         {
             imTriggered = true;
-            destroyBullet();
+            DestroyBullet();
         }
     }
 
-    void destroyBullet()
+    private void DestroyBullet()
     {
-        var exp = GetComponent<ParticleSystem>();
+        ParticleSystem exp = GetComponent<ParticleSystem>();
         exp.Play();
         GetComponent<Collider>().enabled = false;
         GetComponent<Renderer>().enabled = false;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
-        Destroy(gameObject, exp.duration);
+        Destroy(gameObject, exp.main.duration);
     }
 }

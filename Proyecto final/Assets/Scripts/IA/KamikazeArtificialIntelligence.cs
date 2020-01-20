@@ -1,59 +1,107 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using BehaviorTree;
+using System.Collections.Generic;
+using UnityEngine;
 
-class KamikazeArtificialIntelligence : ArtificialIntelligence {
+public class KamikazeArtificialIntelligence : ArtificialIntelligence
+{
+    private void Start()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Length > 0 && target == null)
+        {
+            target = players[0];
+        }
 
-    void Start () {
-        // // GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        // // if(players.Length > 0 && Target == null)
-        // //     Target = players[0];
-        //
-        // if(AudioManager == null)
-        //   AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-        // if(Target == null)
-        //   Target = GameObject.Find("PlayerSpaceship");
-        //
-        // ShipsWingspan = 18f;
-        // HalfTheShipsLength = 14f;
-        // HalfTheShipsHeight = 5f;
-        //
-    	  // ShotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
-        // Parallel root = new Parallel();
-        //
-        // Sequence sequenceShootOrAvoid = new Sequence();
-        // Sequence sequenceShootIfVisible = new Sequence();
-        // sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance,
-        //     overheatIncrement, overheatDecrement, maxOverheatPenalizationTime, overheatData));
-        //
-        //
-        // Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
-        //
-        // Sequence sequenceAvoidAsteroids = new Sequence();
-        // sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, LookForCollisionDistance, ShipsWingspan,
-        //                                                                  HalfTheShipsLength, HalfTheShipsHeight));
-        // sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
-        //                                                                  HalfTheShipsLength, HalfTheShipsHeight));
-        //
-        // selectorAvoidAsteroidOrFaceTarget.AddChild(sequenceAvoidAsteroids);
-        // selectorAvoidAsteroidOrFaceTarget.AddChild(new RotateTowardsPlayer(gameObject));
-        //
-        // sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
-        // sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
-        //
-        // root.AddChild(new MoveAlong(gameObject, Velocity));
-        // root.AddChild(sequenceShootOrAvoid);
-        //
-        // Tree = new BehaviorTree.BehaviorTree(root);
+        if (audioManager == null)
+        {
+            audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        }
+
+        if (target == null)
+        {
+            target = GameObject.Find("PlayerSpaceship");
+        }
+
+        shipsWingspan = 18f;
+        halfTheShipsLength = 14f;
+        halfTheShipsHeight = 5f;
+
+        shotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
+
+        Parallel root = new Parallel(new List<Behavior>
+        {
+             new Selector(new List<Behavior>  /* SELECTOR AVOID ASTEROIR OR FACE TARGET */
+             {
+                 new Filter(new List<Behavior> /* FILTER AVOID ASTEROIDS */
+                 {
+                     new RotateTowardsPlayer(gameObject, rotationInfo),
+                     new AreAsteroidsInFront(gameObject, lookForCollisionDistance, shipsWingspan, shipsWingspan, shipsWingspan, rotationInfo),
+                     new Parallel(new List<Behavior> /* PARALLEL ROTATE ASTEROID */
+                     {
+                         new Filter(new List<Behavior> /* FILTER CHANGE ASTEROID */
+                         {
+                             new IsFacingNewAsteroid(gameObject, rotationInfo),
+                             new ChangeFacingAsteroid(gameObject, rotationInfo),
+                             new ChangeCurrentYawDirection(gameObject, rotationInfo)
+                         }),
+                         new While(new Sequence(new List<Behavior> /* SEQUENCE ROTATE AROUND ASTEROID */
+                         {
+                             new AreAsteroidsInFront(gameObject, lookForCollisionDistance, shipsWingspan, shipsWingspan, shipsWingspan, rotationInfo),
+                             new Yaw(gameObject, rotationInfo)
+                         }))
+                     }, Parallel.Policy.RequireOne),
+                     new ApplyRotation(gameObject, rotationInfo)
+                 }),
+
+                 new Sequence(new List<Behavior> /* SEQUENCE FACE TARGET AND SHOOT */
+                 {
+                     new ApplyRotation(gameObject, rotationInfo),
+
+                     new Sequence(new List<Behavior> /* SEQUENCE OVERHEAT */
+                     {
+                         new Selector(new List<Behavior> /* SELECTOR SHOULD SHOOT */
+                         {
+                             new IsHealthLow(gameObject, GetComponent<DestructionController>(), healthThreshold),
+                             new Invert(new IsOverheatedOrHasToWaitToShoot(gameObject, overheatData, overheatUpperThreshold, overheatLowerThreshold))
+                         }),
+                         new Selector(new List<Behavior> /* SELECTOR COOLING DOWN */
+                         {
+                             new Filter(new List<Behavior> /* FILTER COOLING DOWN */
+                             {
+                                 new IsCoolingDown(gameObject, overheatData),
+                                 new IsCoolingDownDone(gameObject, overheatData),
+                                 new EndCooldown(gameObject, overheatData)
+                             }),
+                             new Selector(new List<Behavior> /* SELECTOR NOT COOLING DOWN */
+                             {
+                                 new Sequence(new List<Behavior> /* SEQUENCE IF OVERHEAT COOL DOWN */
+                                 {
+                                     new IsOverheated(gameObject, overheatData),
+                                     new StartCooldown(gameObject, overheatData)
+                                 }),
+                                 new Filter(new List<Behavior> /* FILTER SHOOT IF VISIBLE */
+                                 {
+                                     new IsTargetInRange(gameObject, shotMaxDistance, aimingHelpRange, shotMinDistance),
+                                     new IsTargetVisible(gameObject),
+                                     new Shoot(gameObject, shotPrefab, shotSpeed),
+                                     new IncreaseOverheat(gameObject, overheatData)
+                                 })
+                             })
+                         })
+                     }),
+                 })
+             }),
+
+             new MoveForward(gameObject, velocity),
+
+             new Filter(new List<Behavior> /* FILTER REDUCE OVERHEAT */
+             {
+                new Invert(new IsCoolingDown(gameObject, overheatData)),
+                new IsOverheatGreaterThanZero(gameObject, overheatData),
+                new ReduceOverheat(gameObject, overheatData)
+             })
+         });
+
+        tree = new BehaviorTree.BehaviorTree(root);
     }
-
-    // private void Update()
-    // {
-    //     if (overheatData.getOverheat() < overheatData.getMaxOverheat() && overheatData.getOverheat() > 0)
-    //     {
-    //         overheatData.setOverheat(overheatData.getOverheat() - overheatDecrement);
-    //     }
-    // }
 }

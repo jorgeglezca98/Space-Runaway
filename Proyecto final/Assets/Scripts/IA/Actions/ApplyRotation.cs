@@ -2,18 +2,18 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    class ApplyRotation : LeafNode
+    public class ApplyRotation : LeafNode
     {
-        ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
+        private RotationInfo rotationInfo;
 
-        public ApplyRotation(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+        public ApplyRotation(GameObject agent, RotationInfo rotationInfo) : base(agent)
         {
-            ArtificialIntelligenceInfo = artificialIntelligenceInfo;
+            this.rotationInfo = rotationInfo;
         }
 
         public override Status Update()
         {
-            Agent.transform.rotation = ArtificialIntelligenceInfo.GetSpaceshipRotation();
+            agent.transform.rotation = rotationInfo.SpaceshipRotation;
             return Status.BH_SUCCESS;
         }
     }

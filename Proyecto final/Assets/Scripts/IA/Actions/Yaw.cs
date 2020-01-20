@@ -2,26 +2,26 @@ using UnityEngine;
 
 namespace BehaviorTree
 {
-    class Yaw : LeafNode
+    public class Yaw : LeafNode
     {
-        ArtificialIntelligenceInfo ArtificialIntelligenceInfo;
+        private RotationInfo rotationInfo;
 
-        public Yaw(GameObject agent, ArtificialIntelligenceInfo artificialIntelligenceInfo) : base(agent)
+        public Yaw(GameObject agent, RotationInfo rotationInfo) : base(agent)
         {
-            ArtificialIntelligenceInfo = artificialIntelligenceInfo;
+            this.rotationInfo = rotationInfo;
         }
 
         public override Status Update()
         {
-            if (ArtificialIntelligenceInfo.GetCurrentDirection() == ArtificialIntelligenceInfo.Direction.Right)
+            if (rotationInfo.CurrentDirection == RotationInfo.Direction.Right)
             {
-                Debug.Log("Yaw to RIGHT");
-                ArtificialIntelligenceInfo.SetSpaceshipRotation(ArtificialIntelligenceInfo.GetSpaceshipRotation() * Quaternion.Euler(0, 1f, 0));
+                //Debug.Log("Yaw to RIGHT");
+                rotationInfo.SpaceshipRotation = rotationInfo.SpaceshipRotation * Quaternion.Euler(0, 1f, 0);
             }
             else
             {
-                Debug.Log("Yaw to LEFT");
-                ArtificialIntelligenceInfo.SetSpaceshipRotation(ArtificialIntelligenceInfo.GetSpaceshipRotation() * Quaternion.Euler(0, -1f, 0));
+                //Debug.Log("Yaw to LEFT");
+                rotationInfo.SpaceshipRotation = rotationInfo.SpaceshipRotation * Quaternion.Euler(0, -1f, 0);
             }
 
             return Status.BH_SUCCESS;

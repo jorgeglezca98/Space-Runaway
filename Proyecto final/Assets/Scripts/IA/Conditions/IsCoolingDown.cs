@@ -2,9 +2,9 @@
 
 namespace BehaviorTree
 {
-    class IsCoolingDown : LeafNode
+    internal class IsCoolingDown : LeafNode
     {
-        OverheatStats overheatData;
+        private OverheatStats overheatData;
 
         public IsCoolingDown(GameObject agent, OverheatStats overheatData) : base(agent)
         {
@@ -13,7 +13,7 @@ namespace BehaviorTree
 
         public override Status Update()
         {
-            if (overheatData.getIsCoolingDown())
+            if (overheatData.GetIsCoolingDown())
             {
                 //Debug.Log("Is cooling down");
                 return Status.BH_SUCCESS;

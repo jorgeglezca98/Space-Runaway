@@ -1,19 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarController : MonoBehaviour {
+public class HealthBarController : MonoBehaviour
+{
+    private Slider healthBar;
 
-	private Slider HealthBar;
+    private void Start()
+    {
+        healthBar = gameObject.GetComponent<Slider>();
+        healthBar.maxValue = GameObject.Find("PlayerSpaceship").GetComponent<PlayerDestructionController>().Stats.GetMaxHealth();
+        healthBar.value = GameObject.Find("PlayerSpaceship").GetComponent<PlayerDestructionController>().Stats.GetMaxHealth();
+        GameEventsController.eventController.OnHealthPctChanged += ChangeHealth;
+    }
 
-	// Use this for initialization
-	void Start () {
-		HealthBar = gameObject.GetComponent<Slider>();
-		GameEventsController.eventController.OnHealthPctChanged += ChangeHealth;
-	}
-
-	void ChangeHealth(float health){
-		this.HealthBar.value = health;
-	}
+    private void ChangeHealth(float health)
+    {
+        healthBar.value = health;
+    }
 }

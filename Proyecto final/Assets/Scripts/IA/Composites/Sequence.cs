@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace BehaviorTree
 {
-    // TODO: improve syntax, make the for loop simpler
-    class Sequence : Composite
+    public class Sequence : Composite
     {
         public Sequence() { }
 
@@ -17,26 +15,33 @@ namespace BehaviorTree
             //Keep going until a child behavior says it’s running.
             try
             {
-                if (GetStatus() != Status.BH_RUNNING) // Sequence Status
+                if (Status != Status.BH_RUNNING) // Sequence Status
                 {
-                    foreach (Behavior child in Children)
+                    foreach (Behavior child in children)
                     {
                         Status s = child.Tick();
-                        if (s != Status.BH_SUCCESS) return s;
-
+                        if (s != Status.BH_SUCCESS)
+                        {
+                            return s;
+                        }
                     }
                     return Status.BH_SUCCESS;
                 }
                 else
                 {
                     int i = 0;
-                    while (i < Children.Count && Children[i].GetStatus() != Status.BH_RUNNING)
-                        i++;
-
-                    for(; i < Children.Count; i++)
+                    while (i < children.Count && children[i].Status != Status.BH_RUNNING)
                     {
-                        Status s = Children[i].Tick();
-                        if (s != Status.BH_SUCCESS) return s;
+                        i++;
+                    }
+
+                    for (; i < children.Count; i++)
+                    {
+                        Status s = children[i].Tick();
+                        if (s != Status.BH_SUCCESS)
+                        {
+                            return s;
+                        }
                     }
                     return Status.BH_SUCCESS;
                 }

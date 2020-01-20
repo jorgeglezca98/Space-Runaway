@@ -12,12 +12,12 @@ namespace BehaviorTree
         {
             this.healthThreshold = healthThreshold;
             stats = destructionController.Stats;
-            actualHealth = stats.getHealth();
+            actualHealth = stats.GetHealth();
         }
 
         public override Status Update()
         {
-            actualHealth = stats.getHealth();
+            actualHealth = stats.GetHealth();
             //Debug.Log("Actual: " + actualHealth + ", Healt Threshold: " + healthThreshold + ", " + stats.getMaxHealth());
 
             if (actualHealth <= healthThreshold)

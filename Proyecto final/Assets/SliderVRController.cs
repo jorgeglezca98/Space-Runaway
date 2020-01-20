@@ -1,74 +1,76 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
-public class SliderVRController : MonoBehaviour {
+public class SliderVRController : MonoBehaviour
+{
+    private bool isActive;
+    private Transform reticle;
+    private float previousX;
+    private Slider slider;
+    private float changeAmount;
+    private AudioManager audioManager;
 
-			private bool IsActive;
-			private Transform Reticle;
-			private float PreviousX;
-			private Slider Slider;
-			private float ChangeAmount;
-			private AudioManager AudioManager;
+    private void Start()
+    {
+        isActive = false;
+        changeAmount = 0.1f;
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        reticle = GameObject.Find("Main Camera").transform;
+        slider = GetComponent<Slider>();
+        previousX = reticle.position.x;
+        SetInitialVolume();
+    }
 
-			void Start () {
-					IsActive = false;
-					ChangeAmount = 0.1f;
-					AudioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-					Reticle = GameObject.Find("Main Camera").transform;
-					Slider = GetComponent<Slider>();
-					PreviousX = Reticle.position.x;
-					SetInitialVolume();
-			}
+    private void SetInitialVolume()
+    {
+        if (gameObject.name == "MusicVolumeSlider")
+        {
+            slider.value = audioManager.GetMusicVolume();
+        }
+        else
+        {
+            slider.value = audioManager.GetSoundEffectsVolume();
+        }
+    }
 
-			void SetInitialVolume(){
-				if(gameObject.name == "MusicVolumeSlider"){
-					Slider.value = AudioManager.GetMusicVolume();
-				}else{
-					Slider.value = AudioManager.GetSoundEffectsVolume();
-				}
-			}
+    private void ChangeSliderValue()
+    {
+        if (gameObject.name == "MusicVolumeSlider")
+        {
+            audioManager.ChangeMusicVolume(slider.value);
+        }
+        else
+        {
+            audioManager.ChangeSoundEffectSVolume(slider.value);
+        }
+    }
 
-			// void Update () {
-			// 		if (IsActive == true && Input.GetButton("Click")) {
-			// 			Vector3 currentPosition = Reticle.position;
-			// 			float directionOfChange = currentPosition.x - PreviousX;
-			// 			ChangeSliderValue(ChangeAmount * directionOfChange);
-			// 		} else PreviousX = Reticle.position.x;
-			// }
+    public void TurnVolumeUp()
+    {
+        if (slider.value < slider.maxValue)
+        {
+            slider.value += changeAmount;
+            ChangeSliderValue();
+        }
+    }
 
+    public void TurnVolumeDown()
+    {
+        if (slider.value > slider.minValue)
+        {
+            slider.value -= changeAmount;
+            ChangeSliderValue();
+        }
+    }
 
-			void ChangeSliderValue(){
-				if(gameObject.name == "MusicVolumeSlider")
-					AudioManager.ChangeMusicVolume(Slider.value);
-				else AudioManager.ChangeSoundEffectSVolume(Slider.value);
-			}
+    public void Activate()
+    {
+        isActive = true;
+    }
 
-			public void TurnVolumeUp(){
-				if(Slider.value < Slider.maxValue){
-					Slider.value += ChangeAmount;
-					ChangeSliderValue();
-				}
-			}
-
-			public void TurnVolumeDown(){
-				if(Slider.value > Slider.minValue){
-					Slider.value -= ChangeAmount;
-					ChangeSliderValue();
-				}
-			}
-
-			public void Activate(){
-					IsActive = true;
-			}
-
-			public void Deactivate(){
-					IsActive = false;
-			}
-
-
+    public void Deactivate()
+    {
+        isActive = false;
+    }
 }
