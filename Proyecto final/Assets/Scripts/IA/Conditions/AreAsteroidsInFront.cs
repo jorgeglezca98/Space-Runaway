@@ -22,8 +22,10 @@ namespace BehaviorTree
         public override Status Update()
         {
             RaycastHit HittedObject;
-            bool ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, Agent.transform.forward, 
-                out HittedObject, Agent.transform.rotation, LookForCollisionDistance);
+            // bool ThereIsCollision = Physics.BoxCast(Agent.transform.position, BoxcastDimension, Agent.transform.forward,
+            //     out HittedObject, Agent.transform.rotation, LookForCollisionDistance);
+            bool ThereIsCollision = Physics.BoxCast(Agent.transform.position - BoxcastDimension.x * Agent.transform.forward, BoxcastDimension, Agent.transform.forward,
+                out HittedObject, Agent.transform.rotation, LookForCollisionDistance, ~(1 << 8) & ~(1 << 10));
             if (ThereIsCollision)
             {
                 if (HittedObject.collider.tag == "asteroid")

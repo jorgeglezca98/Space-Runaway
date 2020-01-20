@@ -208,11 +208,14 @@ class AssaultArtificialIntelligence : ArtificialIntelligence
     void OnDrawGizmos()
     {
         ExtDebug.DrawBoxCastBox(
-          transform.position,
-          new Vector3(HalfTheShipsLength, HalfTheShipsHeight, 0),
-          transform.rotation * Quaternion.Euler(0, 90, 0),
-          transform.right,
-          DashSecureDistance);
+          transform.position - HalfTheShipsLength * transform.forward,
+          new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength),
+          transform.rotation,
+          transform.forward,
+          LookForCollisionDistance);
     }
+
+    // bool ThereIsCollision = Physics.BoxCast(Agent.transform.position - HalfTheShipsLength * Agent.transform.forward, BoxcastDimension, Agent.transform.forward,
+    //     out HittedObject, Agent.transform.rotation, LookForCollisionDistance, ~(1 << 8) & ~(1 << 10));
 
 }
