@@ -23,6 +23,11 @@ namespace BehaviorTree
         protected float ShipsWingspan = 10f;
         protected float HalfTheShipsLength = 7.5f;
         protected float HalfTheShipsHeight = 2.5f;
+        protected ArtificialIntelligenceInfo ArtificialIntelligenceInfo = new ArtificialIntelligenceInfo();
+        protected float HealthThreshold;
+        protected float OverheatUpperThreshold;
+        protected float OverheatLowerThreshold;
+
 
         protected OverheatStats overheatData = new OverheatStats();
 
