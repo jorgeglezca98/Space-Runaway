@@ -2,31 +2,20 @@ using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KamikazeArtificialIntelligence : ArtificialIntelligence
+internal class KamikazeArtificialIntelligence : ArtificialIntelligence
 {
-    private void Start()
+    private new void Start()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length > 0 && target == null)
-        {
-            target = players[0];
-        }
+        //Debug.unityLogger.logEnabled = false;    
+        base.Start();
 
-        if (audioManager == null)
-        {
-            audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-        }
-
-        if (target == null)
-        {
-            target = GameObject.Find("PlayerSpaceship");
-        }
-
-        shipsWingspan = 18f;
+        shipsWingspan = 15f;
         halfTheShipsLength = 14f;
         halfTheShipsHeight = 5f;
 
-        shotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
+        lookForCollisionDistance = velocity + shipsWingspan * 2;
+
+        /* TREE START */
 
         Parallel root = new Parallel(new List<Behavior>
         {
@@ -103,5 +92,15 @@ public class KamikazeArtificialIntelligence : ArtificialIntelligence
          });
 
         tree = new BehaviorTree.BehaviorTree(root);
+    }
+
+    void OnDrawGizmos()
+    {
+        ExtDebug.DrawBoxCastBox(
+          transform.position - halfTheShipsLength * transform.forward,
+          new Vector3(shipsWingspan * 1.5f, halfTheShipsHeight * 1.5f, 0),
+          rotationInfo.SpaceshipRotation,
+          rotationInfo.SpaceshipRotation * Vector3.forward,
+          lookForCollisionDistance);
     }
 }

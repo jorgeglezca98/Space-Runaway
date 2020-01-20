@@ -2,43 +2,23 @@ using BehaviorTree;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AssaultArtificialIntelligence : ArtificialIntelligence
+internal class AssaultArtificialIntelligence : ArtificialIntelligence
 {
     protected int distanceFarFromTarget = 100;
     protected int distanceCloseToTarget = 50;
     private int dashSecureDistance = 40;
     private int dashIntensity = 25;
 
-    private void Start()
+    private new void Start()
     {
-        lookForCollisionDistance = velocity + shipsWingspan * 2;
-        Debug.unityLogger.logEnabled = false;
-
-        if (audioManager == null)
-        {
-            audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
-        }
-
-        if (target == null)
-        {
-            target = GameObject.Find("PlayerSpaceship");
-        }
+        //Debug.unityLogger.logEnabled = false;
+        base.Start();
 
         shipsWingspan = 10f;
         halfTheShipsLength = 7.5f;
         halfTheShipsHeight = 2.5f;
 
-        healthThreshold = GetComponent<DestructionController>().Stats.GetMaxHealth() * 0.3f; // 30 % of health
-
-        overheatUpperThreshold = overheatData.GetMaxOverheat() * 0.75f;
-        overheatLowerThreshold = overheatData.GetMaxOverheat() * 0.25f;
-
-        shotPrefab = Resources.Load("enemy_shot_prefab") as GameObject;
-
-        Rigidbody rg = GetComponent<Rigidbody>();
-        rg.drag = 2f;
-        rg.angularDrag = 0.5f;
-        rg.centerOfMass = Vector3.zero;
+        lookForCollisionDistance = velocity + shipsWingspan * 2;
 
         /* TREE START */
 
@@ -150,16 +130,61 @@ public class AssaultArtificialIntelligence : ArtificialIntelligence
              }),
          });
 
+
+        //Selector selectorMovebackOrForward = new Selector();
+
+        //Sequence sequenceRetroceder = new Sequence();
+        //sequenceRetroceder.AddChild(new IsTheTarjetClose(gameObject, DistanceCloseToTarget));
+        //sequenceRetroceder.AddChild(new MoveBack(gameObject, Velocity));
+        //Sequence sequenceAvanzar = new Sequence();
+        //sequenceAvanzar.AddChild(new IsTheTarjetFar(gameObject, DistanceFarFromTarget));
+        //sequenceAvanzar.AddChild(new MoveAlong(gameObject, Velocity));
+
+        //selectorMovebackOrForward.AddChild(sequenceRetroceder);
+        //selectorMovebackOrForward.AddChild(sequenceAvanzar);
+
+        //Sequence sequenceDashIfDamageIsReceived = new Sequence();
+        //sequenceDashIfDamageIsReceived.AddChild(new ShouldDash(gameObject, GetComponent<DestructionController>()));
+        //sequenceDashIfDamageIsReceived.AddChild(new DashMovement(gameObject, DashSecureDistance, DashIntensity,
+        //                                                         HalfTheShipsHeight, HalfTheShipsLength));
+
+        //Sequence sequenceShootOrAvoid = new Sequence();
+        //Sequence sequenceShootIfVisible = new Sequence();
+
+        //sequenceShootIfVisible.AddChild(new IsNotOverheatedOrLifeIsLow(gameObject, GetComponent<DestructionController>(), overheatData,
+        //    OverheatThreshold, HealthThreshold));
+        //sequenceShootIfVisible.AddChild(new Shoot(gameObject, ShotPrefab, ShotMaxDistance, ShotSpeed, AimingHelpRange, ShotMinDistance,
+        //    overheatIncrement, overheatDecrement, maxOverheatPenalizationTime, overheatData));
+
+        //Selector selectorAvoidAsteroidOrFaceTarget = new Selector();
+
+        //Sequence sequenceAvoidAsteroids = new Sequence();
+        //sequenceAvoidAsteroids.AddChild(new AreObstaclesTowardsTheTarget(gameObject, Mathf.Infinity, ShipsWingspan,
+        //                                                                 HalfTheShipsLength, HalfTheShipsHeight));
+        //sequenceAvoidAsteroids.AddChild(new RotateAroundAsteroid(gameObject, LookForCollisionDistance, ShipsWingspan,
+        //                                                                 HalfTheShipsLength, HalfTheShipsHeight));
+
+        //selectorAvoidAsteroidOrFaceTarget.AddChild(sequenceAvoidAsteroids);
+        //selectorAvoidAsteroidOrFaceTarget.AddChild(new RotateTowardsPlayer(gameObject));
+
+        //sequenceShootOrAvoid.AddChild(selectorAvoidAsteroidOrFaceTarget);
+        //sequenceShootOrAvoid.AddChild(sequenceShootIfVisible);
+        //root.AddChild(sequenceDashIfDamageIsReceived);
+
+        //root.AddChild(sequenceShootOrAvoid);
+        //root.AddChild(selectorMovebackOrForward);
+
         tree = new BehaviorTree.BehaviorTree(root);
     }
 
-    // private void OnDrawGizmos()
-    // {
-    //     ExtDebug.DrawBoxCastBox(
-    //       transform.position - HalfTheShipsLength * transform.forward,
-    //       new Vector3(ShipsWingspan, HalfTheShipsHeight, HalfTheShipsLength),
-    //       transform.rotation,
-    //       transform.forward,
-    //       LookForCollisionDistance);
-    // }
+    private void OnDrawGizmos()
+    {
+        ExtDebug.DrawBoxCastBox(
+          transform.position,
+          new Vector3(halfTheShipsLength, halfTheShipsHeight, 0),
+          transform.rotation * Quaternion.Euler(0, 90, 0),
+          transform.right,
+          dashSecureDistance);
+    }
+
 }

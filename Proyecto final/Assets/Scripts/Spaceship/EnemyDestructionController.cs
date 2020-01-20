@@ -13,7 +13,7 @@ public class EnemyDestructionController : DestructionController
         if (bulletType == "player_shot_prefab(Clone)")
         {
             Stats.SetHealth(Stats.GetHealth() - 1f);
-            Debug.Log("Enemy: Receiving damage. Life : " + Stats.GetHealth());
+            //Debug.Log("Enemy: Receiving damage. Life : " + Stats.GetHealth());
             PlayImpactSound(0f);
         }
     }
