@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameMenu : MonoBehaviour
 {
@@ -9,6 +10,19 @@ public class GameMenu : MonoBehaviour
     private GameObject pauseMenuUi;
     private GameObject mainMenuUi;
     private GameObject endMenuUi;
+
+    public GameObject FindObject(string name)
+    {
+        Transform[] trs = GetComponentsInChildren<RectTransform>(true);
+        foreach (Transform t in trs)
+        {
+            if (t.name == name)
+            {
+                return t.gameObject;
+            }
+        }
+        return null;
+    }
 
     private void Start()
     {
@@ -20,6 +34,19 @@ public class GameMenu : MonoBehaviour
         endMenuUi = gameObject.transform.Find("EndMenu").gameObject;
         GameEventsController.eventController.OnPlayerDestruction += FinalScreen;
         GameEventsController.eventController.OnPlayerWon += FinalScreen;
+
+        Sprite t1CursorAl = Resources.Load<Sprite>("T_1_cursor_al");
+
+        GameObject leftButtonEffects = FindObject("LeftButtonEffects");
+        GameObject rightButtonEffects = FindObject("RightButtonEffects");
+        GameObject leftButtonMusic = FindObject("LeftButtonMusic");
+        GameObject rightButtonMusic = FindObject("RightButtonMusic");
+
+        leftButtonEffects.GetComponent<Image>().sprite = t1CursorAl;
+        rightButtonEffects.GetComponent<Image>().sprite = t1CursorAl;
+
+        leftButtonMusic.GetComponent<Image>().sprite = t1CursorAl;
+        rightButtonMusic.GetComponent<Image>().sprite = t1CursorAl;
     }
 
     private void DisplayInitialMenu()

@@ -5,6 +5,13 @@ public class HealthBarController : MonoBehaviour
 {
     private Slider healthBar;
 
+    private void Awake()
+    {
+        Sprite healthImage = Resources.Load<Sprite>("S_ItemLightOutline_HeartRed_00");
+        GameObject heartIcon = GameObject.Find("HeartIcon");
+        heartIcon.GetComponent<Image>().sprite = healthImage;
+    }
+
     private void Start()
     {
         healthBar = gameObject.GetComponent<Slider>();

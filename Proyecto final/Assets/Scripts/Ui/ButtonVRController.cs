@@ -25,13 +25,13 @@ public class ButtonVRController : MonoBehaviour
 
     public void Activate()
     {
-        Debug.Log("I'm activating!");
+        //Debug.Log("I'm activating!");
         isActive = true;
     }
 
     public void Deactivate()
     {
-        Debug.Log("I'm deactivating!");
+        //Debug.Log("I'm deactivating!");
         isActive = false;
     }
 

@@ -27,7 +27,7 @@ public class SpaceshipMovement : MonoBehaviour
 
         if (rg.velocity.magnitude < noticeableSoundThreshold && movementSoundEffectPlaying)
         {
-            Debug.Log("Audio being stopped!");
+            //Debug.Log("Audio being stopped!");
             audioManager.StopSoundEffect("Movement");
         }
 
