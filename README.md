@@ -308,7 +308,7 @@ Durante las batallas podremos ver como nuestros blásters apuntan al objetivo au
 Como habíamos dicho, al eliminar un enemigo se separan todas sus piezas y se muestra una explosión.
 
 <p align="center"> 
-    <img alt"Explosión" src=""./capturas_ejecucion/Explosion.gif"">
+    <img alt"Explosión" src="./capturas_ejecucion/Explosion.gif">
 </p>
 
 ## Acta de trabajo
