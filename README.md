@@ -340,3 +340,7 @@ Como habíamos dicho, al eliminar un enemigo se separan todas sus piezas y se mu
     - Códificación de los árboles de comportamiento.
     - Flecha de apuntado al enemigo.
     - Solución de bugs y testeo del juego.
+
+## Enlaces de interés
+
+* [Archivos del proyecto (como *apk* y capturas de ejecución)](https://drive.google.com/drive/folders/1V1dJrNsV-B5MbuLXuycFXsVUDazBsz-B?usp=sharing)
