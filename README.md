@@ -44,7 +44,7 @@ Por otro lado, aunque nos encontremos en la cabina de una nave, no consideramos 
 
 #### Suelo
 
-Debido a la naturaleza del juego, que trata de naves espaciales, no hay ningún suelo. Parte de la gracia es que podamos movernos indefinidamente en cualquier dirección. A cambio, hemos puesto unos asteroides estáticos para que, de alguna forma sirvan de referencia. Por otro lado, nuestra idea inicial de mantener los asteroides en movimiento constante para aumentar el realismo también aumentaba mucho la complejidad del juego.
+Debido a la naturaleza del juego, que trata de naves espaciales, no hay ningún suelo. Es esencia del juego que el jugador pueda moverse indefinidamente en cualquier dirección. A cambio, hemos puesto unos asteroides estáticos para que, de alguna forma sirvan de referencia. Por otro lado, nuestra idea inicial de mantener los asteroides en movimiento constante para aumentar el realismo también aumentaba mucho la complejidad del juego.
 
 #### Métodos de entrada de datos
 
@@ -107,7 +107,7 @@ Si ha sido posible dirigirse hacia el objetivo comprobará que le queda poca vid
 
 Al igual que aumentamos el sobrecalentamiento también lo reducimos en cada iteración siempre que tenga un poco de sobrecalentamiento pero no haya llegado al estado *cool down*.
 
-Paralelamente al resto de acciones comprobará en todo momento si se ha perdido demasiada vida para hacer un *dash* y evitar seguir perdiéndonla. En caso de que deba esquivar comprobará si tiene espacio suficiente a su izquierda para desplazarse, en caso contrario comprobará su lado derecho. Puede que no haga un *dash* si considera que puede morir haciéndolo en cualquiera de las dos direcciones.
+Paralelamente al resto de acciones, comprobará en todo momento si se ha perdido demasiada vida para hacer un *dash* y evitar seguir perdiéndonla. En caso de que deba esquivar, comprobará si tiene espacio suficiente a su izquierda para desplazarse; en caso contrario, comprobará su lado derecho. Puede que no haga un *dash* si considera que puede morir haciéndolo en cualquiera de las dos direcciones.
 
 Para ver  una imagen representativa del árbol de comportamiento puede acceder al siguiente [enlace](https://i.imgur.com/xm8NTRP.png).
 
@@ -139,8 +139,8 @@ Para solventar ambos problemas se hizo uso de una técnica denominada _Object Po
 
 En nuestro caso tenemos una lista de asteroides que instanciamos inicialmente y vamos moviendo a lo largo del mundo a medida que avanza el jugador. Estos forman un cubo alrededor del usuario y se trasponen acomodándose a la trayectoria deseada, de modo que los asteroides más alejados del usuario en dirección opuesta a su movimiento pasan a ser (pasado un umbral) los más alejados en dirección al movimiento del usuario.
 
-
 <p align="center"> <img src="https://i.imgur.com/SN0lTXU.png"> </p>
+
 De este modo el jugador puede moverse por el mundo en cualquier dirección y jamás encontrará una ausencia de asteroides.
 
 
@@ -205,7 +205,7 @@ En un script personalizado _AudioManager_ disponemos de diversos sonidos separad
 
 ### Sistema de ayuda al apuntado
 
-La nave cuenta con un sistema de ayuda al apuntado, de modo que cuando el jugador apunte cerca de una nave enemiga pero sin que la mira coincida de manera exacta, los cañones se redirigirán hacia el enemigo de manera automática. El funcionamiento, en resumen, parte del lanzamiento de un `BoxCast` desde la mira del jugador para detectar si en en el rango de ayuda establecido hay naves enemigas, ignorando el resto de elementos. Si las hay, entonces usa un `RayCast` para comprobar si hay una línea de disparo directa entre ambos. De ser así, entonces con la información provista por el `RayCast` se calcula la rotación necesaria de los cañones para que las balas vayan directamente al enemigo. Además, se tiene en cuenta la velocidad del objetivo para que siga la dirección de la nave. Sin embargo, eso no quiere decir que vaya a acertar el disparo ya que los *dashes* son movimientos muy rápidos, y de hecho ese mismo movimiento puede sacarlo del área de disparo. La necesidad de usar el `RayCast` se debe a que el `BoxCast` podría detectar primero un asteroide, pero eso no quiere decir que no haya un enemigo más lejos que esté visible para el jugador. Por otro lado, si sólo utilizaramos el `RayCast` no estaríamos comprobando el rango de ayuda que le hemos establecido. 
+La nave cuenta con un sistema de ayuda al apuntado, de modo que cuando el jugador apunte cerca de una nave enemiga pero sin que la mira coincida de manera exacta, los cañones se redirigirán hacia el enemigo de manera automática. El funcionamiento, en resumen, parte del lanzamiento de un `BoxCast` desde la mira del jugador para detectar si en en el rango de ayuda establecido hay naves enemigas, ignorando el resto de elementos. Si las hay, entonces usa un `RayCast` para comprobar si hay una línea de disparo directa entre ambos. De ser así, entonces con la información provista por el `RayCast` se calcula la rotación necesaria de los cañones para que las balas vayan directamente al enemigo. Además, se tiene en cuenta la velocidad del objetivo para que siga la dirección de la nave. Sin embargo, eso no quiere decir que vaya a acertar el disparo ya que los *dashes* son movimientos muy rápidos, y de hecho ese mismo movimiento puede sacarlo del área de disparo. La necesidad de usar el `RayCast` se debe a que el `BoxCast` podría detectar primero un asteroide, pero eso no quiere decir que no haya un enemigo más lejos que esté visible para el jugador. Por otro lado, si solo utilizaramos el `RayCast` no estaríamos comprobando el rango de ayuda que le hemos establecido. 
 
 <p align="center"> 
     <img src="https://i.imgur.com/PxIrE2c.png">
@@ -239,23 +239,21 @@ Queremos aumentar la inmersión del jugador cuanda ataca, recalcar la idea de qu
 
 Para ello se ha desarrollado un script (_SpotlightController_) que regula una luz de tipo _Spotlight_ que apunta en todo momento al frente del usuario. Esta luz se tiñe de rojo y disminuye su dispersión (centrándose en el centro de mira de la nave) cuando el usuario dispara.
 
-
-
 | ![](https://i.imgur.com/YH35ySe.png)|  ![](https://i.imgur.com/PsIhCX7.png)|
 | -------- | -------- |
 
 
-### Controlador de Eventos
+### Controlador de eventos
 
 Se ha hecho uso de eventos para manejar diferentes situaciones específicas evitando el uso de la funciones _Update_ y _FixedUpdated_.
 
 Concretamente los eventos que se han creado (agrupados por contexto) son:
 
-*    _OnHealthPctChanged_, _OnOverheatPctChanged_. Eventos a los que se suscriben funciones relacionadas con la pérdida de vida y el sobrecalentamiento (Como las necesarias para actualizar los valores de las barras dispuestas en el HUD).
-*    _OnMaximumOverheat_. Evento al que se suscribe la corutina que disminuye el sobrecalentamiento del arma del usuario.
-*    _OnAttackModeEnter_, _OnAttackModeExit_. Eventos al que se suscribe el cambio de luces de la nave del usuario cuando comienza y termina de disparar.
-*    _OnPlayerDestruction_, _OnEnemyDestruction_. Eventos al que se suscriben las funciones de destrucción de la nave del jugador y del enemigo, respectivamente.
-*    _OnPlayerWon_. Evento al que se suscribe la función para desplegar el menú de victoria.
+*     `OnHealthPctChanged`, `OnOverheatPctChanged`. Eventos a los que se suscriben funciones relacionadas con la pérdida de vida y el sobrecalentamiento (Como las necesarias para actualizar los valores de las barras dispuestas en el HUD).
+*    `OnMaximumOverheat`. Evento al que se suscribe la corutina que disminuye el sobrecalentamiento del arma del usuario.
+*    `OnAttackModeEnter`, `OnAttackModeExit`. Eventos al que se suscribe el cambio de luces de la nave del usuario cuando comienza y termina de disparar.
+*    `OnPlayerDestruction`, `OnEnemyDestruction`. Eventos al que se suscriben las funciones de destrucción de la nave del jugador y del enemigo, respectivamente.
+*    `OnPlayerWon`. Evento al que se suscribe la función para desplegar el menú de victoria.
 
 ### Sobre el desarrollo del proyecto: problemas con Unity y control de versiones
 
@@ -263,9 +261,9 @@ El control de versiones con Unity es un tema enrevesado. Muchas veces, al hacer 
 
 Para solucionar una parte de estos problemas, programamos un script que se encargara de instanciar antes de comenzar el juego distintos elementos y les añadiese sus scripts correspondientes.
 
-No obstante con esto no era suficiente, en ciertas ocasiones se desvinculaban inclusive _partes_ de objetos de la escena, por motivos que en el momento desconocíamos y que acabaron siendo achacados a la pérdida de metadatos durante la subida del proyecto a _GitHub_.
+No obstante con esto no era suficiente, en ciertas ocasiones se desvinculaban _partes_ de objetos de la escena, por motivos que en el momento desconocíamos y que acabaron siendo achacados a la pérdida de metadatos durante la subida del proyecto a _GitHub_.
 
-Corrigiendo el _.gitignore_ para subir los metadatos conseguimos solucionar también la pérdida de funcionamiento al reestructurar los ficheros en carpetas.
+Corrigiendo el `.gitignore` para subir los metadatos conseguimos solucionar también la pérdida de funcionamiento al reestructurar los ficheros en carpetas.
 
 A pesar de esto en ciertas circunstancias puede haber errores que necesiten ser manejados manualmente por quien abre el proyecto, como reimportar assets o configurar imágenes como _sprites 2D_.
 
