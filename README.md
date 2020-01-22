@@ -271,10 +271,6 @@ A pesar de esto en ciertas circunstancias puede haber errores que necesiten ser 
 
 ## Capturas de ejecución  
 
-:::warning
-No me deja subir aquí los GIF, los subiré en local en Typora.
-:::
-
 Cuando se pulsa en botón *Menú* veremos las opciones que tenemos disponibles.
 
 <p align="center"> 
