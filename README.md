@@ -15,14 +15,14 @@ Space Runaway es un videojuego de realidad virtual de acción, en el que el juga
 - El mundo está lleno de asteroides que, al chocar contra ellos, destruyen automáticamente la nave del jugador. Por otro lado, también hacen el mismo daño a los enemigos, lo que se puede aprovechar a favor del jugador si consigue que estos se estallen contra los asteroides.
 - El juego está diseñado para jugar en realidad virtual, y las recomendaciones empleadas para facilitar la integración al jugador han sido seguidas. Recomendamos jugarlo sentado debido a la falta de suelo para orientar al jugador.
 - El objetivo del jugador es llegar a la nave nodriza sin que lo maten. Tiene la capacidad de recibir algunos disparos, pero deberá ser cuidadoso porque su vida no se regenera.
-- El jugador no puede disparar indefinidamente. Cada blaster se sobrecalienta y en ese caso se debe esperar unos segundos para volver a disparar. 
+- El jugador no puede disparar indefinidamente. Cada bláster se sobrecalienta y en ese caso se debe esperar unos segundos para volver a disparar. 
 - El jugador, al igual que las naves enemigas, tiene la capacidad de realizar movimientos bruscos hacia los lados denominados *dashes*. Estos son particularmente útiles para realizar esquives, tanto de asteroides como de los disparos (si tiene buenos reflejos).
 
 ### Confort del jugador
 
 #### Movimiento de la cabeza
 
-Nuestra recomendación es que no se mueva la cabeza dentro de lo posible para evitar mareos. Sin embargo, la cabina de la nave permite ver el exterior tanto a la izquierda como a la derecha de esta, pero no hay ninguna obligación de mirar para la ejecución del juego. Para elementos de la interfaz de usuario el movimiento de la cabeza se ha reducido mínimo posible.
+Nuestra recomendación es que no se mueva la cabeza dentro de lo posible para evitar mareos. Sin embargo, la cabina de la nave permite ver el exterior tanto a la izquierda como a la derecha de esta, pero no hay ninguna obligación de mirar para la ejecución del juego. Para elementos de la interfaz de usuario el movimiento de la cabeza se ha reducido al mínimo posible.
 
 #### Texto
 
@@ -66,7 +66,7 @@ Al iniciar el juego hay un menú para evitar entrar de golpe en el juego. En él
 
 El juego está diseñado para ser jugado con las _google carboard_. Para poder tomar acción en el juego, es necesario tener un mando conectado por bluetooth al dispositivo. Este mando debe ser parecido a los típicos usados por consolas, o al menos que permita al jugador rotar, acelerar, frenar, acceder al menú, disparar y realizar *dashes* laterales.
 
-Al empezar el juego se mostrará una ventana para poder decidir entre jugar o salir. Si decidimos jugar comenzará la ejecución del juego. En cualquier momento podemos acceder al menú y veremos distintas opciones. Podemos continuar con la ejecución, que también puede seleccionarse volviendo a pulsar el botón *Menú*; reiniciar el juego, que reiniciará la escena y nos devolverá a la ventana inicial; la opción salir del juego igual que en el inicio y una opción *Menú* que nos llevará a diferentes opciones. Ahora mismo sólo se puede controlar el volumen de los efectos y de la música pero se ha planteado para que tenga más opciones en el futuro. Para manipular el sonido sólo hay que pulsar las flechas de los laterales y pulsando el botón *Back* volveremos a la ventana anterior. Finalmente, tanto si ganamos como si morimos tendremos una ventana que nos lo notifique y que nos permitirá volver a jugar o salir del juego. Todas estas ventanas pueden verse en el apartado *[Menú de opciones](#Menú-de-opciones)*., donde también explicaremos como ha sido desarrollado.
+Al empezar el juego se mostrará una ventana para poder decidir entre jugar o salir. Si decidimos jugar comenzará la ejecución del juego. En cualquier momento podemos acceder al menú y veremos distintas opciones. Podemos continuar con la ejecución, que también puede seleccionarse volviendo a pulsar el botón *Menú*; reiniciar el juego, que reiniciará la escena y nos devolverá a la ventana inicial; la opción salir del juego igual que en el inicio y una opción *Menú* que nos llevará a diferentes opciones. Ahora mismo sólo se puede controlar el volumen de los efectos y de la música pero se ha planteado para que tenga más opciones en el futuro. Para manipular el sonido sólo hay que pulsar las flechas de los laterales y pulsando el botón *Back* volveremos a la ventana anterior. Finalmente, tanto si ganamos como si morimos tendremos una ventana que nos lo notifique y que nos permitirá volver a jugar o salir del juego. Todas estas ventanas pueden verse en el apartado *[Menú de opciones](#Menú-de-opciones)*, donde también explicaremos como ha sido desarrollado.
 
 
 ### Configuración del mando
@@ -75,6 +75,7 @@ Mando: Mars Gaming MGP1
 
 <p align="center"> <img src="https://i.imgur.com/KjtxhmI.png" width="600"> </p>
 <p align="center"> <img src="https://i.imgur.com/6mD8UMF.png" width="570"> </p>
+
 Hemos ofrecido una alternativa a la rotación de la nave debido a que las flechas del mando que estamos usando no funciona correctamente. De esta forma, si en algún momento falla, se puede utilizar el joystick izquierdo. También, gracias a una [app](https://play.google.com/store/apps/details?id=com.Evag.UACL) que nos confirmaba que botones se estaban pulsando, detectamos que dicho joystick es muy sensible y que detecta movimiento cuando no se toca. Por eso en el atributo *dead* en el *Input Manager* hemos puesto como valor *0.7*, para que los valores inferiores a ese sean ignorados.
 
 ### Abrir el proyecto en Unity
@@ -92,7 +93,7 @@ Por otro lado, algunos elementos de la UI suelen dar problemas para mostrarse al
 
 La inteligencia artificial empleada para las naves enemigas ha sido realizada con árboles de comportamiento. Estos árboles, en síntesis, permiten de una manera simple e intuitiva definir el comportamiento de una entidad en base a determinadas acciones y condiciones programables que luego pueden ser combinadas en ramas usando nodos de tipo "selector", "secuencia", etc. La ventaja principal de este sistema es que facilita la construcción de comportamientos complejos a partir de otros más simples. En este documento hablaremos de forma general sobre los comportamientos, para conocer más detalladamente como funcionan los árboles puede acceder [aquí](https://docs.google.com/document/d/1LTw0CHPVsE2F4uNFYRf_9H9fSKghiftniycMtL6lUW0/edit?usp=sharing).
 
-La meta de los enemigos es llegar al usuario (sin chocar con los asteroides) para intentar destruirle. Durante dicha pelea intentarán evitar su destrucción en la medida de lo posible. Funcionan de forma similar al usuario pero tiene ciertas diferencias. En primer lugar, su movimiento ha sido necesario hacerlo con el transform para facilitar el trabajo del árbol de comportamiento. Las fuerzas dejan un movimiento residual con el que es dificil trabajar y hace a las naves propensas de chocar con asteroides. Además, rotan en el eje *y* principalmente, aunque no sería ningún problema cambiar el eje de rotación al eje *x*.
+La meta de los enemigos es llegar al usuario (sin chocar con los asteroides) para intentar destruirle. Durante dicha pelea intentarán evitar su destrucción en la medida de lo posible. Funcionan de forma similar al usuario pero tiene ciertas diferencias. En primer lugar, su movimiento ha sido necesario hacerlo con el *transform* para facilitar el trabajo del árbol de comportamiento. Las fuerzas dejan un movimiento residual con el que es dificil trabajar y hace a las naves propensas de chocar con asteroides. Además, rotan en el eje *y* principalmente, aunque no sería ningún problema cambiar el eje de rotación al eje *x*.
 
 #### Enemigo de asalto
 
@@ -147,7 +148,7 @@ De este modo el jugador puede moverse por el mundo en cualquier dirección y jam
 
 Tanto los disparos del jugador y los enemigos, como las explosiones de las naves usan sistemas de partículas para darles un efecto ligeramente más realista y espectacular. 
 
-La configuración del sistema de partículas para la explosión ha salido del la *Asset Store*, concretamente del *asset* [FX Fire Free](https://assetstore.unity.com/packages/vfx/particles/fire-explosions/fx-fire-free-21587). Básicamente cuando la vida de una nave llega a cero se muestra esta explosión a la vez que todos los hijos de lo que se compone la nave salen disparados por una fuerza. Para ello, primero hay que desenlazarlos de la nave. Finalmente después de un segundo se destruyen todos los objetos implicados.
+La configuración del sistema de partículas para la explosión ha salido de la *Asset Store*, concretamente del *asset* [FX Fire Free](https://assetstore.unity.com/packages/vfx/particles/fire-explosions/fx-fire-free-21587). Básicamente cuando la vida de una nave llega a cero se muestra esta explosión a la vez que todos los hijos de lo que se compone la nave salen disparados por una fuerza. Para ello, primero hay que desenlazarlos de la nave. Finalmente después de un segundo se destruyen todos los objetos implicados.
 
 En el caso de las balas se utilizó [War FX](https://assetstore.unity.com/packages/vfx/particles/war-fx-5669) para generar sensación de impacto cuando la bala colisionara con algo y tuviera que destruirse. En el caso de no chocar las balas serán destruidas al recorrer una cierta distancia. 
 
@@ -189,13 +190,13 @@ Para poder utilizar las _Google Cardboard_ a parte de seguir las indicaciones de
 
 El primero se encarga de activar los botones cuando la mira de la VR pasa encima de ellos, permitiéndo así que el usuario pulsando un botón del gamepad pueda seleccionar dicha opción.
 
-El segundo tenía como objetivo inicial ser análogo del primero,no obstante, no fue posible que funcionase del mismo modo y paso simplemente a ser un script encargado de modificar el estado del slider y llamar a la lógica detrás de este.
+El segundo tenía como objetivo inicial ser análogo del primero, no obstante, no fue posible que funcionase del mismo modo y paso simplemente a ser un script encargado de modificar el estado del slider y llamar a la lógica detrás de este.
 
 ### Integración del sonido
 
 Para la integración del sonido se hace uso de la herramienta _AudioClip_ de Unity.
 
-En un script personalizado _AudioManager_ disponemos de diversos sonidos separados en dos listas, música y efectos del juego. Los sonidos se arrastran directamente al inspector de Unity, donde se puede elegir el Pitch y Volumen de estos.
+En un script personalizado _AudioManager_ disponemos de diversos sonidos separados en dos listas, música y efectos del juego. Los sonidos se arrastran directamente al inspector de Unity, donde se puede elegir el *Pitch* y *Volumen* de estos.
 
 <p align="center"> 
  <img src="https://i.imgur.com/esFElvv.png">
